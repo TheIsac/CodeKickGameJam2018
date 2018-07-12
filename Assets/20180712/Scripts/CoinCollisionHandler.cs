@@ -4,9 +4,10 @@ namespace _20180712.Scripts
 {
     public class CoinCollisionHandler : MonoBehaviour
     {
-        private void OnCollisionEnter(Collision other)
+        private void OnCollisionEnter2D(Collision2D other)
         {
-            var scoreHolder = other.collider.GetComponent<ScoreHolder>();
+            Destroy(gameObject);
+            var scoreHolder = other.gameObject.GetComponent<ScoreHolder>();
             scoreHolder.IncreaseScoreBy(1);
         }
     }
