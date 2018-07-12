@@ -8,7 +8,10 @@ namespace _20180712.Scripts
         {
             Destroy(gameObject);
             var scoreHolder = other.gameObject.GetComponent<ScoreHolder>();
-            scoreHolder.IncreaseScoreBy(1);
+            if (scoreHolder != null)
+            {
+                scoreHolder.IncreaseScoreBy(1);
+            }
         }
     }
 }
