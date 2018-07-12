@@ -20,7 +20,9 @@ public class Movement : MonoBehaviour {
 	void Update ()
 	{
 		ReadInputs();
+		CheckFloor();
 	}
+
 
 	private void ReadInputs()
 	{
@@ -35,9 +37,14 @@ public class Movement : MonoBehaviour {
 
 	private void JumpInput()
 	{
-		if (Input.GetButtonDown("Jump") && canJump)
+		if (Input.GetButtonDown("Jump"))
 		{
 			rb.AddForce(Vector2.up * jumpForce);
 		}
+	}
+
+	private void CheckFloor()
+	{
+
 	}
 }
