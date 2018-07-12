@@ -5,22 +5,30 @@ using UnityEngine;
 
 public class Movement : MonoBehaviour {
 
+
 	[SerializeField]
 	private float movementSpeed, jumpForce;
-
 	private bool canJump;
 
+	[SerializeField]
+	private string directionalInput, jumpInput;
+
 	private Rigidbody2D rb;
+	private BoxCollider2D boxCollider;
+	private float playerBottom, platformTop;
+
 
 	private void Awake()
 	{
 		rb = GetComponent<Rigidbody2D>();
+		boxCollider = GetComponent<BoxCollider2D>();
 	}
 
 	void Update ()
 	{
 		ReadInputs();
-		CheckFloor();
+		playerBottom = transform.position.y - boxCollider.size.y / 2;
+		//Debug.DrawRay(Vector3.zero, new Vector3(transform.position.x, playerBottom));
 	}
 
 
@@ -32,19 +40,24 @@ public class Movement : MonoBehaviour {
 
 	private void DirectionalInput()
 	{
-		rb.velocity = new Vector2(Input.GetAxis("Horizontal") * movementSpeed, rb.velocity.y);
+		rb.velocity = new Vector2(Input.GetAxis(directionalInput) * movementSpeed, rb.velocity.y);
 	}
 
 	private void JumpInput()
 	{
-		if (Input.GetButtonDown("Jump"))
+		if (Input.GetButtonDown(jumpInput) && canJump)
 		{
 			rb.AddForce(Vector2.up * jumpForce);
+			canJump = false;
 		}
 	}
 
-	private void CheckFloor()
+	private void OnCollisionEnter2D(Collision2D collision)
 	{
+		playerBottom = transform.position.y - boxCollider.size.y / 2;
+		platformTop = collision.transform.position.y + collision.transform.GetComponent<BoxCollider2D>().size.y / 2;
 
+		if (playerBottom > platformTop)
+			canJump = true;
 	}
 }
