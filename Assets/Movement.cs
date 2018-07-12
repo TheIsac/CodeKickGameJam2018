@@ -40,7 +40,7 @@ public class Movement : MonoBehaviour {
 
 	private void DirectionalInput()
 	{
-		rb.velocity = new Vector2(Input.GetAxis(directionalInput) * movementSpeed, rb.velocity.y);
+		rb.AddForce(new Vector2(Input.GetAxis(directionalInput) * movementSpeed, 0) * Time.deltaTime);
 	}
 
 	private void JumpInput()
@@ -55,7 +55,7 @@ public class Movement : MonoBehaviour {
 	private void OnCollisionEnter2D(Collision2D collision)
 	{
 		playerBottom = transform.position.y - boxCollider.size.y / 2;
-		platformTop = collision.transform.position.y + collision.transform.GetComponent<BoxCollider2D>().size.y / 2;
+		platformTop = collision.transform.position.y;// + collision.transform.GetComponent<BoxCollider2D>().size.y / 2;
 
 		if (playerBottom > platformTop)
 			canJump = true;
