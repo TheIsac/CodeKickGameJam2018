@@ -7,7 +7,7 @@ public enum Distribution {
 	edge
 }
 
-public class Spawner : MonoBehaviour
+public class Spawner2 : MonoBehaviour
 {
 	public int MinSpawnX = 0;
 	public int MaxSpawnX = 20;
