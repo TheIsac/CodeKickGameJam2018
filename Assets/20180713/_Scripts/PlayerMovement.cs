@@ -2,16 +2,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using _20180713._Scripts;
 
 public class PlayerMovement : MonoBehaviour {
-
 
 	[SerializeField]
 	private float movementSpeed;
 	private bool canJump;
 
 	[SerializeField]
-	private string horizontalInput, verticalInput, interactInput;
+	public string HorizontalInput, VerticalInput, InteractInput;
 
 	private Rigidbody rb;
 	private BoxCollider boxCollider;
@@ -36,12 +36,12 @@ public class PlayerMovement : MonoBehaviour {
 
 	private void DirectionalInput()
 	{
-		rb.AddForce(new Vector2(Input.GetAxis(horizontalInput) * movementSpeed * Time.deltaTime, Input.GetAxis(verticalInput) * movementSpeed * Time.deltaTime));
+		rb.AddForce(new Vector2(Input.GetAxis(HorizontalInput) * movementSpeed * Time.deltaTime, Input.GetAxis(VerticalInput) * movementSpeed * Time.deltaTime));
 	}
 
 	private void ButtonInput()
 	{
-		if (Input.GetButtonDown(interactInput))
+		if (Input.GetButtonDown(InteractInput))
 		{
 			Debug.Log("I PRESSED MY BUTTON KIDS!");
 		}

@@ -8,31 +8,54 @@ namespace _20180713._Scripts
         public Transform HoldingPoint;
 
         private Block holdingBlock;
+        private PlayerMovement playerMovement;
 
-        public bool IsHoldingBlock()
+        private bool isPickingUpBlockThisFrame;
+
+        void Awake()
         {
-            return holdingBlock != null;
+            playerMovement = GetComponent<PlayerMovement>();
+        }
+
+        void Update()
+        {
+            if (IsTryingToRelease())
+            {
+                ReleaseHoldingBlock();
+            }
+
+            if (isPickingUpBlockThisFrame) isPickingUpBlockThisFrame = false;
         }
 
         public void SetHoldingBlock(Block block)
         {
             holdingBlock = block;
             holdingBlock.transform.SetParent(transform);
-            block.Hold();
             block.transform.position = HoldingPoint.position;
+            block.Hold();
+            isPickingUpBlockThisFrame = true;
         }
 
-        public Block GetHoldingBlock()
+        public void ReleaseHoldingBlock()
         {
-            return holdingBlock;
-        }
-
-        public Block ReleaseHoldingBlock()
-        {
-            var block = holdingBlock;
+            holdingBlock.transform.SetParent(null);
+            holdingBlock.Release();
             holdingBlock = null;
-            block.transform.SetParent(null);
-            return block;
+        }
+
+        public bool IsTryingToPickUp()
+        {
+            return !IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
+        }
+
+        public bool IsTryingToRelease()
+        {
+            return IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
+        }
+        
+        public bool IsHoldingBlock()
+        {
+            return holdingBlock && !isPickingUpBlockThisFrame;
         }
     }
 }

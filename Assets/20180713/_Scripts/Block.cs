@@ -21,11 +21,11 @@ public class Block : MonoBehaviour
     {
         isFree = true;
     }
-
-    void OnTriggerEnter(Collider collider)
+    
+    private void OnTriggerStay(Collider collider)
     {
         var blockHolder = collider.GetComponent<BlockHolder>();
-        if (isFree && blockHolder && !blockHolder.IsHoldingBlock())
+        if (isFree && blockHolder && blockHolder.IsTryingToPickUp())
         {
             blockHolder.SetHoldingBlock(this);
         }

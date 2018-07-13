@@ -155,9 +155,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 800
-  horizontalInput: 1_LSH
-  verticalInput: 1_LSV
-  interactInput: 1_Primary
+  HorizontalInput: 1_LSH
+  VerticalInput: 1_LSV
+  InteractInput: 1_Primary
 --- !u!114 &114999400313611456
 MonoBehaviour:
   m_ObjectHideFlags: 1
