@@ -98,3 +98,6 @@ Assets/FmodIntegration_1.10.03/Resources/FMODStudioSettings.asset.meta
 Library/EditorInstance.json
 Library/EditorUserBuildSettings.asset
 
+.idea/*
+Assets/Plugins/*
+Assets/Plugins.meta
