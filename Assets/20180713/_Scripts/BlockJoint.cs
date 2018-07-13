@@ -2,7 +2,7 @@
 
 namespace _20180713._Scripts
 {
-    public class BlockJoint
+    public class BlockJoint : MonoBehaviour
     {
         public Transform Start;
         public Transform End;

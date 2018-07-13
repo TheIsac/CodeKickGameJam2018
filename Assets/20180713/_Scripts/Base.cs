@@ -5,9 +5,10 @@ using UnityEngine;
 
 namespace _20180713._Scripts
 {
-    public class Base
+    [RequireComponent(typeof(Block))]
+    public class Base : MonoBehaviour
     {
-        [SerializeField] private Block pilotBlock;
+        private Block pilotBlock;
 
         private readonly List<Block> baseBlocks = new List<Block>();
 
@@ -15,6 +16,7 @@ namespace _20180713._Scripts
 
         void Awake()
         {
+            pilotBlock = GetComponent<Block>();
             baseBlocks.Add(pilotBlock);
         }
 
