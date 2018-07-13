@@ -1,7 +1,8 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class Spawner : MonoBehaviour
+public class OldSpawner : MonoBehaviour
 {
 	public int MinSpawnX = 0;
 	public int MaxSpawnX = 20;
