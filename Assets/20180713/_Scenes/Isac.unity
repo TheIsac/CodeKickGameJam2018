@@ -113,6 +113,48 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1001 &111603403
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4101191085796988, guid: c4b6b0ba107a442e6b06f587d2d01acc, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101191085796988, guid: c4b6b0ba107a442e6b06f587d2d01acc, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 2.24
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101191085796988, guid: c4b6b0ba107a442e6b06f587d2d01acc, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 10.39
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101191085796988, guid: c4b6b0ba107a442e6b06f587d2d01acc, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101191085796988, guid: c4b6b0ba107a442e6b06f587d2d01acc, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101191085796988, guid: c4b6b0ba107a442e6b06f587d2d01acc, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101191085796988, guid: c4b6b0ba107a442e6b06f587d2d01acc, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4101191085796988, guid: c4b6b0ba107a442e6b06f587d2d01acc, type: 2}
+      propertyPath: m_RootOrder
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: c4b6b0ba107a442e6b06f587d2d01acc, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &452634305
 GameObject:
   m_ObjectHideFlags: 0
@@ -237,9 +279,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   movementSpeed: 800
-  horizontalInput: 2_LSH
-  verticalInput: 2_LSV
-  interactInput: 2_Primary
+  HorizontalInput: 
+  VerticalInput: 
+  InteractInput: 
 --- !u!65 &1075244832
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -346,12 +388,6 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
-    - target: {fileID: 65533501801210318, guid: 681c6a76d4262554fbabd1454dd35a46,
-        type: 2}
-      propertyPath: m_Material
-      value: 
-      objectReference: {fileID: 13400000, guid: 610a33aa6d9e07346a81dbf60cb783d2,
-        type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 681c6a76d4262554fbabd1454dd35a46, type: 2}
   m_IsPrefabAsset: 0
