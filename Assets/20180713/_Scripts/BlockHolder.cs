@@ -6,6 +6,7 @@ namespace _20180713._Scripts
     public class BlockHolder : MonoBehaviour
     {
         public Transform HoldingPoint;
+        public Base Base;
 
         private Block holdingBlock;
         private PlayerMovement playerMovement;
@@ -21,7 +22,14 @@ namespace _20180713._Scripts
         {
             if (IsTryingToRelease())
             {
-                ReleaseHoldingBlock();
+                if (Base.IsBlockCloseEnough(holdingBlock))
+                {
+                    AttachHoldingBlockToBase();
+                }
+                else
+                {
+                    ReleaseHoldingBlock();
+                }
             }
 
             if (isPickingUpBlockThisFrame) isPickingUpBlockThisFrame = false;
@@ -30,16 +38,21 @@ namespace _20180713._Scripts
         public void SetHoldingBlock(Block block)
         {
             holdingBlock = block;
-            holdingBlock.transform.SetParent(transform);
             block.transform.position = HoldingPoint.position;
-            block.Hold();
+            block.SetHolder(gameObject);
             isPickingUpBlockThisFrame = true;
         }
 
-        public void ReleaseHoldingBlock()
+        private void ReleaseHoldingBlock()
         {
-            holdingBlock.transform.SetParent(null);
             holdingBlock.Release();
+            holdingBlock = null;
+        }
+
+        private void AttachHoldingBlockToBase()
+        {
+            holdingBlock.Release();
+            Base.AttachBlock(holdingBlock);
             holdingBlock = null;
         }
 
@@ -48,12 +61,12 @@ namespace _20180713._Scripts
             return !IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
         }
 
-        public bool IsTryingToRelease()
+        private bool IsTryingToRelease()
         {
             return IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
         }
-        
-        public bool IsHoldingBlock()
+
+        private bool IsHoldingBlock()
         {
             return holdingBlock && !isPickingUpBlockThisFrame;
         }
