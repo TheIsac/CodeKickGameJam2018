@@ -41,9 +41,9 @@ public class PlayerMovement : MonoBehaviour {
 
 	private void ButtonInput()
 	{
-		if (Input.GetButton(interactInput))
+		if (Input.GetButtonDown(interactInput))
 		{
-			//EXECUTE INTERACTION
+			Debug.Log("I PRESSED MY BUTTON KIDS!");
 		}
 	}
 	#endregion
