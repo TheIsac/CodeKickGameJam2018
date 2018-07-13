@@ -9,7 +9,7 @@ public class Block : MonoBehaviour
 {
     private bool isFree = true;
 
-    [SerializeField] private BlockJoint[] joints = new BlockJoint[4];
+    [SerializeField] private List<BlockJoint> joints = new List<BlockJoint>();
 
     public bool IsFree()
     {
@@ -30,7 +30,7 @@ public class Block : MonoBehaviour
 
     public IEnumerable<BlockJoint> GetFreeJoints()
     {
-        return joints.Where(joint => !joint.End);
+        return joints.Where(joint => !joint.Connected);
     }
 
     private void OnTriggerStay(Collider collider)

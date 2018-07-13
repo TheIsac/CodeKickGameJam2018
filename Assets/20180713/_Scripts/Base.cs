@@ -52,8 +52,8 @@ namespace _20180713._Scripts
                 }
             }
 
-            closestBaseJoint.Join(closestBlockJoint);
             block.transform.position = closestBaseJoint.End.position;
+            closestBaseJoint.Join(closestBlockJoint);
         }
     }
 }

@@ -6,11 +6,13 @@ namespace _20180713._Scripts
     {
         public Transform Start;
         public Transform End;
+        public bool Connected = false;
 
         public void Join(BlockJoint other)
         {
             other.End = Start;
             End = other.Start;
+            Connected = true;
         }
     }
 }
