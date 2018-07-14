@@ -83,15 +83,15 @@ namespace _20180713._Scripts
 
             var joints = GetClosestTwoJoints(block);
 
-            var base2DPosition = joints.BaseJoint.GetEndPosition();
-            base2DPosition.y = joints.BlockJoint.GetCenterPosition().y;
-            var oldParent = block.transform.parent;
-            block.transform.parent = null;
-            joints.BlockJoint.transform.parent = joints.BaseJoint.transform;
-            block.transform.parent = joints.BlockJoint.transform;
-            block.transform.rotation = Quaternion.identity;
-            block.transform.parent = oldParent;
-            joints.BlockJoint.transform.parent = null;
+//            var base2DPosition = joints.BaseJoint.GetEndPosition();
+//            base2DPosition.y = joints.BlockJoint.GetCenterPosition().y;
+//            var oldParent = block.transform.parent;
+//            block.transform.parent = null;
+//            joints.BlockJoint.transform.parent = joints.BaseJoint.transform;
+//            block.transform.parent = joints.BlockJoint.transform;
+//            block.transform.rotation = Quaternion.identity;
+//            block.transform.parent = oldParent;
+//            joints.BlockJoint.transform.parent = null;
 
 
             //block.transform.position += joints.BaseJoint.GetEndPosition() - joints.BlockJoint.GetEndPosition();
