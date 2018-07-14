@@ -22,7 +22,7 @@ public class Block : MonoBehaviour
         var towardsCamera =  Camera.main.transform.position - transform.position;
         var force =  towardsCamera.normalized + Random.insideUnitSphere * 0.01f;
         //force = new Vector3(0,1,0);
-        //GetComponent<Rigidbody>().AddForce(force * Random.Range(50, 80), ForceMode.Impulse);
+        //GetComponent<Rigidbody>().AddForce(force * Random.Range(40, 70), ForceMode.Impulse);
     }
 
     public bool IsFree()
