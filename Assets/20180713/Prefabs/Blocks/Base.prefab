@@ -21,7 +21,7 @@ GameObject:
   - component: {fileID: 4356937265760500}
   - component: {fileID: 33402705079332474}
   - component: {fileID: 23231180845796824}
-  - component: {fileID: 114536445982357210}
+  - component: {fileID: 114687129834161300}
   m_Layer: 0
   m_Name: mesh_baseRocket
   m_TagString: Untagged
@@ -342,7 +342,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 154c1da6b4704e05808bb94166844bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pilotBlock: {fileID: 114875605361578140}
+--- !u!114 &114687129834161300
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1327778800551650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdd4abd8e96624953ab462df8ac10182, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114723868338034226
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -354,12 +364,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d0d9155e384684ca46c9fae31753b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  movementSpeed: 100
   HorizontalInput: 
   VerticalInput: 
   InteractInput: 
   SecondaryInput: 
-  isMounted: 0
-  movementSpeed: 100
 --- !u!114 &114759339086788694
 MonoBehaviour:
   m_ObjectHideFlags: 1
