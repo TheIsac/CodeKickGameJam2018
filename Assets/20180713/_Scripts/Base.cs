@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.AI;
 
 namespace _20180713._Scripts
 {
-    [RequireComponent(typeof(Block))]
     public class Base : MonoBehaviour
     {
-        private Block pilotBlock;
+        [SerializeField] private Block pilotBlock;
 
         private readonly List<Block> baseBlocks = new List<Block>();
 
@@ -16,14 +17,13 @@ namespace _20180713._Scripts
 
         void Awake()
         {
-            pilotBlock = GetComponent<Block>();
             baseBlocks.Add(pilotBlock);
         }
 
         public void AttachBlock(Block block)
         {
             ConnectClosestBaseJointToClosestBlockJoint(block);
-            block.transform.SetParent(pilotBlock.transform);
+            block.SetHolder(gameObject);
         }
 
         public bool IsBlockCloseEnough(Block block)
@@ -35,18 +35,20 @@ namespace _20180713._Scripts
         public ClosestJointsPair GetClosestTwoJoints(Block block)
         {
             var blockJoints = block.GetFreeJoints();
-            var joints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints());
-            var closestBlockJoint = blockJoints.First();
-            var closestBaseJoint = joints.First();
-            var closestBaseJointDistance = Vector3.Distance(closestBaseJoint.GetAbsolutePositionOfEnd(),
-                closestBlockJoint.GetAbsolutePositionOfEnd());
-            foreach (var baseJoint in joints)
+            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints());
+            BlockJoint closestBlockJoint = null;
+            BlockJoint closestBaseJoint = null;
+            float closestBaseJointDistance = -1;
+            var blockJointsArray = blockJoints as BlockJoint[] ?? blockJoints.ToArray();
+            Debug.Log("blockJointsCount: " + blockJoints.Count() + ", baseJointCount: " + baseJoints.Count());
+            foreach (var baseJoint in baseJoints)
             {
-                foreach (var blockJoint in blockJoints)
+                foreach (var blockJoint in blockJointsArray)
                 {
-                    var distance = Vector3.Distance(baseJoint.GetAbsolutePositionOfEnd(),
-                        blockJoint.GetAbsolutePositionOfEnd());
-                    if (distance < closestBaseJointDistance)
+                    var distance = Vector3.Distance(blockJoint.GetEndPosition(),
+                        baseJoint.GetEndPosition());
+                    Debug.Log("distance: " + distance);
+                    if (distance < closestBaseJointDistance || closestBaseJointDistance < 0)
                     {
                         closestBaseJoint = baseJoint;
                         closestBlockJoint = blockJoint;
@@ -54,6 +56,9 @@ namespace _20180713._Scripts
                     }
                 }
             }
+
+            Debug.Log("closest distance: " + closestBaseJointDistance);
+            Debug.Log("--------------------------------------------------");
 
             return new ClosestJointsPair
             {
@@ -64,25 +69,79 @@ namespace _20180713._Scripts
 
         private void ConnectClosestBaseJointToClosestBlockJoint(Block block)
         {
-            block.transform.rotation =
-                Quaternion.Euler(
-                    transform.up * (float) Math.Round(block.transform.rotation.eulerAngles.y / 90) * 90);
-            block.transform.position = new Vector3(
-                (float) Math.Round(block.transform.position.x),
-                block.transform.position.y,
-                (float) Math.Round(block.transform.position.z)
-            );
+//            block.transform.rotation =
+//                Quaternion.Euler(
+//                    transform.up * (float) Math.Round(block.transform.rotation.eulerAngles.y / 90) * 90);
+
+//            block.transform.rotation = joints.BaseJoint.transform.rotation - joints.transf;
+
+//            block.transform.position = new Vector3(
+//                (float) Math.Round(block.transform.position.x),
+//                block.transform.position.y,
+//                (float) Math.Round(block.transform.position.z)
+//            );
 
             var joints = GetClosestTwoJoints(block);
 
-            block.transform.position = joints.BaseJoint.GetAbsolutePositionOfEnd();
+            var base2DPosition = joints.BaseJoint.GetEndPosition();
+            base2DPosition.y = joints.BlockJoint.GetCenterPosition().y;
+            var oldParent = block.transform.parent;
+            block.transform.parent = null;
+            joints.BlockJoint.transform.parent = joints.BaseJoint.transform;
+            block.transform.parent = joints.BlockJoint.transform;
+            block.transform.rotation = Quaternion.identity;
+            block.transform.parent = oldParent;
+            joints.BlockJoint.transform.parent = null;
+
+
+            //block.transform.position += joints.BaseJoint.GetEndPosition() - joints.BlockJoint.GetEndPosition();
             if (baseBlocks.Any(b => b.transform.position == block.transform.position))
             {
-                throw new Exception("Block inside another block!");
+                Debug.Log("Block inside another block");
+//                throw new Exception("Block inside another block!");
             }
 
             baseBlocks.Add(block);
             joints.BaseJoint.Join(joints.BlockJoint);
+
+            var jointsAtBlockPosition = GetFreeJointsAtPosition(block.transform.position);
+            Debug.Log("jointsAtBlockPosition: " + jointsAtBlockPosition.Count());
+            ConnectLooseJoints(block, jointsAtBlockPosition);
+        }
+
+        private IEnumerable<BlockJoint> GetFreeJointsAtPosition(Vector3 position)
+        {
+            return baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints())
+                .Where(joint => joint.GetEndPosition() == position);
+        }
+
+        private void ConnectLooseJoints(Block block, IEnumerable<BlockJoint> otherJoints)
+        {
+            var freeBlockJoints = block.GetFreeJoints();
+            if (freeBlockJoints.Count() == 0)
+            {
+                Debug.Log("No free block joints");
+            }
+
+            foreach (var looseJoint in otherJoints)
+            {
+                try
+                {
+                    var closestBlockJoint = freeBlockJoints.First(blockJoint =>
+                        blockJoint.GetEndPosition() == looseJoint.GetCenterPosition());
+                    closestBlockJoint.Join(looseJoint);
+                }
+                catch
+                {
+                    Debug.Log("LOOSE joint pos: " + looseJoint.GetEndPosition() + ", " +
+                              looseJoint.GetCenterPosition());
+                    foreach (var joint in freeBlockJoints)
+                    {
+                        Debug.Log("block joint pos: " + joint.GetEndPosition() + ", " +
+                                  joint.GetCenterPosition());
+                    }
+                }
+            }
         }
     }
 

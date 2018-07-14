@@ -9,8 +9,13 @@ public class Block : MonoBehaviour
 {
     private bool isFree = true;
 
-    [SerializeField] private List<BlockJoint> joints = new List<BlockJoint>();
-    
+    private List<BlockJoint> joints = new List<BlockJoint>();
+
+    void Awake()
+    {
+        joints = new List<BlockJoint>(GetComponentsInChildren<BlockJoint>());
+    }
+
     public bool IsFree()
     {
         return isFree;

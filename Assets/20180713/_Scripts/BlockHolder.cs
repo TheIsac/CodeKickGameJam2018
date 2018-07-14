@@ -35,8 +35,8 @@ namespace _20180713._Scripts
             if (IsHoldingBlock())
             {
                 var closestJoints = Base.GetClosestTwoJoints(holdingBlock);
-                Debug.DrawLine(closestJoints.BlockJoint.GetAbsolutePositionOfEnd(),
-                    closestJoints.BaseJoint.GetAbsolutePositionOfEnd(), Color.red);
+                Debug.DrawLine(closestJoints.BlockJoint.GetEndPosition(),
+                    closestJoints.BaseJoint.GetEndPosition(), Color.red);
             }
 
             if (isPickingUpBlockThisFrame) isPickingUpBlockThisFrame = false;

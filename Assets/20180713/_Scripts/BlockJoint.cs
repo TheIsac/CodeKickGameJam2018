@@ -4,21 +4,27 @@ namespace _20180713._Scripts
 {
     public class BlockJoint : MonoBehaviour
     {
-        public Transform Start;
-        public Transform End;
-        public bool Connected = false;
+        public bool Connected;
 
         public void Join(BlockJoint other)
         {
-            other.End = Start;
-            End = other.Start;
             Connected = true;
             other.Connected = true;
         }
 
-        public Vector3 GetAbsolutePositionOfEnd()
+        public Vector3 GetEndPosition()
         {
-            return End.position;
+            return transform.position;
+        }
+
+        public Vector3 GetCenterPosition()
+        {
+            return transform.parent.position;
+        }
+
+        public Vector3 GetFaceVector()
+        {
+            return (GetEndPosition() - GetCenterPosition());
         }
     }
 }
