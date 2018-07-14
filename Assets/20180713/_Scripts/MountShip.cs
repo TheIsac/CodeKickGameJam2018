@@ -8,7 +8,7 @@ namespace _20180713._Scripts
 {
 	public class MountShip : MonoBehaviour {
 
-		private bool canMount;
+		public bool canMount;
 		private bool mounting;
 
 		private PlayerMovement playerMovement;
@@ -128,6 +128,11 @@ namespace _20180713._Scripts
 			{
 				canMount = true;
 			}
+		}
+
+		private void OnTriggerExit(Collider other)
+		{
+			canMount = false;
 		}
 		#endregion
 	}
