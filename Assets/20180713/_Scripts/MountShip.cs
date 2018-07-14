@@ -117,7 +117,8 @@ namespace _20180713._Scripts
 
 		private void OnTriggerStay(Collider other)
 		{
-			var otherBase = other.transform.GetComponent<Base>();
+
+			var otherBase = other.transform.GetComponentInParent<Base>();
 
 			if (other.transform.parent == null || 
 				otherBase == false)
