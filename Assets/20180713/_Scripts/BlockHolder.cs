@@ -7,8 +7,8 @@ namespace _20180713._Scripts
     public class BlockHolder : MonoBehaviour
     {
         public Transform HoldingPoint;
-        public Base Base;
         
+        private Base Base;
         private Block holdingBlock;
         private PlayerMovement playerMovement;
 
