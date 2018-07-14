@@ -9,14 +9,14 @@ namespace _20180713._Scripts
 {
     public class Base : MonoBehaviour
     {
-        [SerializeField] private Block pilotBlock;
-
         private readonly List<Block> baseBlocks = new List<Block>();
 
-        [SerializeField] private const float snappingDistance = 1.5f;
+        [SerializeField] private const float snappingDistance = 2f;
 
         void Awake()
         {
+            var pilotBlockController = GetComponentInChildren<PilotBlockController>();
+            var pilotBlock = pilotBlockController.GetComponent<Block>();
             baseBlocks.Add(pilotBlock);
         }
 

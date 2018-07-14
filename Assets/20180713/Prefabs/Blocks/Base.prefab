@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 4356937265760500}
   - component: {fileID: 33402705079332474}
   - component: {fileID: 23231180845796824}
+  - component: {fileID: 114536445982357210}
   m_Layer: 0
   m_Name: mesh_baseRocket
   m_TagString: Untagged
@@ -86,6 +87,7 @@ GameObject:
   - component: {fileID: 4881436218522000}
   - component: {fileID: 65359680084617296}
   - component: {fileID: 114875605361578140}
+  - component: {fileID: 114009254073967924}
   - component: {fileID: 114723868338034226}
   m_Layer: 0
   m_Name: PilotBlock
@@ -186,7 +188,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1772540786078032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.05, y: 0, z: 3.03}
+  m_LocalPosition: {x: -16, y: -1, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4881436218522000}
@@ -200,7 +202,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1738037740584808}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -3, y: -1, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4356937265760500}
@@ -293,6 +295,18 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114009254073967924
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1738037740584808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f1ac5dd3da20d4caeb8c8fb904e9c5d2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  owner: {fileID: 0}
 --- !u!114 &114313944397874122
 MonoBehaviour:
   m_ObjectHideFlags: 1

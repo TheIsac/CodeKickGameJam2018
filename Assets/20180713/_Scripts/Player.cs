@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using UnityEngine;
 
 namespace _20180713._Scripts
@@ -7,8 +8,15 @@ namespace _20180713._Scripts
     public class Player : MonoBehaviour
     {
         public string Name = "David";
-        
+        public int Order = 1;
+
         private float ShipWeight;
+
+        void Awake()
+        {
+            var meshController = GetComponentInChildren<MeshController>();
+            meshController.SetColorByPlayerOrder(Order);
+        }
 
         public float GetScore()
         {
