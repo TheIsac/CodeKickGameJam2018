@@ -364,11 +364,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d0d9155e384684ca46c9fae31753b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 100
   HorizontalInput: 
   VerticalInput: 
   InteractInput: 
   SecondaryInput: 
+  isMounted: 0
+  movementSpeed: 100
 --- !u!114 &114759339086788694
 MonoBehaviour:
   m_ObjectHideFlags: 1

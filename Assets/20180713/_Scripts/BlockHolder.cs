@@ -72,12 +72,12 @@ namespace _20180713._Scripts
 
         private bool IsTryingToRelease()
         {
-            return IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
+            return holdingBlock && !isPickingUpBlockThisFrame && IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
         }
 
         public bool IsHoldingBlock()
         {
-            return holdingBlock && !isPickingUpBlockThisFrame;
+            return holdingBlock;
         }
     }
 }
