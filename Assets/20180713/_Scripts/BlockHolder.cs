@@ -75,7 +75,7 @@ namespace _20180713._Scripts
             return IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
         }
 
-        private bool IsHoldingBlock()
+        public bool IsHoldingBlock()
         {
             return holdingBlock && !isPickingUpBlockThisFrame;
         }

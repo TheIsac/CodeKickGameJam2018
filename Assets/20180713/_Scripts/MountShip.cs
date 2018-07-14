@@ -55,7 +55,7 @@ namespace _20180713._Scripts
 
 		private void TryMounting()
 		{
-			if(canMount && Input.GetButtonDown(playerMovement.SecondaryInput))
+			if(canMount && !blockHolder.IsHoldingBlock() && Input.GetButtonDown(playerMovement.SecondaryInput))
 			{
 				HidePlayer();
 				GainShipControl();
