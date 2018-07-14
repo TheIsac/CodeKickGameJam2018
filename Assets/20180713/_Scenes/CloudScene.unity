@@ -14,8 +14,8 @@ OcclusionCullingSettings:
 RenderSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 9
-  m_Fog: 0
-  m_FogColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
+  m_Fog: 1
+  m_FogColor: {r: 0.18039216, g: 0.7254902, b: 0.9725491, a: 1}
   m_FogMode: 3
   m_FogDensity: 0.01
   m_LinearFogStart: 0
@@ -140,13 +140,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9d7b231aaa9c4e63a199705cce84dc5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinSpawnX: -20
-  MaxSpawnX: 20
+  MinSpawnX: -30
+  MaxSpawnX: 30
   MinSpawnY: -200
   MaxSpawnY: -200
-  MinSpawnZ: -20
-  MaxSpawnZ: 20
-  SecondsBetweenSpawn: 1.5
+  MinSpawnZ: -30
+  MaxSpawnZ: 30
+  SecondsBetweenSpawn: 1.8
   Distribution: 0
   Prefab: {fileID: 100000, guid: 7bf196ac05a4baa498bfbed8c595db48, type: 2}
 --- !u!4 &17536985
@@ -4881,7 +4881,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.4286223, g: 0.6418807, b: 0.8113208, a: 0}
+  m_BackGroundColor: {r: 0.1787558, g: 0.72687876, b: 0.9716981, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
