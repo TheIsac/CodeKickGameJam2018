@@ -69,32 +69,12 @@ namespace _20180713._Scripts
 
         private void ConnectClosestBaseJointToClosestBlockJoint(Block block)
         {
-//            block.transform.rotation =
-//                Quaternion.Euler(
-//                    transform.up * (float) Math.Round(block.transform.rotation.eulerAngles.y / 90) * 90);
-
-//            block.transform.rotation = joints.BaseJoint.transform.rotation - joints.transf;
-
-//            block.transform.position = new Vector3(
-//                (float) Math.Round(block.transform.position.x),
-//                block.transform.position.y,
-//                (float) Math.Round(block.transform.position.z)
-//            );
 
             var joints = GetClosestTwoJoints(block);
 
-//            var base2DPosition = joints.BaseJoint.GetEndPosition();
-//            base2DPosition.y = joints.BlockJoint.GetCenterPosition().y;
-//            var oldParent = block.transform.parent;
-//            block.transform.parent = null;
-//            joints.BlockJoint.transform.parent = joints.BaseJoint.transform;
-//            block.transform.parent = joints.BlockJoint.transform;
-//            block.transform.rotation = Quaternion.identity;
-//            block.transform.parent = oldParent;
-//            joints.BlockJoint.transform.parent = null;
 
+            Align(block, joints);
 
-            //block.transform.position += joints.BaseJoint.GetEndPosition() - joints.BlockJoint.GetEndPosition();
             if (baseBlocks.Any(b => b.transform.position == block.transform.position))
             {
                 Debug.Log("Block inside another block");
@@ -107,6 +87,16 @@ namespace _20180713._Scripts
             var jointsAtBlockPosition = GetFreeJointsAtPosition(block.transform.position);
             Debug.Log("jointsAtBlockPosition: " + jointsAtBlockPosition.Count());
             ConnectLooseJoints(block, jointsAtBlockPosition);
+        }
+
+        private static void Align(Block block, ClosestJointsPair joints)
+        {
+            var blockTransform = block.transform;
+            var targetTransform = joints.BaseJoint.transform;
+            var currentDir = blockTransform.position - joints.BlockJoint.transform.position;
+            var targetDir = targetTransform.position - joints.BaseJoint.transform.parent.position;
+            blockTransform.rotation = Quaternion.FromToRotation(currentDir, targetDir) * blockTransform.rotation;
+            blockTransform.position = targetTransform.position + targetDir.normalized * currentDir.magnitude;
         }
 
         private IEnumerable<BlockJoint> GetFreeJointsAtPosition(Vector3 position)
