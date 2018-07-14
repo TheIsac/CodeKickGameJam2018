@@ -13,7 +13,7 @@ namespace _20180713._Scripts
 
         private readonly List<Block> baseBlocks = new List<Block>();
 
-        [SerializeField] private const float snappingDistance = 100;
+        [SerializeField] private const float snappingDistance = 1.5f;
 
         void Awake()
         {
@@ -60,6 +60,11 @@ namespace _20180713._Scripts
                 BlockJoint = closestBlockJoint,
                 BaseJoint = closestBaseJoint
             };
+        }
+
+        public IEnumerable<Block> GetBlocks()
+        {
+            return baseBlocks;
         }
 
         private void ConnectClosestBaseJointToClosestBlockJoint(Block block)

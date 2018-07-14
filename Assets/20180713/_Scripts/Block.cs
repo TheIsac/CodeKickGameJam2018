@@ -7,6 +7,8 @@ using _20180713._Scripts;
 
 public class Block : MonoBehaviour
 {
+    public float Weight = 10;
+   
     private bool isFree = true;
 
     private List<BlockJoint> joints = new List<BlockJoint>();

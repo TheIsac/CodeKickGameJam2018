@@ -3,11 +3,12 @@ using UnityEngine;
 
 namespace _20180713._Scripts
 {
+    [RequireComponent(typeof(ShipOwner))]
     public class BlockHolder : MonoBehaviour
     {
         public Transform HoldingPoint;
         public Base Base;
-
+        
         private Block holdingBlock;
         private PlayerMovement playerMovement;
 
@@ -15,6 +16,7 @@ namespace _20180713._Scripts
 
         void Awake()
         {
+            Base = GetComponent<ShipOwner>().OwnBase;
             playerMovement = GetComponent<PlayerMovement>();
         }
 
