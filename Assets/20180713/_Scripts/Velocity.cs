@@ -11,6 +11,6 @@ public class Velocity : MonoBehaviour
 
     // Update is called once per frame
     void Update() {
-        transform.Translate(Direction * Random.Range(MinSpeed, MaxSpeed));
+        transform.Translate(Direction * Random.Range(MinSpeed, MaxSpeed) * Time.deltaTime);
     }
 }
