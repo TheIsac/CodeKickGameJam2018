@@ -162,7 +162,7 @@ GameObject:
   - component: {fileID: 114621653384084556}
   - component: {fileID: 114579602700477192}
   m_Layer: 0
-  m_Name: Base
+  m_Name: PilotBlock
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
