@@ -54,6 +54,7 @@ GameObject:
   - component: {fileID: 4716727896972296}
   - component: {fileID: 33195909345286518}
   - component: {fileID: 23648960363815338}
+  - component: {fileID: 114795982962827124}
   m_Layer: 0
   m_Name: mesh_thruster_top
   m_TagString: Untagged
@@ -71,6 +72,7 @@ GameObject:
   - component: {fileID: 4265583814497996}
   - component: {fileID: 65039033250339558}
   - component: {fileID: 114766307982462548}
+  - component: {fileID: 114128429753935946}
   m_Layer: 0
   m_Name: Thruster-block
   m_TagString: Untagged
@@ -229,6 +231,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 10, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114128429753935946
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1824670222779706}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5de5b639e88c4d1ab53af8953d488ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114395290293880210
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -253,3 +266,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Weight: 40
+--- !u!114 &114795982962827124
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1765165776500628}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac0324f66642b4ea28d5ec52e6a9b9a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

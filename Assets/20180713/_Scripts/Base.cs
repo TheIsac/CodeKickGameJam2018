@@ -62,7 +62,7 @@ namespace _20180713._Scripts
             };
         }
 
-        public IEnumerable<Block> GetBlocks()
+        public List<Block> GetBlocks()
         {
             return baseBlocks;
         }
