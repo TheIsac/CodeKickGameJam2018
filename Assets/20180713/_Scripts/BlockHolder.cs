@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace _20180713._Scripts
@@ -36,7 +37,9 @@ namespace _20180713._Scripts
 
             if (IsHoldingBlock())
             {
-                var closestJoints = Base.GetClosestTwoJoints(holdingBlock);
+                var baseJoints = Base.GetBlocks().SelectMany(baseBlock => baseBlock.GetFreeJoints());
+                var blockJoints = holdingBlock.GetFreeJoints();
+                var closestJoints = Base.GetClosestTwoJoints(blockJoints,baseJoints);
                 Debug.DrawLine(closestJoints.BlockJoint.GetEndPosition(),
                     closestJoints.BaseJoint.GetEndPosition(), Color.red);
             }
@@ -63,6 +66,12 @@ namespace _20180713._Scripts
             holdingBlock.Release();
             Base.AttachBlock(holdingBlock);
             holdingBlock = null;
+        }
+        
+        private void DetachHoldingBlockFromBase(Block block)
+        {
+            //SetHoldingBlock(block);
+            Base.DetachBlock(holdingBlock);
         }
 
         public bool IsTryingToPickUp()

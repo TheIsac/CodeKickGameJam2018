@@ -11,6 +11,12 @@ namespace _20180713._Scripts
             Connected = true;
             other.Connected = true;
         }
+        
+        public void Disconnect(BlockJoint other)
+        {
+            Connected = false;
+            other.Connected = false;
+        }
 
         public Vector3 GetEndPosition()
         {

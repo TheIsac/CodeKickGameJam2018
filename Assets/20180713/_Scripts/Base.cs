@@ -26,16 +26,20 @@ namespace _20180713._Scripts
             block.SetHolder(gameObject);
         }
 
+        public void DetachBlock(Block block)
+        {
+            DisConnectClosestBaseJointToClosestBlockJoint(block);
+        }
+
         public bool IsBlockCloseEnough(Block block)
         {
             return baseBlocks.Min(baseBlock =>
                        Vector3.Distance(block.transform.position, baseBlock.transform.position)) < snappingDistance;
         }
 
-        public ClosestJointsPair GetClosestTwoJoints(Block block)
+        public ClosestJointsPair GetClosestTwoJoints(IEnumerable<BlockJoint> blockJoints,
+            IEnumerable<BlockJoint> baseJoints)
         {
-            var blockJoints = block.GetFreeJoints();
-            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints());
             BlockJoint closestBlockJoint = null;
             BlockJoint closestBaseJoint = null;
             float closestBaseJointDistance = -1;
@@ -69,8 +73,9 @@ namespace _20180713._Scripts
 
         private void ConnectClosestBaseJointToClosestBlockJoint(Block block)
         {
-            var joints = GetClosestTwoJoints(block);
-
+            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints());
+            var blockJoints = block.GetFreeJoints();
+            var joints = GetClosestTwoJoints(blockJoints, baseJoints);
 
             Align(block, joints);
 
@@ -86,6 +91,20 @@ namespace _20180713._Scripts
             ConnectLooseJoints(block, jointsAtBlockPosition);
         }
 
+        private void DisConnectClosestBaseJointToClosestBlockJoint(Block block)
+        {
+            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetConnectedJoints());
+            var blockJoints = block.GetConnectedJoints();
+            var joints = GetClosestTwoJoints(blockJoints, baseJoints);
+
+            baseBlocks.Remove(block);
+            joints.BaseJoint.Disconnect(joints.BlockJoint);
+
+            var jointsAtBlockPosition = GetConnectedJointsAtPosition(block.transform.position);
+            //Varfor?
+            //ConnectLooseJoints(block, jointsAtBlockPosition);
+        }
+
         private static void Align(Block block, ClosestJointsPair joints)
         {
             var blockTransform = block.transform;
@@ -98,6 +117,12 @@ namespace _20180713._Scripts
         private IEnumerable<BlockJoint> GetFreeJointsAtPosition(Vector3 position)
         {
             return baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints())
+                .Where(joint => joint.GetEndPosition() == position);
+        }
+        
+        private IEnumerable<BlockJoint> GetConnectedJointsAtPosition(Vector3 position)
+        {
+            return baseBlocks.SelectMany(baseBlock => baseBlock.GetConnectedJoints())
                 .Where(joint => joint.GetEndPosition() == position);
         }
 

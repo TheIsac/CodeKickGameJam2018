@@ -36,6 +36,12 @@ public class Block : MonoBehaviour
         isFree = false;
     }
 
+    public GameObject GetHolder()
+    {
+        return transform.parent.gameObject;
+    }
+
+
     public void Release()
     {
         transform.SetParent(null);
@@ -45,6 +51,11 @@ public class Block : MonoBehaviour
     public IEnumerable<BlockJoint> GetFreeJoints()
     {
         return joints.Where(joint => !joint.Connected);
+    }
+
+    public IEnumerable<BlockJoint> GetConnectedJoints()
+    {
+        return joints.Where(joint => joint.Connected);
     }
 
     private void OnTriggerStay(Collider collider)
