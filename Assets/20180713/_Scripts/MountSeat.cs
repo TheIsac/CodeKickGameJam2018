@@ -46,6 +46,8 @@ namespace _20180713._Scripts
 
 		private void ParentShipToPlayer()
 		{
+			transform.position = 
+				new Vector3(baseBlock.transform.position.x, transform.position.y, baseBlock.transform.position.z);
 			baseBlock.transform.parent = transform;
 		}
 
