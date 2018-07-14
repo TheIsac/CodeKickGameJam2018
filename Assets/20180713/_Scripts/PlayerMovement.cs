@@ -7,7 +7,6 @@ using _20180713._Scripts;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float movementSpeed;
-    private bool canJump;
 
     [SerializeField] public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput;
 
@@ -53,5 +52,5 @@ public class PlayerMovement : MonoBehaviour
 		}
     }
 
-    #endregion
+	#endregion
 }
