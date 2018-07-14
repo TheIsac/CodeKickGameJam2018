@@ -84,11 +84,10 @@ namespace _20180713._Scripts
         private static void Align(Block block, ClosestJointsPair joints)
         {
             var blockTransform = block.transform;
-            var targetTransform = joints.BaseJoint.transform;
-            var currentDir = blockTransform.position - joints.BlockJoint.transform.position;
-            var targetDir = targetTransform.position - joints.BaseJoint.transform.parent.position;
+            var currentDir = blockTransform.position - joints.BlockJoint.GetEndPosition();
+            var targetDir = joints.BaseJoint.GetEndPosition() - joints.BaseJoint.GetCenterPosition();
             blockTransform.rotation = Quaternion.FromToRotation(currentDir, targetDir) * blockTransform.rotation;
-            blockTransform.position = targetTransform.position + targetDir.normalized * currentDir.magnitude;
+            block.transform.position += joints.BaseJoint.GetEndPosition() - joints.BlockJoint.GetEndPosition();
         }
 
         private IEnumerable<BlockJoint> GetFreeJointsAtPosition(Vector3 position)
