@@ -67,6 +67,11 @@ namespace _20180713._Scripts
             block.transform.rotation =
                 Quaternion.Euler(
                     transform.up * (float) Math.Round(block.transform.rotation.eulerAngles.y / 90) * 90);
+            block.transform.position = new Vector3(
+                (float) Math.Round(block.transform.position.x),
+                block.transform.position.y,
+                (float) Math.Round(block.transform.position.z)
+            );
 
             var joints = GetClosestTwoJoints(block);
 
