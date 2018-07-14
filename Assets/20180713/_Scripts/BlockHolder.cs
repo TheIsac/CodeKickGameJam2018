@@ -32,6 +32,13 @@ namespace _20180713._Scripts
                 }
             }
 
+            if (IsHoldingBlock())
+            {
+                var closestJoints = Base.GetClosestTwoJoints(holdingBlock);
+                Debug.DrawLine(closestJoints.BlockJoint.GetAbsolutePositionOfEnd(),
+                    closestJoints.BaseJoint.GetAbsolutePositionOfEnd(), Color.red);
+            }
+
             if (isPickingUpBlockThisFrame) isPickingUpBlockThisFrame = false;
         }
 

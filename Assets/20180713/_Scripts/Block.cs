@@ -10,7 +10,7 @@ public class Block : MonoBehaviour
     private bool isFree = true;
 
     [SerializeField] private List<BlockJoint> joints = new List<BlockJoint>();
-
+    
     public bool IsFree()
     {
         return isFree;

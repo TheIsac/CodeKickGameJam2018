@@ -13,6 +13,12 @@ namespace _20180713._Scripts
             other.End = Start;
             End = other.Start;
             Connected = true;
+            other.Connected = true;
+        }
+
+        public Vector3 GetAbsolutePositionOfEnd()
+        {
+            return End.position;
         }
     }
 }
