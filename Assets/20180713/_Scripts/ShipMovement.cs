@@ -6,12 +6,13 @@ using _20180713._Scripts;
 
 public class ShipMovement : MonoBehaviour
 {
-    [HideInInspector] public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput;
-    public bool isMounted = false;
+	[HideInInspector]
+	public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput;
+	public bool isMounted = false;
 
-    [SerializeField] private float movementSpeed;
-    private Rigidbody rb;
-    private BoxCollider boxCollider;
+    [SerializeField] public float movementSpeed;
+	private Rigidbody rb;
+	private BoxCollider boxCollider;
 
     private void Awake()
     {
@@ -77,4 +78,3 @@ public class ShipMovement : MonoBehaviour
             }
         }
     }
-}

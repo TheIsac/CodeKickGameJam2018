@@ -629,7 +629,7 @@ Prefab:
     - target: {fileID: 54780976887471582, guid: ae03b5544db34464c84e29a7eef99109,
         type: 2}
       propertyPath: m_AngularDrag
-      value: 1
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 54780976887471582, guid: ae03b5544db34464c84e29a7eef99109,
         type: 2}
@@ -1075,6 +1075,22 @@ Prefab:
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 1ac3560705b3cdf469a591fa5b914aeb, type: 2}
   m_IsPrefabAsset: 0
+--- !u!1 &1768110046 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1738037740584808, guid: ae03b5544db34464c84e29a7eef99109,
+    type: 2}
+  m_PrefabInternal: {fileID: 935101074}
+--- !u!114 &1768110052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1768110046}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac66652d5f998cf4a8a98407da1614b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2018907760 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1336679690780568, guid: 8bfb5f2de0d950246aa13e1c684112f0,

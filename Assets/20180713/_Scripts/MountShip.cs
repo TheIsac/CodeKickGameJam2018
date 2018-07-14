@@ -118,19 +118,13 @@ namespace _20180713._Scripts
 		private void OnTriggerStay(Collider other)
 		{
 
-			var otherBase = other.transform.GetComponentInParent<Base>();
-
-			if (other.transform.parent == null || 
-				otherBase == false)
-			{
-				canMount = false;
+			if (other.transform.parent == null)
 				return;
-			}
 
-			else if (other.transform.parent.gameObject == baseBlock.gameObject)
-			{
+			if (other.transform.parent.gameObject == baseBlock.gameObject)
 				canMount = true;
-			}
+			else
+				canMount = false;
 		}
 
 		private void OnTriggerExit(Collider other)

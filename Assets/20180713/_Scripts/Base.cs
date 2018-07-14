@@ -10,6 +10,7 @@ namespace _20180713._Scripts
     public class Base : MonoBehaviour
     {
         private readonly List<Block> baseBlocks = new List<Block>();
+		private ShipModifier shipModifier;
 
         [SerializeField] private const float snappingDistance = 2f;
 
@@ -18,12 +19,14 @@ namespace _20180713._Scripts
             var pilotBlockController = GetComponentInChildren<PilotBlockController>();
             var pilotBlock = pilotBlockController.GetComponent<Block>();
             baseBlocks.Add(pilotBlock);
+			shipModifier = GetComponentInChildren<ShipModifier>();
         }
 
         public void AttachBlock(Block block)
         {
             ConnectClosestBaseJointToClosestBlockJoint(block);
             block.SetHolder(gameObject);
+			shipModifier.UpdateMass(block.Weight);
         }
 
         public void DetachBlock(Block block)
