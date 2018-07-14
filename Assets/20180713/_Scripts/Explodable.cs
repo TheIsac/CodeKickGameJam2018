@@ -15,21 +15,29 @@ public class Explodable : MonoBehaviour
         time += Time.deltaTime;
         if (time > ExplodeInSeconds)
         {
-            var colldiers = Physics.OverlapSphere(transform.position, Radius);
-            foreach (var collider in colldiers)
+            var colliders = Physics.OverlapSphere(transform.position, Radius);
+            foreach (var collider in colliders)
             {
                 var block = collider.GetComponent<Block>();
-                var holder = block.GetHolder();
-                if (holder != null)
+                if (block != null)
                 {
-                    var @base = holder.GetComponent<Base>();
-                    if (@base != null)
+                    var holder = block.GetHolder();
+                    if (holder != null)
                     {
-                        @base.DetachBlock(block);
-                    }
+                        var @base = holder.GetComponent<Base>();
+                        if (@base != null)
+                        {
+                            @base.DetachBlock(block);
+                        }
+                    }   
                 }
 
                 var body = collider.GetComponent<Rigidbody>();
+                if (body == null && collider.transform.parent != null)
+                {
+                    body = collider.transform.parent.GetComponent<Rigidbody>();
+                }
+                
                 if (body != null)
                 {
                     body.AddExplosionForce(Force, transform.position, Radius);
