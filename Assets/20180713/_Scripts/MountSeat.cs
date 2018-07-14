@@ -22,7 +22,7 @@ namespace _20180713._Scripts
 			playerMesh = GetComponentInChildren<MeshRenderer>();
 			playerCollider = GetComponent<Collider>();
 			blockHolder = GetComponent<BlockHolder>();
-			baseBlock = blockHolder.Base;
+			baseBlock = GetComponent<ShipOwner>().OwnBase;
 		}
 
 		private void Update()
