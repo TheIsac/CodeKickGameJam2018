@@ -5,21 +5,26 @@ using _20180713._Scripts;
 
 public class ShipMovement : MonoBehaviour
 {
+
+	[HideInInspector]
+	public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput;
+	public bool isMounted = false;
+
     [SerializeField] private float movementSpeed;
-
-	[SerializeField] public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput;
-
 	private Rigidbody rb;
 	private BoxCollider boxCollider;
 
 	private void Awake()
 	{
-		rb = GetComponent<Rigidbody>();
+		rb = GetComponentInParent<Rigidbody>();
 		boxCollider = GetComponent<BoxCollider>();
 	}
 
 	void Update()
 	{
+		if (!isMounted)
+			return;
+
 		ReadInputs();
 	}
 

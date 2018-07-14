@@ -86,6 +86,7 @@ GameObject:
   - component: {fileID: 4881436218522000}
   - component: {fileID: 65359680084617296}
   - component: {fileID: 114875605361578140}
+  - component: {fileID: 114723868338034226}
   m_Layer: 0
   m_Name: PilotBlock
   m_TagString: Untagged
@@ -102,6 +103,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4852627488717390}
   - component: {fileID: 114479759195867656}
+  - component: {fileID: 54780976887471582}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -184,7 +186,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1772540786078032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -3.05, y: 0, z: 3.03}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4881436218522000}
@@ -264,6 +266,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1327778800551650}
   m_Mesh: {fileID: 4300000, guid: e32d436108531014ba99e52a44b3c6be, type: 3}
+--- !u!54 &54780976887471582
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1772540786078032}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 1
+  m_AngularDrag: 6
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 84
+  m_CollisionDetection: 0
 --- !u!65 &65359680084617296
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -312,6 +329,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pilotBlock: {fileID: 114875605361578140}
+--- !u!114 &114723868338034226
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1738037740584808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01d0d9155e384684ca46c9fae31753b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HorizontalInput: 
+  VerticalInput: 
+  InteractInput: 
+  SecondaryInput: 
+  isMounted: 0
+  movementSpeed: 100
 --- !u!114 &114759339086788694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -347,3 +381,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89aec9f80494648b4bed6326678cee6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Weight: 10
