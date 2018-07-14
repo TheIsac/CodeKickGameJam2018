@@ -203,6 +203,16 @@ Prefab:
       propertyPath: Base
       value: 
       objectReference: {fileID: 889670285}
+    - target: {fileID: 114925389900713448, guid: 681c6a76d4262554fbabd1454dd35a46,
+        type: 2}
+      propertyPath: MountInput
+      value: 1_Secondary
+      objectReference: {fileID: 0}
+    - target: {fileID: 114925389900713448, guid: 681c6a76d4262554fbabd1454dd35a46,
+        type: 2}
+      propertyPath: SecondaryInput
+      value: 1_Secondary
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 681c6a76d4262554fbabd1454dd35a46, type: 2}
   m_IsPrefabAsset: 0
@@ -616,6 +626,16 @@ Prefab:
       propertyPath: InteractInput
       value: 3_Primary
       objectReference: {fileID: 0}
+    - target: {fileID: 114925389900713448, guid: 681c6a76d4262554fbabd1454dd35a46,
+        type: 2}
+      propertyPath: MountInput
+      value: 3_Secondary
+      objectReference: {fileID: 0}
+    - target: {fileID: 114925389900713448, guid: 681c6a76d4262554fbabd1454dd35a46,
+        type: 2}
+      propertyPath: SecondaryInput
+      value: 3_Secondary
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 681c6a76d4262554fbabd1454dd35a46, type: 2}
   m_IsPrefabAsset: 0
@@ -800,6 +820,16 @@ Prefab:
       propertyPath: InteractInput
       value: 4_Primary
       objectReference: {fileID: 0}
+    - target: {fileID: 114925389900713448, guid: 681c6a76d4262554fbabd1454dd35a46,
+        type: 2}
+      propertyPath: MountInput
+      value: 4_Secondary
+      objectReference: {fileID: 0}
+    - target: {fileID: 114925389900713448, guid: 681c6a76d4262554fbabd1454dd35a46,
+        type: 2}
+      propertyPath: SecondaryInput
+      value: 4_Secondary
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 681c6a76d4262554fbabd1454dd35a46, type: 2}
   m_IsPrefabAsset: 0
@@ -911,6 +941,16 @@ Prefab:
         type: 2}
       propertyPath: InteractInput
       value: 2_Primary
+      objectReference: {fileID: 0}
+    - target: {fileID: 114925389900713448, guid: 681c6a76d4262554fbabd1454dd35a46,
+        type: 2}
+      propertyPath: MountInput
+      value: 2_Secondary
+      objectReference: {fileID: 0}
+    - target: {fileID: 114925389900713448, guid: 681c6a76d4262554fbabd1454dd35a46,
+        type: 2}
+      propertyPath: SecondaryInput
+      value: 2_Secondary
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 681c6a76d4262554fbabd1454dd35a46, type: 2}

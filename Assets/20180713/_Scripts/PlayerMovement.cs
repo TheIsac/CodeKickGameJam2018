@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float movementSpeed;
     private bool canJump;
 
-    [SerializeField] public string HorizontalInput, VerticalInput, InteractInput;
+    [SerializeField] public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput;
 
     private Rigidbody rb;
     private BoxCollider boxCollider;
@@ -46,6 +46,11 @@ public class PlayerMovement : MonoBehaviour
             var inputAngle = Mathf.DeltaAngle(currentAngle, targetAngle);
             rb.AddTorque(transform.up * inputAngle * 0.01f);
         }
+
+		if (Input.GetButtonDown(SecondaryInput))
+		{
+
+		}
     }
 
     #endregion
