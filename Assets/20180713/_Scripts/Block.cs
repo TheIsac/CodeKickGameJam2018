@@ -17,12 +17,12 @@ public class Block : MonoBehaviour
     void Awake()
     {
         joints = new List<BlockJoint>(GetComponentsInChildren<BlockJoint>());
-        GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * Random.Range(1, 50));
+        //GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * Random.Range(1, 50));
 
         var towardsCamera =  Camera.main.transform.position - transform.position;
         var force =  towardsCamera.normalized + Random.insideUnitSphere * 0.01f;
         //force = new Vector3(0,1,0);
-        GetComponent<Rigidbody>().AddForce(force * Random.Range(50, 80), ForceMode.Impulse);
+        //GetComponent<Rigidbody>().AddForce(force * Random.Range(50, 80), ForceMode.Impulse);
     }
 
     public bool IsFree()
