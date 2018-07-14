@@ -20,6 +20,7 @@ public class Spawner2 : MonoBehaviour
     public Distribution Distribution;
     public GameObject Prefab;
     public bool randomizeYRotation = false;
+    public bool addRandomTorque = false;
 
     private float secondsSinceLastSpawn = 0;
 
@@ -65,6 +66,11 @@ public class Spawner2 : MonoBehaviour
         if (randomizeYRotation)
         {
             instance.transform.Rotate(Vector3.up, Random.Range(0, 360));
+        }
+
+        if (addRandomTorque)
+        {
+            instance.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere);
         }
     }
 }

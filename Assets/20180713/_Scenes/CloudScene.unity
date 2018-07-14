@@ -142,8 +142,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MinSpawnX: -30
   MaxSpawnX: 30
-  MinSpawnY: -170
-  MaxSpawnY: -170
+  MinSpawnY: -160
+  MaxSpawnY: -160
   MinSpawnZ: -30
   MaxSpawnZ: 30
   SecondsBetweenSpawn: 1

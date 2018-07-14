@@ -23,6 +23,8 @@ GameObject:
   - component: {fileID: 23881311748010038}
   - component: {fileID: 95127350969405794}
   - component: {fileID: 114286153125877618}
+  - component: {fileID: 114889483953351240}
+  - component: {fileID: 114674372906702344}
   m_Layer: 0
   m_Name: NewCloud
   m_TagString: Untagged
@@ -117,3 +119,28 @@ MonoBehaviour:
   Direction: {x: 0, y: 1, z: 0}
   MinSpeed: 1
   MaxSpeed: 20
+--- !u!114 &114674372906702344
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1817361374692174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a7964a3134134cb1a4d6f07188bb273, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114889483953351240
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1817361374692174}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 15380dd32a875a84a85b9e138f0fa9d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Axis: 1
+  Comparison: 1
+  Value: 15
