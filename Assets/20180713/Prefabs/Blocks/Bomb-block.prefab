@@ -68,8 +68,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4543526085107194}
-  - component: {fileID: 65755002022670336}
   - component: {fileID: 114512190265875340}
+  - component: {fileID: 135081050872297630}
+  - component: {fileID: 65225035934273438}
   m_Layer: 0
   m_Name: Bomb-block
   m_TagString: Untagged
@@ -155,7 +156,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1600180116481990}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6.47, y: -1, z: -5.25}
+  m_LocalPosition: {x: 5.97, y: -1, z: -5.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4278917853159582}
@@ -234,17 +235,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1230330589717800}
   m_Mesh: {fileID: 4300000, guid: b22de3e768f3942199cce30805dec9e6, type: 3}
---- !u!65 &65755002022670336
+--- !u!65 &65225035934273438
 BoxCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1600180116481990}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 10, z: 1}
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114057712130997528
 MonoBehaviour:
@@ -282,6 +283,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Weight: 100
+  Speed: 0
 --- !u!114 &114588577326416544
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -306,3 +308,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Connected: 0
+--- !u!135 &135081050872297630
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1600180116481990}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Center: {x: 0, y: 0, z: 0}

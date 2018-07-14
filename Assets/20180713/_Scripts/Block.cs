@@ -9,6 +9,7 @@ using Random = UnityEngine.Random;
 public class Block : MonoBehaviour
 {
     public float Weight = 10;
+	public float Speed = 0;
    
     private bool isFree = true;
 

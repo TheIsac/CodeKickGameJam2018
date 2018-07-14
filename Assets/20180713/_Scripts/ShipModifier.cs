@@ -22,13 +22,9 @@ public class ShipModifier : MonoBehaviour {
 		baseSpeed = shipMovement.movementSpeed;
 	}
 
-	public void UpdateMass(float mass)
+	public void UpdateMassAndSpeed(float mass, float speed)
 	{
 		rb.mass += mass/10;
-	}
-
-	public void UpdateSpeed(float speed)
-	{
-		shipMovement.movementSpeed += speed;
+		shipMovement.movementSpeed += speed*10;
 	}
 }

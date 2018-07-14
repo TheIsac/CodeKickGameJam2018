@@ -26,7 +26,7 @@ namespace _20180713._Scripts
         {
             ConnectClosestBaseJointToClosestBlockJoint(block);
             block.SetHolder(gameObject);
-			shipModifier.UpdateMass(block.Weight);
+			shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
         }
 
         public void DetachBlock(Block block)

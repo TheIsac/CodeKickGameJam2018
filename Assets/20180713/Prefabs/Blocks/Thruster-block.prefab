@@ -70,9 +70,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4265583814497996}
-  - component: {fileID: 65039033250339558}
   - component: {fileID: 114766307982462548}
   - component: {fileID: 114128429753935946}
+  - component: {fileID: 135664725936296594}
+  - component: {fileID: 65322895441774560}
   m_Layer: 0
   m_Name: Thruster-block
   m_TagString: Untagged
@@ -100,7 +101,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1824670222779706}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 17.8, y: -1, z: -5.25}
+  m_LocalPosition: {x: 4.8, y: -1, z: 1.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4943290399396460}
@@ -219,17 +220,17 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1691120149752466}
   m_Mesh: {fileID: 4300000, guid: 9b7d8c0c9d50e4d67b27e8da26ef8f40, type: 3}
---- !u!65 &65039033250339558
+--- !u!65 &65322895441774560
 BoxCollider:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1824670222779706}
   m_Material: {fileID: 0}
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 1, y: 10, z: 1}
+  m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!114 &114128429753935946
 MonoBehaviour:
@@ -265,7 +266,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89aec9f80494648b4bed6326678cee6b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Weight: 40
+  Weight: 10
+  Speed: 90
 --- !u!114 &114795982962827124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -277,3 +279,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac0324f66642b4ea28d5ec52e6a9b9a1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!135 &135664725936296594
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1824670222779706}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Center: {x: 0, y: 0, z: 0}
