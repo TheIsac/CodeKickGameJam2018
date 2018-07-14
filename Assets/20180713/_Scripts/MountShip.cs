@@ -14,6 +14,7 @@ namespace _20180713._Scripts
 		private PlayerMovement playerMovement;
 		private MeshRenderer playerMesh;
 		private Collider playerCollider;
+		private BlockHolder blockHolder;
 		private Base baseBlock;
 
 		private ShipMovement playerShip;
@@ -23,6 +24,7 @@ namespace _20180713._Scripts
 			playerMovement = GetComponent<PlayerMovement>();
 			playerMesh = GetComponentInChildren<MeshRenderer>();
 			playerCollider = GetComponent<Collider>();
+			blockHolder = GetComponent<BlockHolder>();
 			baseBlock = GetComponent<ShipOwner>().OwnBase;
 			playerShip = baseBlock.gameObject.GetComponentInChildren<ShipMovement>();
 
@@ -105,6 +107,8 @@ namespace _20180713._Scripts
 		{
 			transform.position =
 				new Vector3(baseBlock.transform.position.x, transform.position.y, baseBlock.transform.position.z);
+
+			playerMovement.StopPlayerMovement();
 		}
 
 		#endregion
@@ -116,14 +120,12 @@ namespace _20180713._Scripts
 			if (other.transform.parent == null || 
 				other.transform.parent.GetComponent<Base>() == false)
 			{
-				Debug.Log("CANT MOUNT");
 				canMount = false;
 				return;
 			}
 
 			else if (other.transform.parent.GetComponent<Base>())
 			{
-				Debug.Log("NOW I CAN MOUNT");
 				canMount = true;
 			}
 		}
