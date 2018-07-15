@@ -438,6 +438,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weight: 10
   Speed: 0
+  isStatic: 0
 --- !u!135 &135594990049845118
 SphereCollider:
   m_ObjectHideFlags: 1

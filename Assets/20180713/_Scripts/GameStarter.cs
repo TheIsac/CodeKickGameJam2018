@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -45,6 +46,10 @@ namespace _20180713._Scripts
                 players.Add(player);
                 ships.Add(playerShip);
             }
+
+            var shipManager = GameObject.FindWithTag("ShipManager").GetComponent<ShipManager>();
+            var shipComponents = ships.Select(shipGameObject => shipGameObject.GetComponent<Base>());
+            shipManager.Ships.AddRange(shipComponents);
 
             scoreboardComponent.ResetScoreboard();
         }

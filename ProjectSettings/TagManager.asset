@@ -5,6 +5,8 @@ TagManager:
   serializedVersion: 2
   tags:
   - Scoreboard
+  - AudioManager
+  - ShipManager
   layers:
   - Default
   - TransparentFX
