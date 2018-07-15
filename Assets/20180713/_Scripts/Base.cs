@@ -88,7 +88,7 @@ namespace _20180713._Scripts
                 throw new Exception("Block inside another block!");
             }
 
-            baseBlocks.Add(block);
+            AddBlock(block);
             joints.BaseJoint.Join(joints.BlockJoint);
 
             var jointsAtBlockPosition = GetFreeJointsAtPosition(block.transform.position);
@@ -125,10 +125,17 @@ namespace _20180713._Scripts
             startBlock.Release();
         }
 
+        private void AddBlock(Block block)
+        {
+            baseBlocks.Add(block);
+            Destroy(block.GetComponent<Rigidbody>());
+        }
+
         private void RemoveBlock(Block block)
         {
             baseBlocks.Remove(block);
             shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
+            block.gameObject.AddComponent<Rigidbody>();
         }
 
         private bool IsConnectedToPilotBlock(Block startBlock, List<BlockJoint> visitedJoints)
