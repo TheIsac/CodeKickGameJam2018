@@ -62,7 +62,8 @@ public class Block : MonoBehaviour
     private void OnTriggerStay(Collider collider)
     {
         var blockHolder = collider.GetComponent<BlockHolder>();
-        if (isFree && blockHolder != null && blockHolder.IsTryingToPickUp())
+        var tryingToPickUp = blockHolder != null && blockHolder.IsTryingToPickUp();
+        if (isFree && tryingToPickUp)
         {
             blockHolder.SetHoldingBlock(this);
             var rigidbody = GetComponent<Rigidbody>();
@@ -70,6 +71,16 @@ public class Block : MonoBehaviour
             {
                 rigidbody.velocity = Vector3.zero;
                 rigidbody.angularVelocity = Vector3.zero;                
+            }
+        }
+
+        if (!isFree && tryingToPickUp && transform.parent != null)
+        {
+            var @base = GetHolder().GetComponent<Base>();
+            if (@base)
+            {
+                @base.DetachBlock(this);  
+                blockHolder.SetHoldingBlock(this);              
             }
         }
     }

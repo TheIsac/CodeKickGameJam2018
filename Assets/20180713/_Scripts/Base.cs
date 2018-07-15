@@ -96,16 +96,10 @@ namespace _20180713._Scripts
 
         private void DisConnectClosestBaseJointToClosestBlockJoint(Block block)
         {
-            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetConnectedJoints());
-            var blockJoints = block.GetConnectedJoints();
-            var joints = GetClosestTwoJoints(blockJoints, baseJoints);
-
-            baseBlocks.Remove(block);
-            joints.BaseJoint.Disconnect(joints.BlockJoint);
-
-            var jointsAtBlockPosition = GetConnectedJointsAtPosition(block.transform.position);
-            //Varfor?
-            //ConnectLooseJoints(block, jointsAtBlockPosition);
+            foreach (var joint in block.GetConnectedJoints())
+            {
+                joint.Disconnect();
+            }
         }
 
         private static void Align(Block block, ClosestJointsPair joints)
@@ -120,12 +114,6 @@ namespace _20180713._Scripts
         private IEnumerable<BlockJoint> GetFreeJointsAtPosition(Vector3 position)
         {
             return baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints())
-                .Where(joint => joint.GetEndPosition() == position);
-        }
-        
-        private IEnumerable<BlockJoint> GetConnectedJointsAtPosition(Vector3 position)
-        {
-            return baseBlocks.SelectMany(baseBlock => baseBlock.GetConnectedJoints())
                 .Where(joint => joint.GetEndPosition() == position);
         }
 
