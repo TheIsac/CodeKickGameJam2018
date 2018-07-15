@@ -10,20 +10,24 @@ public class Block : MonoBehaviour
 {
     public float Weight = 10;
     public float Speed = 0;
+    public bool isStatic = false;
 
     private bool isFree = true;
-
+    
     private List<BlockJoint> joints = new List<BlockJoint>();
 
     void Awake()
     {
         joints = new List<BlockJoint>(GetComponentsInChildren<BlockJoint>());
-        //GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * Random.Range(1, 50));
 
-        var towardsCamera = Camera.main.transform.position - transform.position;
-        var force = towardsCamera.normalized + Random.insideUnitSphere * 0.01f;
-        //force = new Vector3(0,1,0);
-        //GetComponent<Rigidbody>().AddForce(force * Random.Range(40, 70), ForceMode.Impulse);
+        if (!isStatic)
+        {
+            GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * Random.Range(1, 50));
+            var towardsCamera = Camera.main.transform.position - transform.position;
+            var force = towardsCamera.normalized + Random.insideUnitSphere * 0.01f;
+            //force = new Vector3(0,1,0);
+            GetComponent<Rigidbody>().AddForce(force * Random.Range(40, 70), ForceMode.Impulse);    
+        }
     }
 
     public bool IsFree()
