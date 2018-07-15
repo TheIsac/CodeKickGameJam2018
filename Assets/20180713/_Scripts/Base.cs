@@ -97,11 +97,11 @@ namespace _20180713._Scripts
 
         private void DisConnectClosestBaseJointToClosestBlockJoint(Block block)
         {
-            baseBlocks.Remove(block);
+            RemoveBlock(block);
             foreach (var joint in block.GetConnectedJoints())
             {
                 joint.Disconnect();
-                if (IsConnectedToPilotBlock(joint.Block, new List<BlockJoint>()))
+                if (!IsConnectedToPilotBlock(joint.Block, new List<BlockJoint>()))
                 {
                     DisconnectNetworkOfBlocks(joint.Block, new List<BlockJoint>());
                 }
@@ -110,13 +110,25 @@ namespace _20180713._Scripts
 
         private void DisconnectNetworkOfBlocks(Block startBlock, List<BlockJoint> visitedJoints)
         {
-            var currentBlock = startBlock;
-            foreach (var joint in currentBlock.GetConnectedJoints())
+            if (startBlock.GetComponent<PilotBlockController>()) return;
+
+            foreach (var joint in startBlock.GetConnectedJoints())
             {
                 if (visitedJoints.Contains(joint)) continue;
                 joint.Disconnect();
                 visitedJoints.Add(joint);
+
+                DisconnectNetworkOfBlocks(joint.Block, visitedJoints);
             }
+
+            RemoveBlock(startBlock);
+            startBlock.Release();
+        }
+
+        private void RemoveBlock(Block block)
+        {
+            baseBlocks.Remove(block);
+            shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
         }
 
         private bool IsConnectedToPilotBlock(Block startBlock, List<BlockJoint> visitedJoints)

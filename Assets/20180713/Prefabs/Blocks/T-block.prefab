@@ -70,6 +70,7 @@ GameObject:
   - component: {fileID: 114032157275673676}
   - component: {fileID: 135693444134269104}
   - component: {fileID: 65104830083332218}
+  - component: {fileID: 54256668598138482}
   m_Layer: 0
   m_Name: T-block
   m_TagString: Untagged
@@ -205,6 +206,21 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1938741172681994}
   m_Mesh: {fileID: 4300000, guid: 1be1855918e6c46699b184ea95adb556, type: 3}
+--- !u!54 &54256668598138482
+Rigidbody:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1681195361528180}
+  serializedVersion: 2
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!65 &65104830083332218
 BoxCollider:
   m_ObjectHideFlags: 1
@@ -230,6 +246,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weight: 20
   Speed: 0
+  isStatic: 0
 --- !u!114 &114297569846402416
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -241,7 +258,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06fa66038b54b75aaf0049cf5330b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Connected: 0
+  Block: {fileID: 0}
+  connectedJoint: {fileID: 0}
 --- !u!114 &114381533108116084
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -253,7 +271,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06fa66038b54b75aaf0049cf5330b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Connected: 0
+  Block: {fileID: 0}
+  connectedJoint: {fileID: 0}
 --- !u!114 &114928109521453604
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -265,7 +284,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06fa66038b54b75aaf0049cf5330b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Connected: 0
+  Block: {fileID: 0}
+  connectedJoint: {fileID: 0}
 --- !u!135 &135693444134269104
 SphereCollider:
   m_ObjectHideFlags: 1

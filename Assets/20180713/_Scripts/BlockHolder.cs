@@ -40,8 +40,11 @@ namespace _20180713._Scripts
                 var baseJoints = Base.GetBlocks().SelectMany(baseBlock => baseBlock.GetFreeJoints());
                 var blockJoints = holdingBlock.GetFreeJoints();
                 var closestJoints = Base.GetClosestTwoJoints(blockJoints, baseJoints);
-                Debug.DrawLine(closestJoints.BlockJoint.GetEndPosition(),
-                    closestJoints.BaseJoint.GetEndPosition(), Color.red);
+                if (closestJoints != null && closestJoints.BaseJoint && closestJoints.BlockJoint)
+                {
+                    Debug.DrawLine(closestJoints.BlockJoint.GetEndPosition(),
+                        closestJoints.BaseJoint.GetEndPosition(), Color.red);
+                }
             }
 
             if (isPickingUpBlockThisFrame) isPickingUpBlockThisFrame = false;

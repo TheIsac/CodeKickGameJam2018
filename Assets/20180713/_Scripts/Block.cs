@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using UnityEngine;
 using _20180713._Scripts;
 using Random = UnityEngine.Random;
@@ -10,24 +11,14 @@ public class Block : MonoBehaviour
 {
     public float Weight = 10;
     public float Speed = 0;
-    public bool isStatic = false;
 
     private bool isFree = true;
-    
+
     private List<BlockJoint> joints = new List<BlockJoint>();
 
     void Awake()
     {
         joints = new List<BlockJoint>(GetComponentsInChildren<BlockJoint>());
-
-        if (!isStatic)
-        {
-            GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * Random.Range(1, 50));
-            var towardsCamera = Camera.main.transform.position - transform.position;
-            var force = towardsCamera.normalized + Random.insideUnitSphere * 0.01f;
-            //force = new Vector3(0,1,0);
-            GetComponent<Rigidbody>().AddForce(force * Random.Range(40, 70), ForceMode.Impulse);    
-        }
     }
 
     public bool IsFree()
@@ -43,6 +34,14 @@ public class Block : MonoBehaviour
         isFree = false;
         var holderBaseComponent = holder.GetComponent<Base>();
         IsOnShip = holderBaseComponent != null;
+
+        var rigidbody = GetComponent<Rigidbody>();
+        if (rigidbody)
+        {
+            rigidbody.isKinematic = true;
+            rigidbody.velocity = Vector3.zero;
+            rigidbody.angularVelocity = Vector3.zero;
+        }
     }
 
     public GameObject GetHolder()
@@ -55,6 +54,12 @@ public class Block : MonoBehaviour
     {
         transform.SetParent(null);
         isFree = true;
+
+        var rigidbody = GetComponent<Rigidbody>();
+        if (rigidbody)
+        {
+            rigidbody.isKinematic = false;
+        }
     }
 
     public IEnumerable<BlockJoint> GetFreeJoints()
@@ -64,7 +69,7 @@ public class Block : MonoBehaviour
 
     public IEnumerable<BlockJoint> GetConnectedJoints()
     {
-        return joints.Where(joint => joint.connectedJoint != null);
+        return joints.Where(joint => joint.connectedJoint != null).Select(joint => joint.connectedJoint);
     }
 
     private void OnTriggerStay(Collider collider)
@@ -74,12 +79,6 @@ public class Block : MonoBehaviour
         if (isFree && tryingToPickUp)
         {
             blockHolder.SetHoldingBlock(this);
-            var rigidbody = GetComponent<Rigidbody>();
-            if (rigidbody)
-            {
-                rigidbody.velocity = Vector3.zero;
-                rigidbody.angularVelocity = Vector3.zero;
-            }
         }
 
         if (!isFree && tryingToPickUp && transform.parent != null)
