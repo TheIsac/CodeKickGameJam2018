@@ -163,7 +163,8 @@ namespace _20180713._Scripts
             var blockTransform = block.transform;
             var currentDir = blockTransform.position - joints.BlockJoint.GetEndPosition();
             var targetDir = joints.BaseJoint.GetEndPosition() - joints.BaseJoint.GetCenterPosition();
-            blockTransform.rotation = Quaternion.FromToRotation(currentDir, targetDir) * blockTransform.rotation;
+            blockTransform.rotation = Quaternion.FromToRotation(currentDir, targetDir) * blockTransform.rotation *
+                                      Quaternion.Euler(new Vector3(0, 1, 0));
             block.transform.position += joints.BaseJoint.GetEndPosition() - joints.BlockJoint.GetEndPosition();
         }
 
