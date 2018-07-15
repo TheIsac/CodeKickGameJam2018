@@ -89,6 +89,7 @@ GameObject:
   - component: {fileID: 114875605361578140}
   - component: {fileID: 114009254073967924}
   - component: {fileID: 114723868338034226}
+  - component: {fileID: 114374377134732748}
   m_Layer: 0
   m_Name: PilotBlock
   m_TagString: Untagged
@@ -106,6 +107,8 @@ GameObject:
   - component: {fileID: 4852627488717390}
   - component: {fileID: 114479759195867656}
   - component: {fileID: 54780976887471582}
+  - component: {fileID: 135594990049845118}
+  - component: {fileID: 114375037212499280}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -188,7 +191,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1772540786078032}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -16, y: -1, z: 5}
+  m_LocalPosition: {x: -6, y: -1, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4881436218522000}
@@ -289,7 +292,7 @@ BoxCollider:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1738037740584808}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 610a33aa6d9e07346a81dbf60cb783d2, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
   serializedVersion: 2
@@ -306,7 +309,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f1ac5dd3da20d4caeb8c8fb904e9c5d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  owner: {fileID: 0}
+  Owner: {fileID: 0}
 --- !u!114 &114313944397874122
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -318,7 +321,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06fa66038b54b75aaf0049cf5330b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Connected: 0
+  Block: {fileID: 0}
+  connectedJoint: {fileID: 0}
+--- !u!114 &114374377134732748
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1738037740584808}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac66652d5f998cf4a8a98407da1614b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  extraMass: 0
+  extraSpeed: 0
+--- !u!114 &114375037212499280
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1772540786078032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d567e3bb445a7849a1d244039223d70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114405142584987430
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -330,7 +358,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06fa66038b54b75aaf0049cf5330b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Connected: 0
+  Block: {fileID: 0}
+  connectedJoint: {fileID: 0}
 --- !u!114 &114479759195867656
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -364,11 +393,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 01d0d9155e384684ca46c9fae31753b7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 100
   HorizontalInput: 
   VerticalInput: 
   InteractInput: 
   SecondaryInput: 
+  isMounted: 0
+  movementSpeed: 100
 --- !u!114 &114759339086788694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -380,7 +410,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06fa66038b54b75aaf0049cf5330b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Connected: 0
+  Block: {fileID: 0}
+  connectedJoint: {fileID: 0}
 --- !u!114 &114776408460980974
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -392,7 +423,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e06fa66038b54b75aaf0049cf5330b3e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Connected: 0
+  Block: {fileID: 0}
+  connectedJoint: {fileID: 0}
 --- !u!114 &114875605361578140
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -405,3 +437,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Weight: 10
+  Speed: 0
+--- !u!135 &135594990049845118
+SphereCollider:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1772540786078032}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Radius: 1.5
+  m_Center: {x: 0, y: 0, z: 0}

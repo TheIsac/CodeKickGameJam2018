@@ -14,6 +14,11 @@ namespace _20180713._Scripts
 
         void Awake()
         {
+            ResetScoreboard();
+        }
+
+        public void ResetScoreboard()
+        {
             scoreTexts = new List<Text>();
             for (var i = 0; i < Players.Count; i++)
             {
@@ -29,6 +34,7 @@ namespace _20180713._Scripts
             for (var i = 0; i < Players.Count; i++)
             {
                 var player = Players[i];
+
                 scoreTexts[i].text = player.Name + " " + player.GetScore();
             }
         }

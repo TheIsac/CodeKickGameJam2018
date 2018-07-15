@@ -1,16 +1,16 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using _20180713._Scripts;
 
 public class ShipMovement : MonoBehaviour
 {
-
 	[HideInInspector]
 	public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput;
 	public bool isMounted = false;
 
-    [SerializeField] private float movementSpeed;
+	[SerializeField] public float movementSpeed;
 	private Rigidbody rb;
 	private BoxCollider boxCollider;
 
@@ -26,6 +26,7 @@ public class ShipMovement : MonoBehaviour
 			return;
 
 		ReadInputs();
+		AdjustThrusterBlocks();
 	}
 
 	#region inputs
@@ -52,9 +53,29 @@ public class ShipMovement : MonoBehaviour
 
 		if (Input.GetButtonDown(SecondaryInput))
 		{
-
 		}
 	}
 
 	#endregion
+
+	public void AdjustThrusterBlocks()
+	{
+		var playerMovementComponent = GetComponent<PilotBlockController>().Owner.GetComponent<PlayerMovement>();
+		var moveDirection = Vector3.zero;
+		moveDirection += Vector3.left * Input.GetAxis(playerMovementComponent.VerticalInput);
+		moveDirection += Vector3.forward * Input.GetAxis(playerMovementComponent.HorizontalInput);
+		moveDirection.y = 0;
+		var baseComponent = GetComponentInParent<Base>();
+		var thrusterBlocks = baseComponent.GetBlocks()
+			.Where(b => b.GetComponentInChildren<ThrusterBlock>())
+			.Select(b => b.GetComponentInChildren<ThrusterBlock>());
+		foreach (var thrusterBlock in thrusterBlocks)
+		{
+			var nozzleController = thrusterBlock.GetComponentInChildren<NozzleController>();
+			if (moveDirection != Vector3.zero)
+			{
+				nozzleController.transform.rotation = Quaternion.LookRotation(moveDirection);
+			}
+		}
+	}
 }

@@ -5,10 +5,10 @@ using _20180713._Scripts;
 
 public class PilotBlockController : MonoBehaviour {
 
-    [SerializeField] private Player owner;
+    public Player Owner;
 
-    void Awake()
+    void Start()
     {
-        GetComponentInChildren<MeshController>().SetColorByPlayerOrder(owner.Order);
+        GetComponentInChildren<MeshController>().SetColorByPlayerOrder(Owner.Order);
     }
 }

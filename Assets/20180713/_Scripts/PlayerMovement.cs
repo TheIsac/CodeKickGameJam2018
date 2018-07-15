@@ -24,6 +24,11 @@ public class PlayerMovement : MonoBehaviour
         ReadInputs();
     }
 
+	public void StopPlayerMovement()
+	{
+		rb.velocity = Vector3.zero;
+	}
+
     #region inputs
 
     private void ReadInputs()
@@ -45,11 +50,6 @@ public class PlayerMovement : MonoBehaviour
             var inputAngle = Mathf.DeltaAngle(currentAngle, targetAngle);
             rb.AddTorque(transform.up * inputAngle * 0.01f);
         }
-
-		if (Input.GetButtonDown(SecondaryInput))
-		{
-
-		}
     }
 
 	#endregion

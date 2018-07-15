@@ -9,10 +9,10 @@ InputManager:
     m_Name: 1_LSH
     descriptiveName: Player 1, Left stick, Horizontal
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
+    negativeButton: a
+    positiveButton: d
+    altNegativeButton: a
+    altPositiveButton: d
     gravity: 3
     dead: 1
     sensitivity: 3
@@ -25,10 +25,10 @@ InputManager:
     m_Name: 1_LSV
     descriptiveName: Player 1, Left stick, Vertical
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
-    altNegativeButton: 
-    altPositiveButton: 
+    negativeButton: s
+    positiveButton: w
+    altNegativeButton: s
+    altPositiveButton: w
     gravity: 3
     dead: 1
     sensitivity: 3
@@ -44,7 +44,7 @@ InputManager:
     negativeButton: 
     positiveButton: joystick 1 button 0
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: e
     gravity: 3
     dead: 0.001
     sensitivity: 3
@@ -60,7 +60,7 @@ InputManager:
     negativeButton: 
     positiveButton: joystick 1 button 3
     altNegativeButton: 
-    altPositiveButton: 
+    altPositiveButton: f
     gravity: 3
     dead: 0.001
     sensitivity: 3
@@ -78,7 +78,7 @@ InputManager:
     altNegativeButton: 
     altPositiveButton: 
     gravity: 3
-    dead: 0.001
+    dead: 0.01
     sensitivity: 3
     snap: 1
     invert: 0
@@ -94,7 +94,7 @@ InputManager:
     altNegativeButton: 
     altPositiveButton: 
     gravity: 3
-    dead: 0.001
+    dead: 0.01
     sensitivity: 3
     snap: 1
     invert: 1
@@ -393,8 +393,8 @@ InputManager:
     m_Name: Horizontal
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
+    negativeButton: a
+    positiveButton: d
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0
@@ -409,8 +409,8 @@ InputManager:
     m_Name: Vertical
     descriptiveName: 
     descriptiveNegativeName: 
-    negativeButton: 
-    positiveButton: 
+    negativeButton: s
+    positiveButton: w
     altNegativeButton: 
     altPositiveButton: 
     gravity: 0

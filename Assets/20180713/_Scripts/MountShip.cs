@@ -6,127 +6,129 @@ using UnityEngine;
 
 namespace _20180713._Scripts
 {
-	public class MountShip : MonoBehaviour {
+    public class MountShip : MonoBehaviour
+    {
+        public bool canMount;
+        private bool mounting;
 
-		private bool canMount;
-		private bool mounting;
+        private PlayerMovement playerMovement;
+        private MeshRenderer playerMesh;
+        private Collider playerCollider;
+        private BlockHolder blockHolder;
+        private Base baseBlock;
 
-		private PlayerMovement playerMovement;
-		private MeshRenderer playerMesh;
-		private Collider playerCollider;
-		private Base baseBlock;
+        private ShipMovement playerShip;
 
-		private ShipMovement playerShip;
+        private void Start()
+        {
+            playerMovement = GetComponent<PlayerMovement>();
+            playerMesh = GetComponentInChildren<MeshRenderer>();
+            playerCollider = GetComponent<Collider>();
+            blockHolder = GetComponent<BlockHolder>();
+            baseBlock = GetComponent<ShipOwner>().OwnBase;
+            playerShip = baseBlock.gameObject.GetComponentInChildren<ShipMovement>();
 
-		private void Awake()
-		{
-			playerMovement = GetComponent<PlayerMovement>();
-			playerMesh = GetComponentInChildren<MeshRenderer>();
-			playerCollider = GetComponent<Collider>();
-			baseBlock = GetComponent<ShipOwner>().OwnBase;
-			playerShip = baseBlock.gameObject.GetComponentInChildren<ShipMovement>();
+            SetShipInputs();
+        }
 
-			SetShipInputs();
-		}
+        private void SetShipInputs()
+        {
+            playerShip.HorizontalInput = playerMovement.HorizontalInput;
+            playerShip.VerticalInput = playerMovement.VerticalInput;
+            playerShip.InteractInput = playerMovement.InteractInput;
+            playerShip.SecondaryInput = playerMovement.SecondaryInput;
+        }
 
-		private void SetShipInputs()
-		{
-			playerShip.HorizontalInput = playerMovement.HorizontalInput;
-			playerShip.VerticalInput = playerMovement.VerticalInput;
-			playerShip.InteractInput = playerMovement.InteractInput;
-			playerShip.SecondaryInput = playerMovement.SecondaryInput;
-		}
+        private void Update()
+        {
+            if (!mounting)
+            {
+                TryMounting();
+            }
 
-		private void Update()
-		{
-			if (!mounting)
-			{
-				TryMounting();
-			}
-
-			else if (mounting)
-			{
-				tryDismounting();
-			}
-		}
+            else if (mounting)
+            {
+                tryDismounting();
+            }
+        }
 
 
-		private void TryMounting()
-		{
-			if(canMount && Input.GetButtonDown(playerMovement.SecondaryInput))
-			{
-				HidePlayer();
-				GainShipControl();
-				mounting = true;
-			}
-		}
+        private void TryMounting()
+        {
+            if (canMount && !blockHolder.IsHoldingBlock() && Input.GetButtonDown(playerMovement.SecondaryInput))
+            {
+                HidePlayer();
+                GainShipControl();
+                mounting = true;
+            }
+        }
 
-		private void tryDismounting()
-		{
-			if (Input.GetButtonDown(playerMovement.SecondaryInput))
-			{
-				ShowPlayer();
-				LoseShipControl();
-				TeleportToShipPosition();
-				mounting = false;
-				canMount = false;
-			}
-		}
+        private void tryDismounting()
+        {
+            if (Input.GetButtonDown(playerMovement.SecondaryInput))
+            {
+                ShowPlayer();
+                LoseShipControl();
+                TeleportToShipPosition();
+                mounting = false;
+                canMount = false;
+            }
+        }
 
-		#region Dismounted
+        #region Dismounted
 
-		private void HidePlayer()
-		{
-			playerMesh.enabled = false;
-			playerCollider.enabled = false;
-		}
+        private void HidePlayer()
+        {
+            playerMesh.enabled = false;
+            playerCollider.enabled = false;
+        }
 
-		private void GainShipControl()
-		{
-			playerShip.isMounted = true;
-		}
+        private void GainShipControl()
+        {
+            playerShip.isMounted = true;
+        }
 
-		#endregion
+        #endregion
 
-		#region Mounted
+        #region Mounted
 
-		private void ShowPlayer()
-		{
-			playerMesh.enabled = true;
-			playerCollider.enabled = true;
-		}
+        private void ShowPlayer()
+        {
+            playerMesh.enabled = true;
+            playerCollider.enabled = true;
+        }
 
-		private void LoseShipControl()
-		{
-			playerShip.isMounted = false;
-		}
+        private void LoseShipControl()
+        {
+            playerShip.isMounted = false;
+        }
 
-		private void TeleportToShipPosition()
-		{
-			transform.position =
-				new Vector3(baseBlock.transform.position.x, transform.position.y, baseBlock.transform.position.z);
-		}
+        private void TeleportToShipPosition()
+        {
+            transform.position =
+                new Vector3(baseBlock.transform.position.x, transform.position.y, baseBlock.transform.position.z);
 
-		#endregion
+            playerMovement.StopPlayerMovement();
+        }
 
-		#region Triggers
+        #endregion
 
-		private void OnTriggerStay(Collider other)
-		{
-			if (other.transform.parent == null || 
-				other.transform.parent.GetComponent<Base>() == false)
-			{
-				Debug.Log("CANT MOUNT");
-				canMount = false;
-				return;
-			}
+        #region Triggers
 
-			else if (other.transform.parent.GetComponent<Base>())
-			{
-				Debug.Log("NOW I CAN MOUNT");
-				canMount = true;
-			}
-		}
-		#endregion
-	}
+        private void OnTriggerStay(Collider other)
+        {
+            if (!baseBlock) return;
+
+            if (other.transform.gameObject == baseBlock.gameObject)
+                canMount = true;
+        }
+
+        private void OnTriggerExit(Collider other)
+        {
+            if (other.transform.gameObject == baseBlock.gameObject)
+                canMount = false;
+        }
+
+        #endregion
+    }
 }

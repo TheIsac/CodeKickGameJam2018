@@ -10,6 +10,7 @@ namespace _20180713._Scripts
     public class Base : MonoBehaviour
     {
         private readonly List<Block> baseBlocks = new List<Block>();
+        private ShipModifier shipModifier;
 
         [SerializeField] private const float snappingDistance = 2f;
 
@@ -18,12 +19,20 @@ namespace _20180713._Scripts
             var pilotBlockController = GetComponentInChildren<PilotBlockController>();
             var pilotBlock = pilotBlockController.GetComponent<Block>();
             baseBlocks.Add(pilotBlock);
+            shipModifier = GetComponentInChildren<ShipModifier>();
         }
 
         public void AttachBlock(Block block)
         {
             ConnectClosestBaseJointToClosestBlockJoint(block);
             block.SetHolder(gameObject);
+            shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
+        }
+
+        public void DetachBlock(Block block)
+        {
+            DisConnectClosestBaseJointToClosestBlockJoint(block);
+            shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
         }
 
         public bool IsBlockCloseEnough(Block block)
@@ -32,10 +41,9 @@ namespace _20180713._Scripts
                        Vector3.Distance(block.transform.position, baseBlock.transform.position)) < snappingDistance;
         }
 
-        public ClosestJointsPair GetClosestTwoJoints(Block block)
+        public ClosestJointsPair GetClosestTwoJoints(IEnumerable<BlockJoint> blockJoints,
+            IEnumerable<BlockJoint> baseJoints)
         {
-            var blockJoints = block.GetFreeJoints();
-            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints());
             BlockJoint closestBlockJoint = null;
             BlockJoint closestBaseJoint = null;
             float closestBaseJointDistance = -1;
@@ -62,15 +70,16 @@ namespace _20180713._Scripts
             };
         }
 
-        public IEnumerable<Block> GetBlocks()
+        public List<Block> GetBlocks()
         {
             return baseBlocks;
         }
 
         private void ConnectClosestBaseJointToClosestBlockJoint(Block block)
         {
-            var joints = GetClosestTwoJoints(block);
-
+            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints());
+            var blockJoints = block.GetFreeJoints();
+            var joints = GetClosestTwoJoints(blockJoints, baseJoints);
 
             Align(block, joints);
 
@@ -79,11 +88,74 @@ namespace _20180713._Scripts
                 throw new Exception("Block inside another block!");
             }
 
-            baseBlocks.Add(block);
+            AddBlock(block);
             joints.BaseJoint.Join(joints.BlockJoint);
 
             var jointsAtBlockPosition = GetFreeJointsAtPosition(block.transform.position);
             ConnectLooseJoints(block, jointsAtBlockPosition);
+        }
+
+        private void DisConnectClosestBaseJointToClosestBlockJoint(Block block)
+        {
+            RemoveBlock(block);
+            foreach (var joint in block.GetConnectedJoints())
+            {
+                joint.Disconnect();
+                if (!IsConnectedToPilotBlock(joint.Block, new List<BlockJoint>()))
+                {
+                    DisconnectNetworkOfBlocks(joint.Block, new List<BlockJoint>());
+                }
+            }
+        }
+
+        private void DisconnectNetworkOfBlocks(Block startBlock, List<BlockJoint> visitedJoints)
+        {
+            if (startBlock.GetComponent<PilotBlockController>()) return;
+
+            foreach (var joint in startBlock.GetConnectedJoints())
+            {
+                if (visitedJoints.Contains(joint)) continue;
+                joint.Disconnect();
+                visitedJoints.Add(joint);
+
+                DisconnectNetworkOfBlocks(joint.Block, visitedJoints);
+            }
+
+            RemoveBlock(startBlock);
+            startBlock.Release();
+        }
+
+        private void AddBlock(Block block)
+        {
+            baseBlocks.Add(block);
+            Destroy(block.GetComponent<Rigidbody>());
+        }
+
+        private void RemoveBlock(Block block)
+        {
+            baseBlocks.Remove(block);
+            shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
+            block.gameObject.AddComponent<Rigidbody>();
+        }
+
+        private bool IsConnectedToPilotBlock(Block startBlock, List<BlockJoint> visitedJoints)
+        {
+            var currentBlock = startBlock;
+            foreach (var joint in currentBlock.GetConnectedJoints())
+            {
+                if (visitedJoints.Contains(joint)) continue;
+
+                if (joint.Block.GetComponent<PilotBlockController>())
+                {
+                    return true;
+                }
+
+                visitedJoints.Add(joint);
+
+                if (IsConnectedToPilotBlock(joint.Block, visitedJoints)) return true;
+            }
+
+            return false;
         }
 
         private static void Align(Block block, ClosestJointsPair joints)

@@ -1,23 +1,23 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace _20180713._Scripts
 {
-
     [RequireComponent(typeof(ShipOwner))]
     public class BlockHolder : MonoBehaviour
     {
         public SoundOneshot soundOneshot;
 
         public Transform HoldingPoint;
-        
+
         private Base Base;
         private Block holdingBlock;
         private PlayerMovement playerMovement;
 
         private bool isPickingUpBlockThisFrame;
 
-        void Awake()
+        void Start()
         {
             Base = GetComponent<ShipOwner>().OwnBase;
             playerMovement = GetComponent<PlayerMovement>();
@@ -40,18 +40,20 @@ namespace _20180713._Scripts
 
             if (IsHoldingBlock())
             {
-                var closestJoints = Base.GetClosestTwoJoints(holdingBlock);
-                Debug.DrawLine(closestJoints.BlockJoint.GetEndPosition(),
-                    closestJoints.BaseJoint.GetEndPosition(), Color.red);
-                
+                var baseJoints = Base.GetBlocks().SelectMany(baseBlock => baseBlock.GetFreeJoints());
+                var blockJoints = holdingBlock.GetFreeJoints();
+                var closestJoints = Base.GetClosestTwoJoints(blockJoints, baseJoints);
+                if (closestJoints != null && closestJoints.BaseJoint && closestJoints.BlockJoint)
+                {
+                    Debug.DrawLine(closestJoints.BlockJoint.GetEndPosition(),
+                        closestJoints.BaseJoint.GetEndPosition(), Color.red);
+                }
             }
-
             if (isPickingUpBlockThisFrame)
             {
                 soundOneshot.PlaySound(soundOneshot.pickupBlock, transform.position);
                 isPickingUpBlockThisFrame = false;
             }
- 
         }
 
         public void SetHoldingBlock(Block block)
@@ -75,6 +77,12 @@ namespace _20180713._Scripts
             holdingBlock = null;
         }
 
+        private void DetachHoldingBlockFromBase(Block block)
+        {
+            //SetHoldingBlock(block);
+            Base.DetachBlock(holdingBlock);
+        }
+
         public bool IsTryingToPickUp()
         {
             return !IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
@@ -82,12 +90,13 @@ namespace _20180713._Scripts
 
         private bool IsTryingToRelease()
         {
-            return IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
+            return holdingBlock && !isPickingUpBlockThisFrame && IsHoldingBlock() &&
+                   Input.GetButtonDown(playerMovement.InteractInput);
         }
 
-        private bool IsHoldingBlock()
+        public bool IsHoldingBlock()
         {
-            return holdingBlock && !isPickingUpBlockThisFrame;
+            return holdingBlock;
         }
     }
 }
