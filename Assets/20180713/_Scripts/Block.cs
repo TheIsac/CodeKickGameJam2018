@@ -51,12 +51,12 @@ public class Block : MonoBehaviour
 
     public IEnumerable<BlockJoint> GetFreeJoints()
     {
-        return joints.Where(joint => !joint.Connected);
+        return joints.Where(joint => joint.connectedJoint == null);
     }
 
     public IEnumerable<BlockJoint> GetConnectedJoints()
     {
-        return joints.Where(joint => joint.Connected);
+        return joints.Where(joint => joint.connectedJoint != null);
     }
 
     private void OnTriggerStay(Collider collider)

@@ -5,7 +5,6 @@ namespace _20180713._Scripts
 {
     public class BlockJoint : MonoBehaviour
     {
-        public bool Connected;
         public Block Block;
         public BlockJoint connectedJoint;
 
@@ -20,18 +19,14 @@ namespace _20180713._Scripts
 
         public void Join(BlockJoint other)
         {
-            Connected = true;
-            other.Connected = true;
             connectedJoint = other;
             other.connectedJoint = this;
         }
         
         public void Disconnect()
         {
-            Connected = false;
             if (connectedJoint)
             {
-                connectedJoint.Connected = false;
                 connectedJoint.connectedJoint = null;   
             }
             connectedJoint = null;  
