@@ -15,14 +15,16 @@ namespace _20180713._Scripts
 		[FMODUnity.EventRef]
 		public string blockCollision;
 		[FMODUnity.EventRef]
-		public string bombBeep;
+        public string blockBuild;
+        [FMODUnity.EventRef]
+        public string bombBeep;
 		FMOD.Studio.EventInstance soundevent;
 
 
 
 		void Start()
 		{
-			soundevent = FMODUnity.RuntimeManager.CreateInstance(bombBeep);
+			//soundevent = FMODUnity.RuntimeManager.CreateInstance(bombBeep);
 		}
 
 		void Update()

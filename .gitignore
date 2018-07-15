@@ -99,3 +99,5 @@ Library/EditorInstance.json
 Library/EditorUserBuildSettings.asset
 
 .idea/*
+/fmod/Pompeji/.cache
+/fmod/Pompeji/Metadata

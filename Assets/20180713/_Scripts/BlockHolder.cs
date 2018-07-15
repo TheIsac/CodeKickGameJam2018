@@ -37,7 +37,7 @@ namespace _20180713._Scripts
                 else
                 {
                     ReleaseHoldingBlock();
-                    audioManager.PlaySound(audioManager.dropBlock, transform.position);
+                    audioManager.PlaySound(audioManager.pickupBlock, transform.position);
                 }
             }
 
