@@ -62,9 +62,9 @@ MonoBehaviour:
   - {fileID: 114766307982462548, guid: ef518bcfd35fd4582b83fed59176c5e5, type: 2}
   - {fileID: 114146386776557088, guid: 86d23e31ecb2643b3885bfd7407597ab, type: 2}
   SecondsBetweenSpawn: 3
-  Distance: 30
-  MaxY: 15
-  MinSpeed: 1
+  Distance: 25
+  MaxY: 20
+  MinSpeed: 2
   MaxSpeed: 5
-  RareMinSpeed: 5
-  RareMaxSpeed: 10
+  RareMinSpeed: 8
+  RareMaxSpeed: 16
