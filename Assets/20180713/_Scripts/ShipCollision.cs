@@ -27,7 +27,7 @@ public class ShipCollision : MonoBehaviour {
 		Rigidbody fastestRigidbody = CheckWhoIsFaster(otherRigidBody);
 		if(fastestRigidbody == shipRigidbody)
 		{
-			BreakOtherShip();
+			BreakOtherShip(otherShip);
 		}
 	}
 
@@ -41,8 +41,30 @@ public class ShipCollision : MonoBehaviour {
 		return fastestRigidbody;
 	}
 
-	private void BreakOtherShip()
+	private void BreakOtherShip(Transform otherShip)
 	{
-		//BREAK THE OTHER SHIP HERE
+		var amountOfChildren = otherShip.childCount;
+		if (amountOfChildren <= 1)
+			return;
+
+		GetRandomChild(amountOfChildren, otherShip);
+	}
+
+	private void GetRandomChild(int amountOfChildren, Transform otherShip)
+	{
+		var randomBlockNumber = UnityEngine.Random.Range(0, amountOfChildren);
+
+		while (otherShip.GetChild(randomBlockNumber).GetComponent<ShipMovement>())
+		{
+			randomBlockNumber = UnityEngine.Random.Range(0, amountOfChildren);
+		}
+
+		var blockToBreak = otherShip.GetChild(randomBlockNumber);
+		var blockToBreakScript = blockToBreak.GetComponent<Block>();
+
+		if (blockToBreakScript)
+		{
+			blockToBreakScript.Release();
+		}
 	}
 }
