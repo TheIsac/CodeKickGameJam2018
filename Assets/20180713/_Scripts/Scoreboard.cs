@@ -24,7 +24,7 @@ namespace _20180713._Scripts
             {
                 var text = Instantiate(ScoreTemplate);
                 text.transform.SetParent(transform);
-                text.transform.position = transform.position + Vector3.down * 60 * i;
+                text.transform.position = transform.position + Vector3.right * 200 * i;
                 scoreTexts.Add(text);
             }
         }
