@@ -10,7 +10,7 @@ namespace _20180713._Scripts
     public class Base : MonoBehaviour
     {
         private readonly List<Block> baseBlocks = new List<Block>();
-		private ShipModifier shipModifier;
+        private ShipModifier shipModifier;
 
         [SerializeField] private const float snappingDistance = 2f;
 
@@ -19,14 +19,14 @@ namespace _20180713._Scripts
             var pilotBlockController = GetComponentInChildren<PilotBlockController>();
             var pilotBlock = pilotBlockController.GetComponent<Block>();
             baseBlocks.Add(pilotBlock);
-			shipModifier = GetComponentInChildren<ShipModifier>();
+            shipModifier = GetComponentInChildren<ShipModifier>();
         }
 
         public void AttachBlock(Block block)
         {
             ConnectClosestBaseJointToClosestBlockJoint(block);
             block.SetHolder(gameObject);
-			shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
+            shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
         }
 
         public void DetachBlock(Block block)
@@ -100,7 +100,42 @@ namespace _20180713._Scripts
             foreach (var joint in block.GetConnectedJoints())
             {
                 joint.Disconnect();
+                if (IsConnectedToPilotBlock(joint.Block, new List<BlockJoint>()))
+                {
+                    DisconnectNetworkOfBlocks(joint.Block, new List<BlockJoint>());
+                }
             }
+        }
+
+        private void DisconnectNetworkOfBlocks(Block startBlock, List<BlockJoint> visitedJoints)
+        {
+            var currentBlock = startBlock;
+            foreach (var joint in currentBlock.GetConnectedJoints())
+            {
+                if (visitedJoints.Contains(joint)) continue;
+                joint.Disconnect();
+                visitedJoints.Add(joint);
+            }
+        }
+
+        private bool IsConnectedToPilotBlock(Block startBlock, List<BlockJoint> visitedJoints)
+        {
+            var currentBlock = startBlock;
+            foreach (var joint in currentBlock.GetConnectedJoints())
+            {
+                if (visitedJoints.Contains(joint)) continue;
+
+                if (joint.Block.GetComponent<PilotBlockController>())
+                {
+                    return true;
+                }
+
+                visitedJoints.Add(joint);
+
+                if (IsConnectedToPilotBlock(joint.Block, visitedJoints)) return true;
+            }
+
+            return false;
         }
 
         private static void Align(Block block, ClosestJointsPair joints)

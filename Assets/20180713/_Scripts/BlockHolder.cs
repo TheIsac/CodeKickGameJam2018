@@ -8,14 +8,14 @@ namespace _20180713._Scripts
     public class BlockHolder : MonoBehaviour
     {
         public Transform HoldingPoint;
-        
+
         private Base Base;
         private Block holdingBlock;
         private PlayerMovement playerMovement;
 
         private bool isPickingUpBlockThisFrame;
 
-        void Awake()
+        void Start()
         {
             Base = GetComponent<ShipOwner>().OwnBase;
             playerMovement = GetComponent<PlayerMovement>();
@@ -39,7 +39,7 @@ namespace _20180713._Scripts
             {
                 var baseJoints = Base.GetBlocks().SelectMany(baseBlock => baseBlock.GetFreeJoints());
                 var blockJoints = holdingBlock.GetFreeJoints();
-                var closestJoints = Base.GetClosestTwoJoints(blockJoints,baseJoints);
+                var closestJoints = Base.GetClosestTwoJoints(blockJoints, baseJoints);
                 Debug.DrawLine(closestJoints.BlockJoint.GetEndPosition(),
                     closestJoints.BaseJoint.GetEndPosition(), Color.red);
             }
@@ -67,7 +67,7 @@ namespace _20180713._Scripts
             Base.AttachBlock(holdingBlock);
             holdingBlock = null;
         }
-        
+
         private void DetachHoldingBlockFromBase(Block block)
         {
             //SetHoldingBlock(block);
@@ -81,7 +81,8 @@ namespace _20180713._Scripts
 
         private bool IsTryingToRelease()
         {
-            return holdingBlock && !isPickingUpBlockThisFrame && IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
+            return holdingBlock && !isPickingUpBlockThisFrame && IsHoldingBlock() &&
+                   Input.GetButtonDown(playerMovement.InteractInput);
         }
 
         public bool IsHoldingBlock()
