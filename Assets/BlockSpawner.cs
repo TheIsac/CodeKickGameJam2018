@@ -58,10 +58,10 @@ public class BlockSpawner : MonoBehaviour
         var body = instance.gameObject.GetComponent<Rigidbody>();
         body.useGravity = false;
         body.AddForce(force * Random.Range(MinSpeed, MaxSpeed), ForceMode.Impulse);
-        if (Random.Range(0, 10) < 1)
+        if (Random.Range(0, 15) < 1)
         {
             body.AddForce(force * Random.Range(RareMinSpeed, RareMaxSpeed), ForceMode.Impulse);            
         }
-        GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * Random.Range(1, 20));
+        body.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere * Random.Range(1, 20));
     }
 }
