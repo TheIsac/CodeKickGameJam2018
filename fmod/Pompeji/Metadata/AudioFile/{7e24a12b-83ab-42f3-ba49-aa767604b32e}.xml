@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{7e24a12b-83ab-42f3-ba49-aa767604b32e}">
+        <property name="assetPath">
+            <value>Can I Make You A Drink.ogg</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>93.176485260770974</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{387c9bbc-a6a0-43f9-8966-426e94281d54}</destination>
+        </relationship>
+    </object>
+</objects>

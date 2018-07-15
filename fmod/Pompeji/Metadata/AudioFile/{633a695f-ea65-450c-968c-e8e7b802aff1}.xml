@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="AudioFile" id="{633a695f-ea65-450c-968c-e8e7b802aff1}">
+        <property name="assetPath">
+            <value>Brace For Impact.ogg</value>
+        </property>
+        <property name="frequencyInKHz">
+            <value>44.0999985</value>
+        </property>
+        <property name="channelCount">
+            <value>2</value>
+        </property>
+        <property name="length">
+            <value>141.47369614512471</value>
+        </property>
+        <relationship name="masterAssetFolder">
+            <destination>{387c9bbc-a6a0-43f9-8966-426e94281d54}</destination>
+        </relationship>
+    </object>
+</objects>

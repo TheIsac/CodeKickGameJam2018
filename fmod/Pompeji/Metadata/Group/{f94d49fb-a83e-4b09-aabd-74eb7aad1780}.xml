@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="MixerGroup" id="{f94d49fb-a83e-4b09-aabd-74eb7aad1780}">
+        <property name="volume">
+            <value>-1.20000005</value>
+        </property>
+        <property name="name">
+            <value>MUSIC</value>
+        </property>
+        <relationship name="effectChain">
+            <destination>{5665dea1-509d-4fb6-bd85-957fb1e93c78}</destination>
+        </relationship>
+        <relationship name="panner">
+            <destination>{31a046b0-7771-4961-bbca-aeec6eee0386}</destination>
+        </relationship>
+        <relationship name="output">
+            <destination>{f461f96f-4c1b-4886-90bc-4f738fcce287}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusEffectChain" id="{5665dea1-509d-4fb6-bd85-957fb1e93c78}">
+        <relationship name="effects">
+            <destination>{52b557e7-5c8c-4bc8-9380-971ea3107004}</destination>
+            <destination>{000575ae-153e-4b04-b580-25be45dcdb8e}</destination>
+            <destination>{2121d5f7-0864-4fbb-8672-e74b1604f267}</destination>
+        </relationship>
+    </object>
+    <object class="MixerBusPanner" id="{31a046b0-7771-4961-bbca-aeec6eee0386}"/>
+    <object class="MixerBusFader" id="{52b557e7-5c8c-4bc8-9380-971ea3107004}"/>
+    <object class="CompressorEffect" id="{000575ae-153e-4b04-b580-25be45dcdb8e}">
+        <property name="threshold">
+            <value>-8</value>
+        </property>
+        <property name="ratio">
+            <value>4.89999962</value>
+        </property>
+        <property name="attackTime">
+            <value>9.60000038</value>
+        </property>
+        <property name="releaseTime">
+            <value>280</value>
+        </property>
+        <property name="gain">
+            <value>8.5</value>
+        </property>
+    </object>
+    <object class="LimiterEffect" id="{2121d5f7-0864-4fbb-8672-e74b1604f267}">
+        <property name="ceiling">
+            <value>-1.99999988</value>
+        </property>
+    </object>
+</objects>

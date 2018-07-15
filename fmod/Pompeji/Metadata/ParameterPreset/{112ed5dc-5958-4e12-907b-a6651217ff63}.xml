@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.01.10.00">
+    <object class="ParameterPreset" id="{112ed5dc-5958-4e12-907b-a6651217ff63}">
+        <property name="name">
+            <value>randomValue</value>
+        </property>
+        <relationship name="folder">
+            <destination>{666ee462-dfbb-4196-9834-85bb21519ca3}</destination>
+        </relationship>
+        <relationship name="parameter">
+            <destination>{e9fab460-6e78-4ffb-a784-772504297a9e}</destination>
+        </relationship>
+    </object>
+    <object class="GameParameter" id="{e9fab460-6e78-4ffb-a784-772504297a9e}">
+        <property name="initialValue">
+            <value>0.50000005960464478</value>
+        </property>
+        <relationship name="modulators">
+            <destination>{29c2d557-5b81-4a6b-a4d8-93e0f769958d}</destination>
+        </relationship>
+    </object>
+    <object class="RandomizerModulator" id="{29c2d557-5b81-4a6b-a4d8-93e0f769958d}">
+        <property name="nameOfPropertyBeingModulated">
+            <value>cursorPosition</value>
+        </property>
+        <property name="amount">
+            <value>100</value>
+        </property>
+    </object>
+</objects>
