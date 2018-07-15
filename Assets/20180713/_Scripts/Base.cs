@@ -32,6 +32,7 @@ namespace _20180713._Scripts
         public void DetachBlock(Block block)
         {
             DisConnectClosestBaseJointToClosestBlockJoint(block);
+            shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
         }
 
         public bool IsBlockCloseEnough(Block block)
