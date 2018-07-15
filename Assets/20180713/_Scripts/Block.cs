@@ -43,7 +43,7 @@ public class Block : MonoBehaviour
 
     public GameObject GetHolder()
     {
-        return transform.parent.gameObject;
+        return transform.parent ? transform.parent.gameObject : null;
     }
 
 
