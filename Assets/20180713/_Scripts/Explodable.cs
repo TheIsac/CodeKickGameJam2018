@@ -8,6 +8,7 @@ public class Explodable : MonoBehaviour
     public float ExplodeInSeconds = 10;
     public float Radius;
     public float Force;
+    public GameObject ExplosionParticle;
 
     private float time = 0;
     private bool running = false;
@@ -39,6 +40,7 @@ public class Explodable : MonoBehaviour
                         }
                     }
                 }
+
 //                var body = blockInRange.GetComponent<Rigidbody>();
 //                if (body == null && blockInRange.transform.parent != null)
 //                {
@@ -50,6 +52,11 @@ public class Explodable : MonoBehaviour
 //                    body.AddExplosionForce(Force, transform.position, Radius);
 //                }
             }
+
+            var explosion = Instantiate(ExplosionParticle);
+            explosion.transform.position = gameObject.transform.position;
+            explosion.transform.rotation = gameObject.transform.rotation;
+            Destroy(explosion, explosion.GetComponent<ParticleSystem>().main.duration * .9f);
 
             Destroy(gameObject);
         }
