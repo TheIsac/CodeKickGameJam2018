@@ -7,7 +7,7 @@ namespace _20180713._Scripts
     [RequireComponent(typeof(ShipOwner))]
     public class BlockHolder : MonoBehaviour
     {
-        public SoundOneshot soundOneshot;
+        public AudioManager AudioManager;
 
         public Transform HoldingPoint;
 
@@ -19,6 +19,7 @@ namespace _20180713._Scripts
 
         void Start()
         {
+            AudioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
             Base = GetComponent<ShipOwner>().OwnBase;
             playerMovement = GetComponent<PlayerMovement>();
         }
@@ -34,7 +35,7 @@ namespace _20180713._Scripts
                 else
                 {
                     ReleaseHoldingBlock();
-                    soundOneshot.PlaySound(soundOneshot.dropBlock, transform.position);
+                    AudioManager.PlaySound(AudioManager.dropBlock, transform.position);
                 }
             }
 
@@ -49,9 +50,10 @@ namespace _20180713._Scripts
                         closestJoints.BaseJoint.GetEndPosition(), Color.red);
                 }
             }
+
             if (isPickingUpBlockThisFrame)
             {
-                soundOneshot.PlaySound(soundOneshot.pickupBlock, transform.position);
+                AudioManager.PlaySound(AudioManager.pickupBlock, transform.position);
                 isPickingUpBlockThisFrame = false;
             }
         }
