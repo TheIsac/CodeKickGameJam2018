@@ -7,7 +7,7 @@ namespace _20180713._Scripts
 {
     public class GameStarter : MonoBehaviour
     {
-        public int PlayerCount = 2;
+        public int PlayerCount = 4;
 
         public int ArenaWidth = 20;
         public int ArenaHeight = 20;

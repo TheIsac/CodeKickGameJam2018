@@ -20,11 +20,11 @@ public class MeshController : MonoBehaviour {
 		}
 		else if (order == 3)
 		{
-			SetColor(Color.green);
+			SetColor(Color.black);
 		}
 		else if (order == 4)
 		{
-			SetColor(Color.cyan);
+			SetColor(Color.red);
 		}
 	}
 }

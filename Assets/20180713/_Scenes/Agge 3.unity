@@ -152,6 +152,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 4
       objectReference: {fileID: 0}
+    - target: {fileID: 114566318118126892, guid: 9a5d8515ee51c4062b171cd759b8247a,
+        type: 2}
+      propertyPath: SecondsBetweenSpawn
+      value: 1.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9a5d8515ee51c4062b171cd759b8247a, type: 2}
   m_IsPrefabAsset: 0
@@ -480,6 +485,11 @@ Prefab:
       propertyPath: m_RootOrder
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 114577416718885472, guid: 66c17fdfd2dc5432a851a5efefaec1e9,
+        type: 2}
+      propertyPath: PlayerCount
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 66c17fdfd2dc5432a851a5efefaec1e9, type: 2}
   m_IsPrefabAsset: 0
@@ -593,6 +603,7 @@ MonoBehaviour:
   dropBlock: event:/SFX/UGH 3D
   explosion: event:/SFX/UGH 3D
   blockCollision: 
+  blockBuild: 
   bombBeep: 
 --- !u!1 &1443156350
 GameObject:
