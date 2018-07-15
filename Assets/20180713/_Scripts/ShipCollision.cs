@@ -7,12 +7,10 @@ using UnityEngine;
 public class ShipCollision : MonoBehaviour {
 
 	private Rigidbody shipRigidbody;
-	private Base baseBlock;
 
 	private void Awake()
 	{
 		shipRigidbody = transform.GetComponent<Rigidbody>();
-		baseBlock = transform.GetComponent<Base>();
 	}
 
 	private void OnCollisionEnter(Collision collision)
@@ -61,12 +59,13 @@ public class ShipCollision : MonoBehaviour {
 			randomBlockNumber = UnityEngine.Random.Range(0, amountOfChildren);
 		}
 
+		var otherBase = otherShip.GetComponent<Base>();
 		var blockToBreak = otherShip.GetChild(randomBlockNumber);
 		var blockToBreakScript = blockToBreak.GetComponent<Block>();
 
 		if (blockToBreakScript != null)
 		{
-			baseBlock.DetachBlock(blockToBreakScript);
+			otherBase.DetachBlock(blockToBreakScript);
 			Debug.Log("I WORK");
 		}
 	}
