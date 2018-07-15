@@ -8,10 +8,14 @@ public class Explodable : MonoBehaviour
     public float ExplodeInSeconds = 10;
     public float Radius;
     public float Force;
-    [SerializeField] private float time;
+
+    private float time = 0;
+    private bool running = false;
 
     void Update()
     {
+        if (!running) return;
+
         time += Time.deltaTime;
         if (time > ExplodeInSeconds)
         {
@@ -29,7 +33,7 @@ public class Explodable : MonoBehaviour
                         {
                             @base.DetachBlock(block);
                         }
-                    }   
+                    }
                 }
 
                 var body = collider.GetComponent<Rigidbody>();
@@ -37,7 +41,7 @@ public class Explodable : MonoBehaviour
                 {
                     body = collider.transform.parent.GetComponent<Rigidbody>();
                 }
-                
+
                 if (body != null)
                 {
                     body.AddExplosionForce(Force, transform.position, Radius);
@@ -46,5 +50,22 @@ public class Explodable : MonoBehaviour
 
             Destroy(gameObject);
         }
+    }
+
+    void Arm()
+    {
+        if (time < 1)
+        {
+            ExplodeInSeconds = Random.Range(10, 20);
+            time = 0;
+        }
+
+        running = true;
+    }
+
+    void Disarm()
+    {
+        time = 0;
+        running = false;
     }
 }
