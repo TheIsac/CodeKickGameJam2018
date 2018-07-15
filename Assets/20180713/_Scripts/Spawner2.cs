@@ -22,7 +22,12 @@ public class Spawner2 : MonoBehaviour
     public bool randomizeYRotation = false;
     public bool addRandomTorque = false;
 
-    private float secondsSinceLastSpawn = 0;
+    private float secondsSinceLastSpawn;
+
+    void Start()
+    {
+        secondsSinceLastSpawn = SecondsBetweenSpawn;
+    }
 
     void Update()
     {
