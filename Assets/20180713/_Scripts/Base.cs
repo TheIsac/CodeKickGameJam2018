@@ -96,6 +96,7 @@ namespace _20180713._Scripts
 
         private void DisConnectClosestBaseJointToClosestBlockJoint(Block block)
         {
+            baseBlocks.Remove(block);
             foreach (var joint in block.GetConnectedJoints())
             {
                 joint.Disconnect();

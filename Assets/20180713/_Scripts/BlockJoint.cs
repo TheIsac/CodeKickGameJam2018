@@ -23,6 +23,7 @@ namespace _20180713._Scripts
             Connected = true;
             other.Connected = true;
             connectedJoint = other;
+            other.connectedJoint = this;
         }
         
         public void Disconnect()
@@ -33,6 +34,7 @@ namespace _20180713._Scripts
                 connectedJoint.Connected = false;
                 connectedJoint.connectedJoint = null;   
             }
+            connectedJoint = null;  
         }
 
         public Vector3 GetEndPosition()
