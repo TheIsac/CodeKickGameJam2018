@@ -117,19 +117,14 @@ namespace _20180713._Scripts
 
 		private void OnTriggerStay(Collider other)
 		{
-
-			if (other.transform.parent == null)
-				return;
-
-			if (other.transform.parent.gameObject == baseBlock.gameObject)
+			if (other.transform.gameObject == baseBlock.gameObject)
 				canMount = true;
-			else
-				canMount = false;
 		}
 
 		private void OnTriggerExit(Collider other)
 		{
-			canMount = false;
+			if (other.transform.gameObject == baseBlock.gameObject)
+				canMount = false;
 		}
 		#endregion
 	}
