@@ -3,9 +3,12 @@ using UnityEngine;
 
 namespace _20180713._Scripts
 {
+
     [RequireComponent(typeof(ShipOwner))]
     public class BlockHolder : MonoBehaviour
     {
+        public SoundOneshot soundOneshot;
+
         public Transform HoldingPoint;
         
         private Base Base;
@@ -31,6 +34,7 @@ namespace _20180713._Scripts
                 else
                 {
                     ReleaseHoldingBlock();
+                    soundOneshot.PlaySound(soundOneshot.dropBlock, transform.position);
                 }
             }
 
@@ -39,9 +43,15 @@ namespace _20180713._Scripts
                 var closestJoints = Base.GetClosestTwoJoints(holdingBlock);
                 Debug.DrawLine(closestJoints.BlockJoint.GetEndPosition(),
                     closestJoints.BaseJoint.GetEndPosition(), Color.red);
+                
             }
 
-            if (isPickingUpBlockThisFrame) isPickingUpBlockThisFrame = false;
+            if (isPickingUpBlockThisFrame)
+            {
+                soundOneshot.PlaySound(soundOneshot.pickupBlock, transform.position);
+                isPickingUpBlockThisFrame = false;
+            }
+ 
         }
 
         public void SetHoldingBlock(Block block)
