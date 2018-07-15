@@ -12,6 +12,12 @@ public class Explodable : MonoBehaviour
 
     private float time = 0;
     private bool running = false;
+    private AudioManager audioManager;
+
+    void Start()
+    {
+        audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
+    }
 
     void Update()
     {
@@ -52,6 +58,8 @@ public class Explodable : MonoBehaviour
 //                    body.AddExplosionForce(Force, transform.position, Radius);
 //                }
             }
+
+            audioManager.PlaySound(audioManager.explosion, transform.position);
 
             var explosion = Instantiate(ExplosionParticle);
             explosion.transform.position = gameObject.transform.position;

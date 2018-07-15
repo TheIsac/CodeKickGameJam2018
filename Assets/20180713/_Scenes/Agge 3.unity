@@ -599,12 +599,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e69ae0479de840b4ab983c5d056d4fc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pickupBlock: event:/SFX/UGH 3D
-  dropBlock: event:/SFX/UGH 3D
-  explosion: event:/SFX/UGH 3D
-  blockCollision: 
-  blockBuild: 
-  bombBeep: 
+  pickupBlock: event:/SFX/PickupDrop
+  dropBlock: event:/SFX/PickupDrop
+  explosion: event:/SFX/Explosion
+  blockCollision: event:/SFX/Collision
+  blockBuild: event:/SFX/Build
+  bombBeep: event:/SFX/UGH 3D
+  thruster: event:/SFX/Thruster Loop
 --- !u!1 &1443156350
 GameObject:
   m_ObjectHideFlags: 0

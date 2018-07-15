@@ -15,9 +15,11 @@ public class Block : MonoBehaviour
     private bool isFree = true;
 
     private List<BlockJoint> joints = new List<BlockJoint>();
+    private AudioManager audioManager;
 
     void Awake()
     {
+        audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
         joints = new List<BlockJoint>(GetComponentsInChildren<BlockJoint>());
     }
 
@@ -70,6 +72,11 @@ public class Block : MonoBehaviour
     public IEnumerable<BlockJoint> GetConnectedJoints()
     {
         return joints.Where(joint => joint.connectedJoint != null).Select(joint => joint.connectedJoint);
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        audioManager.PlaySound(audioManager.blockCollision, transform.position);
     }
 
     private void OnTriggerStay(Collider collider)

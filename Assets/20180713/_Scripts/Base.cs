@@ -13,6 +13,7 @@ namespace _20180713._Scripts
         private ShipModifier shipModifier;
 
         [SerializeField] private const float snappingDistance = 2f;
+        private AudioManager audioManager;
 
         void Awake()
         {
@@ -20,6 +21,7 @@ namespace _20180713._Scripts
             var pilotBlock = pilotBlockController.GetComponent<Block>();
             baseBlocks.Add(pilotBlock);
             shipModifier = GetComponentInChildren<ShipModifier>();
+            audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
         }
 
         public void AttachBlock(Block block)
@@ -33,6 +35,8 @@ namespace _20180713._Scripts
             ConnectClosestBaseJointToClosestBlockJoint(block);
             block.SetHolder(gameObject);
             shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
+            
+            audioManager.PlaySound(audioManager.blockBuild, transform.position);
         }
 
         public void DetachBlock(Block block)
