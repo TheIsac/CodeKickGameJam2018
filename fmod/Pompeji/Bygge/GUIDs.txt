@@ -1,0 +1,15 @@
+{477bdb13-b15e-4fc7-aeea-d9e172430693} event:/Music tracks/Brace For Impact
+{a5962b2f-c567-4770-b9c1-25322e9291d8} event:/Music tracks/Can I Make You A Drink
+{c0d5ce36-e19b-4365-ab08-90fd75e96ebd} event:/Music tracks/Hyperactive Rubberized Coating
+{f4964899-633f-43b1-bded-6eecf87ce86d} event:/Music tracks/Neon Is Not Edible
+{4d750c87-d211-49e4-88b3-0ddb49e166fe} event:/SFX/UGH 3D
+{9224d55b-b842-4883-a8e8-d6f6019826ae} event:/SFX/UGH
+{6da42810-9a1a-443f-bcd1-52db185c695a} event:/SFX/Windloop
+{d46171b3-5d97-4fa2-bd2b-185aa28da5c1} event:/Game Event
+{f461f96f-4c1b-4886-90bc-4f738fcce287} bus:/
+{f94d49fb-a83e-4b09-aabd-74eb7aad1780} bus:/MUSIC
+{f2c05a8a-ec46-4c67-9ff0-153657750546} bus:/SFX
+{739753d9-25ee-4f54-bbe2-b08aabd8a578} bus:/SFX/Background
+{bcae13a1-b8eb-444e-a5f5-6a32d85b36cf} bus:/SFX/Effects
+{41bfd592-c1c8-4a73-be22-1f7c34998090} bus:/Reverb
+{94212f6e-4eff-48d0-90f1-9a247e837bcc} bank:/Master Bank
