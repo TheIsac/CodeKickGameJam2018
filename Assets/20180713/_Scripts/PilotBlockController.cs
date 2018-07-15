@@ -7,7 +7,7 @@ public class PilotBlockController : MonoBehaviour {
 
     public Player Owner;
 
-    void Awake()
+    void Start()
     {
         GetComponentInChildren<MeshController>().SetColorByPlayerOrder(Owner.Order);
     }

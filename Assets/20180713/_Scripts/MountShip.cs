@@ -19,7 +19,7 @@ namespace _20180713._Scripts
 
 		private ShipMovement playerShip;
 
-		private void Awake()
+		private void Start()
 		{
 			playerMovement = GetComponent<PlayerMovement>();
 			playerMesh = GetComponentInChildren<MeshRenderer>();

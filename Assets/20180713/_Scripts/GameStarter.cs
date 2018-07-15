@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace _20180713._Scripts
 {
@@ -11,6 +12,16 @@ namespace _20180713._Scripts
         public int ArenaHeight = 20;
         public int BaseCornerOffset = 5;
 
+        public List<string> PlayerNames = new List<string>
+        {
+            "Isac",
+            "Gabriel",
+            "David",
+            "Gustav",
+            "Heimer",
+            "August"
+        };
+
         public GameObject BaseTemplate;
         public GameObject PlayerTemplate;
 
@@ -19,14 +30,23 @@ namespace _20180713._Scripts
 
         public void Start()
         {
+            var scoreboard = GameObject.FindWithTag("Scoreboard");
+            var scoreboardComponent = scoreboard.GetComponent<Scoreboard>();
             for (var i = 0; i < PlayerCount; i++)
             {
+                var playerNameIndex = Random.Range(0, PlayerNames.Count - 1);
+                var playerName = PlayerNames[playerNameIndex];
+                PlayerNames.RemoveAt(playerNameIndex);
                 var playerOrder = i + 1;
-                var player = CreatePlayer("Player " + playerOrder, playerOrder);
-                var playerShip = CreatePlayerBase(player);
+                var player = CreatePlayer(playerName, playerOrder);
+                var playerShip = CreateShipAndPlacePlayerAboveShip(player);
+                var playerComponent = player.GetComponent<Player>();
+                scoreboardComponent.Players.Add(playerComponent);
                 players.Add(player);
                 ships.Add(playerShip);
             }
+
+            scoreboardComponent.ResetScoreboard();
         }
 
         private GameObject CreatePlayer(string playerName, int order)
@@ -38,12 +58,13 @@ namespace _20180713._Scripts
             return player;
         }
 
-        private GameObject CreatePlayerBase(GameObject player)
+        private GameObject CreateShipAndPlacePlayerAboveShip(GameObject player)
         {
             var playerShip = Instantiate(BaseTemplate);
-            var shipComponent = playerShip.GetComponent<Base>();
             var playerComponent = player.GetComponent<Player>();
             playerShip.transform.position = GetShipPositionByPlayerOrder(playerComponent.Order);
+            player.transform.position = GetShipPositionByPlayerOrder(playerComponent.Order) + Vector3.up;
+            var shipComponent = playerShip.GetComponent<Base>();
             var playerShipOwnerComponent = player.GetComponent<ShipOwner>();
             playerShipOwnerComponent.OwnBase = shipComponent;
 
@@ -90,7 +111,7 @@ namespace _20180713._Scripts
                     -ArenaHeight * .5f + BaseCornerOffset
                 );
             }
-            
+
             return Vector3.zero;
         }
     }

@@ -13,7 +13,7 @@ namespace _20180713._Scripts
 
         private float ShipWeight;
 
-        void Awake()
+        void Start()
         {
             var meshController = GetComponentInChildren<MeshController>();
             meshController.SetColorByPlayerOrder(Order);
