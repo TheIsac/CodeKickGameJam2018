@@ -19,10 +19,14 @@ public class Explodable : MonoBehaviour
         time += Time.deltaTime;
         if (time > ExplodeInSeconds)
         {
+            Collider selectedCollider = null;
             var colliders = Physics.OverlapSphere(transform.position, Radius);
-            foreach (var collider in colliders)
+            foreach (var blockInRange in colliders)
             {
-                var block = collider.GetComponent<Block>();
+                var block = blockInRange.GetComponent<Block>();
+                if (!block) continue;
+                if (block.GetComponent<PilotBlockController>()) continue;
+
                 if (block != null)
                 {
                     var holder = block.GetHolder();
@@ -35,24 +39,23 @@ public class Explodable : MonoBehaviour
                         }
                     }
                 }
-
-                var body = collider.GetComponent<Rigidbody>();
-                if (body == null && collider.transform.parent != null)
-                {
-                    body = collider.transform.parent.GetComponent<Rigidbody>();
-                }
-
-                if (body != null)
-                {
-                    body.AddExplosionForce(Force, transform.position, Radius);
-                }
+//                var body = blockInRange.GetComponent<Rigidbody>();
+//                if (body == null && blockInRange.transform.parent != null)
+//                {
+//                    body = blockInRange.transform.parent.GetComponent<Rigidbody>();
+//                }
+//
+//                if (body != null)
+//                {
+//                    body.AddExplosionForce(Force, transform.position, Radius);
+//                }
             }
 
             Destroy(gameObject);
         }
     }
 
-    void Arm()
+    public void Arm()
     {
         if (time < 1)
         {
@@ -63,7 +66,7 @@ public class Explodable : MonoBehaviour
         running = true;
     }
 
-    void Disarm()
+    public void Disarm()
     {
         time = 0;
         running = false;

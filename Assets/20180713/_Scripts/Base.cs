@@ -24,6 +24,12 @@ namespace _20180713._Scripts
 
         public void AttachBlock(Block block)
         {
+            var explosionComponent = block.GetComponent<Explodable>();
+            if (explosionComponent)
+            {
+                explosionComponent.Arm();
+            }
+
             ConnectClosestBaseJointToClosestBlockJoint(block);
             block.SetHolder(gameObject);
             shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
@@ -31,14 +37,31 @@ namespace _20180713._Scripts
 
         public void DetachBlock(Block block)
         {
+            var explosionComponent = block.GetComponent<Explodable>();
+            if (explosionComponent)
+            {
+                explosionComponent.Disarm();
+            }
+
             DisConnectClosestBaseJointToClosestBlockJoint(block);
             shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
         }
 
-        public bool IsBlockCloseEnough(Block block)
+        public bool IsBlockCloseEnough(Block block, float minDistance)
         {
             return baseBlocks.Min(baseBlock =>
-                       Vector3.Distance(block.transform.position, baseBlock.transform.position)) < snappingDistance;
+                       Vector3.Distance(block.transform.position, baseBlock.transform.position)) < minDistance;
+        }
+        
+        public bool IsCloseEnough(Vector3 position, float minDistance)
+        {
+            return baseBlocks.Min(baseBlock =>
+                       Vector3.Distance(position, baseBlock.transform.position)) < minDistance;
+        }
+
+        public float GetDistanceToClosestBlock(Vector3 position)
+        {
+            return baseBlocks.Min(baseBlock => Vector3.Distance(position, baseBlock.transform.position));
         }
 
         public ClosestJointsPair GetClosestTwoJoints(IEnumerable<BlockJoint> blockJoints,

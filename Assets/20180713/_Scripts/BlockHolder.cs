@@ -7,19 +7,21 @@ namespace _20180713._Scripts
     [RequireComponent(typeof(ShipOwner))]
     public class BlockHolder : MonoBehaviour
     {
-        public AudioManager AudioManager;
-
         public Transform HoldingPoint;
 
         private Base Base;
         private Block holdingBlock;
         private PlayerMovement playerMovement;
+        private AudioManager audioManager;
+        private ShipManager shipManager;
+        [SerializeField] private const float snappingDistance = 2f;
 
         private bool isPickingUpBlockThisFrame;
 
         void Start()
         {
-            AudioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
+            audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
+            shipManager = GameObject.FindWithTag("ShipManager").GetComponent<ShipManager>();
             Base = GetComponent<ShipOwner>().OwnBase;
             playerMovement = GetComponent<PlayerMovement>();
         }
@@ -28,14 +30,14 @@ namespace _20180713._Scripts
         {
             if (IsTryingToRelease())
             {
-                if (Base.IsBlockCloseEnough(holdingBlock))
+                if (shipManager.IsCloseEnoughToSomeBase(transform.position, snappingDistance))
                 {
-                    AttachHoldingBlockToBase();
+                    AttachHoldingBlockToBase(shipManager.GetClosestBase(transform.position));
                 }
                 else
                 {
                     ReleaseHoldingBlock();
-                    AudioManager.PlaySound(AudioManager.dropBlock, transform.position);
+                    audioManager.PlaySound(audioManager.dropBlock, transform.position);
                 }
             }
 
@@ -53,7 +55,7 @@ namespace _20180713._Scripts
 
             if (isPickingUpBlockThisFrame)
             {
-                AudioManager.PlaySound(AudioManager.pickupBlock, transform.position);
+                audioManager.PlaySound(audioManager.pickupBlock, transform.position);
                 isPickingUpBlockThisFrame = false;
             }
         }
@@ -72,10 +74,10 @@ namespace _20180713._Scripts
             holdingBlock = null;
         }
 
-        private void AttachHoldingBlockToBase()
+        private void AttachHoldingBlockToBase(Base ship)
         {
             holdingBlock.Release();
-            Base.AttachBlock(holdingBlock);
+            ship.AttachBlock(holdingBlock);
             holdingBlock = null;
         }
 
