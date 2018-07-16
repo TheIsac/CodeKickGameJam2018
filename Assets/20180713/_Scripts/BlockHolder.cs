@@ -14,7 +14,7 @@ namespace _20180713._Scripts
         private PlayerMovement playerMovement;
         private AudioManager audioManager;
         private ShipManager shipManager;
-        [SerializeField] private const float snappingDistance = 2f;
+        [SerializeField] private const float SnappingDistance = 2f;
 
         private bool isPickingUpBlockThisFrame;
 
@@ -30,7 +30,7 @@ namespace _20180713._Scripts
         {
             if (IsTryingToRelease())
             {
-                if (shipManager.IsCloseEnoughToSomeBase(transform.position, snappingDistance))
+                if (shipManager.IsCloseEnoughToSomeBase(transform.position, SnappingDistance))
                 {
                     AttachHoldingBlockToBase(shipManager.GetClosestBase(transform.position));
                 }
@@ -81,15 +81,14 @@ namespace _20180713._Scripts
             holdingBlock = null;
         }
 
-        private void DetachHoldingBlockFromBase(Block block)
-        {
-            //SetHoldingBlock(block);
-            Base.DetachBlock(holdingBlock);
-        }
-
         public bool IsTryingToPickUp()
         {
             return !IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
+        }
+        
+        public bool IsHoldingDownPickUpButton()
+        {
+            return Input.GetButton(playerMovement.InteractInput);
         }
 
         private bool IsTryingToRelease()

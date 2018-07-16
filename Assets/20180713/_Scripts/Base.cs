@@ -10,10 +10,10 @@ namespace _20180713._Scripts
     public class Base : MonoBehaviour
     {
         private readonly List<Block> baseBlocks = new List<Block>();
+        private readonly Dictionary<Block, float> screwnessByBlock = new Dictionary<Block, float>();
         private ShipModifier shipModifier;
-
-        [SerializeField] private const float snappingDistance = 2f;
         private AudioManager audioManager;
+        private float unscrewProgressPerSecond = .1f;
 
         void Awake()
         {
@@ -34,29 +34,37 @@ namespace _20180713._Scripts
 
             ConnectClosestBaseJointToClosestBlockJoint(block);
             block.SetHolder(gameObject);
-            shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
-            
+
             audioManager.PlaySound(audioManager.blockBuild, transform.position);
+        }
+
+        public void WorkOnUnscrewingBlock(Block block)
+        {
+            if (!screwnessByBlock.ContainsKey(block)) return;
+
+            var screwness = screwnessByBlock[block];
+            var newScrewness = screwness - Time.deltaTime * unscrewProgressPerSecond;
+            screwnessByBlock[block] = newScrewness;
+        }
+
+        public bool BlockIsUnscrewed(Block block)
+        {
+            return screwnessByBlock[block] < 0;
         }
 
         public void DetachBlock(Block block)
         {
+            if (!screwnessByBlock.ContainsKey(block)) return;
+
             var explosionComponent = block.GetComponent<Explodable>();
             if (explosionComponent)
             {
                 explosionComponent.Disarm();
             }
 
-            DisConnectClosestBaseJointToClosestBlockJoint(block);
-            shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
+            DisconnectBlockJoints(block);
         }
 
-        public bool IsBlockCloseEnough(Block block, float minDistance)
-        {
-            return baseBlocks.Min(baseBlock =>
-                       Vector3.Distance(block.transform.position, baseBlock.transform.position)) < minDistance;
-        }
-        
         public bool IsCloseEnough(Vector3 position, float minDistance)
         {
             return baseBlocks.Min(baseBlock =>
@@ -122,7 +130,7 @@ namespace _20180713._Scripts
             ConnectLooseJoints(block, jointsAtBlockPosition);
         }
 
-        private void DisConnectClosestBaseJointToClosestBlockJoint(Block block)
+        private void DisconnectBlockJoints(Block block)
         {
             RemoveBlock(block);
             foreach (var joint in block.GetConnectedJoints())
@@ -130,12 +138,12 @@ namespace _20180713._Scripts
                 joint.Disconnect();
                 if (!IsConnectedToPilotBlock(joint.Block, new List<BlockJoint>()))
                 {
-                    DisconnectNetworkOfBlocks(joint.Block, new List<BlockJoint>());
+                    DisconnectAllConnectedBlocks(joint.Block, new List<BlockJoint>());
                 }
             }
         }
 
-        private void DisconnectNetworkOfBlocks(Block startBlock, List<BlockJoint> visitedJoints)
+        private void DisconnectAllConnectedBlocks(Block startBlock, List<BlockJoint> visitedJoints)
         {
             if (startBlock.GetComponent<PilotBlockController>()) return;
 
@@ -145,7 +153,7 @@ namespace _20180713._Scripts
                 joint.Disconnect();
                 visitedJoints.Add(joint);
 
-                DisconnectNetworkOfBlocks(joint.Block, visitedJoints);
+                DisconnectAllConnectedBlocks(joint.Block, visitedJoints);
             }
 
             RemoveBlock(startBlock);
@@ -155,6 +163,8 @@ namespace _20180713._Scripts
         private void AddBlock(Block block)
         {
             baseBlocks.Add(block);
+            shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
+            screwnessByBlock[block] = 1f;
             Destroy(block.GetComponent<Rigidbody>());
         }
 
@@ -162,6 +172,7 @@ namespace _20180713._Scripts
         {
             baseBlocks.Remove(block);
             shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
+            screwnessByBlock.Remove(block);
             block.gameObject.AddComponent<Rigidbody>();
         }
 

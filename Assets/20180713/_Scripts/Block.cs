@@ -82,19 +82,24 @@ public class Block : MonoBehaviour
     private void OnTriggerStay(Collider collider)
     {
         var blockHolder = collider.GetComponent<BlockHolder>();
-        var tryingToPickUp = blockHolder != null && blockHolder.IsTryingToPickUp();
-        if (isFree && tryingToPickUp)
+        if (blockHolder == null) return;
+
+        if (isFree && blockHolder.IsTryingToPickUp())
         {
             blockHolder.SetHoldingBlock(this);
         }
 
-        if (!isFree && tryingToPickUp && transform.parent != null)
+        if (!isFree && blockHolder.IsHoldingDownPickUpButton() && transform.parent != null)
         {
-            var @base = GetHolder().GetComponent<Base>();
-            if (@base)
+            var ship = GetHolder().GetComponent<Base>();
+            if (ship)
             {
-                @base.DetachBlock(this);
-                blockHolder.SetHoldingBlock(this);
+                ship.WorkOnUnscrewingBlock(this);
+                if (ship.BlockIsUnscrewed(this))
+                {
+                    ship.DetachBlock(this);
+                    blockHolder.SetHoldingBlock(this);
+                }
             }
         }
     }
