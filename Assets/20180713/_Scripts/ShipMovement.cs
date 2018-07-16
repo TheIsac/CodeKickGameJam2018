@@ -14,7 +14,6 @@ public class ShipMovement : MonoBehaviour
 
     [SerializeField] public float movementSpeed;
     private Rigidbody rb;
-    private BoxCollider boxCollider;
     private bool isPlayingSound = false;
     private AudioManager audioManager;
     private EventInstance thrusterSound;
@@ -23,7 +22,6 @@ public class ShipMovement : MonoBehaviour
     {
         audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
         rb = GetComponentInParent<Rigidbody>();
-        boxCollider = GetComponent<BoxCollider>();
     }
 
     void Update()

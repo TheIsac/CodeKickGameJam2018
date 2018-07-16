@@ -9,7 +9,7 @@ public class PhysicsJoints : MonoBehaviour {
 	public void AddFixedJoint(Base baseBlock)
 	{
 		var rigidBody = GetComponent<Rigidbody>();
-		var fixedJoint = GetComponent<FixedJoint>();
+//		var fixedJoint = GetComponent<FixedJoint>();
 
 		if(rigidBody == null)
 			rigidBody = gameObject.AddComponent<Rigidbody>();

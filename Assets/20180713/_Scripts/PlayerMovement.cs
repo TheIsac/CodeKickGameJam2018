@@ -11,12 +11,10 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput;
 
     private Rigidbody rb;
-    private BoxCollider boxCollider;
 
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        boxCollider = GetComponent<BoxCollider>();
     }
 
     void Update()

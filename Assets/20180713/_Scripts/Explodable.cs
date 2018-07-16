@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.UIElements;
 using UnityEngine;
 using _20180713._Scripts;
 
@@ -7,12 +8,15 @@ public class Explodable : MonoBehaviour
 {
     public float ExplodeInSeconds = 10;
     public float Radius;
-    public float Force;
     public GameObject ExplosionParticle;
 
-    private float time = 0;
-    private bool running = false;
     private AudioManager audioManager;
+    private bool running = false;
+    private float explodeTime = 0;
+    private float tickInSeconds = 2;
+    private float tickTime = 0;
+    private bool tickFaster = false;
+    private bool tickEvenFaster = false;
 
     void Start()
     {
@@ -23,10 +27,10 @@ public class Explodable : MonoBehaviour
     {
         if (!running) return;
 
-        time += Time.deltaTime;
-        if (time > ExplodeInSeconds)
+        explodeTime += Time.deltaTime;
+        tickTime += Time.deltaTime;
+        if (explodeTime > ExplodeInSeconds)
         {
-            Collider selectedCollider = null;
             var colliders = Physics.OverlapSphere(transform.position, Radius);
             foreach (var blockInRange in colliders)
             {
@@ -34,29 +38,15 @@ public class Explodable : MonoBehaviour
                 if (!block) continue;
                 if (block.GetComponent<PilotBlockController>()) continue;
 
-                if (block != null)
+                var holder = block.GetHolder();
+                if (holder != null)
                 {
-                    var holder = block.GetHolder();
-                    if (holder != null)
+                    var @base = holder.GetComponent<Base>();
+                    if (@base != null)
                     {
-                        var @base = holder.GetComponent<Base>();
-                        if (@base != null)
-                        {
-                            @base.DetachBlock(block);
-                        }
+                        @base.DetachBlock(block);
                     }
                 }
-
-//                var body = blockInRange.GetComponent<Rigidbody>();
-//                if (body == null && blockInRange.transform.parent != null)
-//                {
-//                    body = blockInRange.transform.parent.GetComponent<Rigidbody>();
-//                }
-//
-//                if (body != null)
-//                {
-//                    body.AddExplosionForce(Force, transform.position, Radius);
-//                }
             }
 
             audioManager.PlaySound(audioManager.explosion, transform.position);
@@ -68,14 +58,37 @@ public class Explodable : MonoBehaviour
 
             Destroy(gameObject);
         }
+        else if (tickEvenFaster && tickTime > tickInSeconds * .1)
+        {
+            audioManager.PlaySound(audioManager.bombBeep, transform.position);
+            tickTime = 0;
+        }
+        else if (tickFaster && tickTime > tickInSeconds * .25)
+        {
+            audioManager.PlaySound(audioManager.bombBeep, transform.position);
+            tickTime = 0;
+            if (explodeTime > ExplodeInSeconds * .8 && !tickEvenFaster)
+            {
+                tickEvenFaster = true;
+            }
+        }
+        else if (tickTime > tickInSeconds)
+        {
+            audioManager.PlaySound(audioManager.bombBeep, transform.position);
+            tickTime = 0;
+            if (explodeTime > ExplodeInSeconds * .5 && !tickFaster)
+            {
+                tickFaster = true;
+            }
+        }
     }
 
     public void Arm()
     {
-        if (time < 1)
+        if (explodeTime < 1)
         {
             ExplodeInSeconds = Random.Range(10, 20);
-            time = 0;
+            explodeTime = 0;
         }
 
         running = true;
@@ -83,7 +96,7 @@ public class Explodable : MonoBehaviour
 
     public void Disarm()
     {
-        time = 0;
+        explodeTime = 0;
         running = false;
     }
 }
