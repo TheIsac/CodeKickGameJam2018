@@ -22,18 +22,18 @@ public class BlockSpawner : MonoBehaviour
     public float RareMaxSpeed = 10;
 
     public float BombSpawnChance = .05f;
-    public float ThrusterSpawnChance = .08f;
+    public float ThrusterSpawnChance = .1f;
 
     private float secondsSinceLastSpawn = 0;
-    private List<Block> GeneralBlocks;
-    private Block BombBlock;
-    private Block ThrusterBlock;
+    private List<Block> generalBlocks;
+    private Block bombBlock;
+    private Block thrusterBlock;
 
     void Start()
     {
-        BombBlock = Prefabs.Find(p => p.GetComponent<Explodable>() != null);
-        ThrusterBlock = Prefabs.Find(p => p.GetComponent<ThrusterBlock>() != null);
-        GeneralBlocks = Prefabs.Where(p => p != BombBlock && p != ThrusterBlock).ToList();
+        bombBlock = Prefabs.Find(p => p.GetComponent<Explodable>() != null);
+        thrusterBlock = Prefabs.Find(p => p.GetComponent<ThrusterBlock>() != null);
+        generalBlocks = Prefabs.Where(p => p != bombBlock && p != thrusterBlock).ToList();
     }
 
     void Update()
@@ -93,15 +93,15 @@ public class BlockSpawner : MonoBehaviour
         var threshold = 1 - BombSpawnChance;
         if (chance > threshold)
         {
-            return BombBlock;
+            return bombBlock;
         }
 
         threshold -= ThrusterSpawnChance;
         if (chance > threshold)
         {
-            return ThrusterBlock;
+            return thrusterBlock;
         }
 
-        return GeneralBlocks[Random.Range(0, GeneralBlocks.Count)];
+        return generalBlocks[Random.Range(0, generalBlocks.Count)];
     }
 }
