@@ -64,6 +64,10 @@ namespace _20180713._Scripts
         {
             holdingBlock = block;
             block.transform.position = HoldingPoint.position;
+            var blockRotation = block.transform.rotation;
+            blockRotation.z = 0;
+            blockRotation.x = 0;
+            block.transform.rotation = blockRotation;
             block.SetHolder(gameObject);
             isPickingUpBlockThisFrame = true;
         }
@@ -85,7 +89,7 @@ namespace _20180713._Scripts
         {
             return !IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
         }
-        
+
         public bool IsHoldingDownPickUpButton()
         {
             return Input.GetButton(playerMovement.InteractInput);

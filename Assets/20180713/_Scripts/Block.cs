@@ -13,6 +13,7 @@ public class Block : MonoBehaviour
     public float Speed = 0;
 
     private bool isFree = true;
+    private bool isExplosive;
 
     private List<BlockJoint> joints = new List<BlockJoint>();
     private AudioManager audioManager;
@@ -21,6 +22,11 @@ public class Block : MonoBehaviour
     {
         audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
         joints = new List<BlockJoint>(GetComponentsInChildren<BlockJoint>());
+    }
+
+    void Start()
+    {
+        isExplosive = GetComponent<Explodable>();
     }
 
     public bool IsFree()
@@ -89,18 +95,26 @@ public class Block : MonoBehaviour
             blockHolder.SetHoldingBlock(this);
         }
 
-        if (!isFree && blockHolder.IsHoldingDownPickUpButton() && transform.parent != null)
+        if (!isFree && transform.parent != null)
         {
-            var ship = GetHolder().GetComponent<Base>();
-            if (ship)
-            {
-                ship.WorkOnUnscrewingBlock(this);
-                if (ship.BlockIsUnscrewed(this))
-                {
-                    ship.DetachBlock(this);
-                    blockHolder.SetHoldingBlock(this);
-                }
-            }
+            HandleShipBlockCollision(blockHolder);
+        }
+    }
+
+    private void HandleShipBlockCollision(BlockHolder blockHolder)
+    {
+        var ship = GetHolder().GetComponent<Base>();
+        if (!ship) return;
+
+        if (blockHolder.IsHoldingDownPickUpButton())
+        {
+            ship.WorkOnUnscrewingBlock(this);
+        }
+
+        if ((blockHolder.IsTryingToPickUp() && isExplosive) || ship.BlockIsUnscrewed(this))
+        {
+            ship.DetachBlock(this);
+            blockHolder.SetHoldingBlock(this);
         }
     }
 }

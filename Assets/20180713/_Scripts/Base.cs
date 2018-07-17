@@ -49,6 +49,7 @@ namespace _20180713._Scripts
 
         public bool BlockIsUnscrewed(Block block)
         {
+            if (!screwnessByBlock.ContainsKey(block)) return false;
             return screwnessByBlock[block] < 0;
         }
 
@@ -201,8 +202,10 @@ namespace _20180713._Scripts
             var blockTransform = block.transform;
             var currentDir = blockTransform.position - joints.BlockJoint.GetEndPosition();
             var targetDir = joints.BaseJoint.GetEndPosition() - joints.BaseJoint.GetCenterPosition();
-            blockTransform.rotation = Quaternion.FromToRotation(currentDir, targetDir) * blockTransform.rotation *
-                                      Quaternion.Euler(new Vector3(0, 1, 0));
+            var resultRotation = Quaternion.FromToRotation(currentDir, targetDir) * blockTransform.rotation;
+            resultRotation.z = 0;
+            resultRotation.x = 0;
+            blockTransform.rotation = resultRotation;
             block.transform.position += joints.BaseJoint.GetEndPosition() - joints.BlockJoint.GetEndPosition();
         }
 

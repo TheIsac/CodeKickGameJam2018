@@ -66,7 +66,6 @@ public class ShipCollision : MonoBehaviour {
 		if (blockToBreakScript != null)
 		{
 			otherBase.DetachBlock(blockToBreakScript);
-			Debug.Log("I WORK");
 		}
 	}
 }

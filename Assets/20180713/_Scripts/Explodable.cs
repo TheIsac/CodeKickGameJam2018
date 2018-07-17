@@ -96,7 +96,6 @@ public class Explodable : MonoBehaviour
 
     public void Disarm()
     {
-        explodeTime = 0;
         running = false;
     }
 }
