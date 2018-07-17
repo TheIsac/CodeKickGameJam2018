@@ -111,6 +111,12 @@ namespace _20180713._Scripts
             return baseBlocks;
         }
 
+        public bool HasFreeJoints()
+        {
+            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints()).ToList();
+            return baseJoints.Count > 0;
+        }
+
         private void ConnectClosestBaseJointToClosestBlockJoint(Block block)
         {
             var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints());

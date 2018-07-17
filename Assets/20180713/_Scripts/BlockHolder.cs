@@ -32,7 +32,11 @@ namespace _20180713._Scripts
             {
                 if (shipManager.IsCloseEnoughToSomeBase(transform.position, SnappingDistance))
                 {
-                    AttachHoldingBlockToBase(shipManager.GetClosestBase(transform.position));
+                    var closestShip = shipManager.GetClosestShip(transform.position);
+                    if (closestShip.HasFreeJoints())
+                    {
+                        AttachHoldingBlockToBase(closestShip);
+                    }
                 }
                 else
                 {

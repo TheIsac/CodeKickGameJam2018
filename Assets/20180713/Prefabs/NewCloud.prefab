@@ -117,8 +117,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Direction: {x: 0, y: 1, z: 0}
-  MinSpeed: 4
-  MaxSpeed: 8
+  MinSpeed: 1
+  MaxSpeed: 2
 --- !u!114 &114674372906702344
 MonoBehaviour:
   m_ObjectHideFlags: 1

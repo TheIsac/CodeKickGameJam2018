@@ -8,7 +8,7 @@ public class ShipManager : MonoBehaviour
 {
     public List<Base> Ships = new List<Base>();
 
-    public Base GetClosestBase(Vector3 position)
+    public Base GetClosestShip(Vector3 position)
     {
         Base closest = null;
         var closestDistance = -1f;

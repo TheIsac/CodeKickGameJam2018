@@ -8,7 +8,7 @@ public enum Distribution
     edge
 }
 
-public class Spawner2 : MonoBehaviour
+public class CloudSpawner : MonoBehaviour
 {
     public int MinSpawnX = 0;
     public int MaxSpawnX = 20;
@@ -27,6 +27,8 @@ public class Spawner2 : MonoBehaviour
     void Start()
     {
         secondsSinceLastSpawn = SecondsBetweenSpawn;
+        Spawn();
+        Spawn();
     }
 
     void Update()

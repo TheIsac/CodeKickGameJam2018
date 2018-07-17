@@ -7,6 +7,7 @@ using _20180713._Scripts;
 public class PlayerMovement : MonoBehaviour
 {
     [SerializeField] private float movementSpeed;
+    [SerializeField] private float maxSpeed = 11;
 
     [SerializeField] public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput;
 
@@ -22,10 +23,10 @@ public class PlayerMovement : MonoBehaviour
         ReadInputs();
     }
 
-	public void StopPlayerMovement()
-	{
-		rb.velocity = Vector3.zero;
-	}
+    public void StopPlayerMovement()
+    {
+        rb.velocity = Vector3.zero;
+    }
 
     #region inputs
 
@@ -38,8 +39,17 @@ public class PlayerMovement : MonoBehaviour
     {
         var verticalInput = Input.GetAxis(VerticalInput);
         var horizontalInput = Input.GetAxis(HorizontalInput);
-        rb.AddForce(new Vector3(horizontalInput * movementSpeed * Time.deltaTime, 0,
-            verticalInput * movementSpeed * Time.deltaTime));
+
+        if (rb.velocity.magnitude > maxSpeed)
+        {
+            var overExceedingPercentage = 10 / rb.velocity.magnitude;
+            rb.AddForce(rb.velocity * (1 - overExceedingPercentage) * -1);
+        }
+        else
+        {
+            rb.AddForce(new Vector3(horizontalInput * movementSpeed * Time.deltaTime, 0,
+                verticalInput * movementSpeed * Time.deltaTime), ForceMode.Acceleration);
+        }
 
         if (Mathf.Abs(verticalInput) > 0.5 || Mathf.Abs(horizontalInput) > 0.5)
         {
@@ -50,5 +60,5 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-	#endregion
+    #endregion
 }

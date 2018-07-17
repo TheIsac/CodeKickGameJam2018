@@ -787,7 +787,7 @@ MonoBehaviour:
   - {fileID: 114766307982462548, guid: ef518bcfd35fd4582b83fed59176c5e5, type: 2}
   - {fileID: 114146386776557088, guid: 86d23e31ecb2643b3885bfd7407597ab, type: 2}
   SecondsBetweenSpawn: 2
-  Distance: 100
+  Distance: 60
   MaxY: 20
   MinSpeed: 2
   MaxSpeed: 5
@@ -840,11 +840,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MinSpawnX: -30
   MaxSpawnX: 30
-  MinSpawnY: -220
-  MaxSpawnY: -205
+  MinSpawnY: -150
+  MaxSpawnY: -40
   MinSpawnZ: -30
   MaxSpawnZ: 30
-  SecondsBetweenSpawn: 10
+  SecondsBetweenSpawn: 25
   Distribution: 0
   Prefab: {fileID: 1817361374692174, guid: 669018a57585f4d5f82fecaa40f83349, type: 2}
   randomizeYRotation: 1
@@ -882,10 +882,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6f3dd9c59b6b43a8ba1d8aa2a8394f65, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerCount: 4
+  PlayerCount: 2
   ArenaWidth: 40
   ArenaHeight: 20
   BaseCornerOffset: 5
+  GameLengthSeconds: 211
   PlayerNames:
   - Isac
   - Gabriel

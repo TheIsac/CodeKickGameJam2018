@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
@@ -12,6 +13,7 @@ namespace _20180713._Scripts
         public int ArenaWidth = 20;
         public int ArenaHeight = 20;
         public int BaseCornerOffset = 5;
+        public int GameLengthSeconds = 5 * 60;
 
         public List<string> PlayerNames = new List<string>
         {
@@ -28,11 +30,14 @@ namespace _20180713._Scripts
 
         private readonly List<GameObject> players = new List<GameObject>();
         private readonly List<GameObject> ships = new List<GameObject>();
+        private GameTimer gameTimer;
+        private bool foundTimer;
+        private Scoreboard scoreboard;
+        private float gameTimeLeft = 5 * 60;
 
         public void Start()
         {
-            var scoreboard = GameObject.FindWithTag("Scoreboard");
-            var scoreboardComponent = scoreboard.GetComponent<Scoreboard>();
+            scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
             for (var i = 0; i < PlayerCount; i++)
             {
                 var playerNameIndex = Random.Range(0, PlayerNames.Count - 1);
@@ -42,7 +47,7 @@ namespace _20180713._Scripts
                 var player = CreatePlayer(playerName, playerOrder);
                 var playerShip = CreateShipAndPlacePlayerAboveShip(player);
                 var playerComponent = player.GetComponent<Player>();
-                scoreboardComponent.Players.Add(playerComponent);
+                scoreboard.Players.Add(playerComponent);
                 players.Add(player);
                 ships.Add(playerShip);
             }
@@ -51,7 +56,37 @@ namespace _20180713._Scripts
             var shipComponents = ships.Select(shipGameObject => shipGameObject.GetComponent<Base>());
             shipManager.Ships.AddRange(shipComponents);
 
-            scoreboardComponent.ResetScoreboard();
+            var gameTimerObject = GameObject.FindWithTag("GameTimer");
+            if (gameTimerObject)
+            {
+                foundTimer = true;
+                gameTimer = gameTimerObject.GetComponent<GameTimer>();
+                gameTimer.SetTime(GameLengthSeconds);
+                gameTimeLeft = GameLengthSeconds;
+                GameObject.FindWithTag("EndText").GetComponent<EndText>().SetText("");
+            }
+
+            scoreboard.ResetScoreboard();
+
+            //TODO Some bug requires us to deactivate-activate the main camera for it to display stuff properly
+            var mainCamera = GameObject.FindWithTag("MainCamera");
+            mainCamera.SetActive(false);
+            mainCamera.SetActive(true);
+        }
+
+        void Update()
+        {
+            if (foundTimer)
+            {
+                gameTimeLeft = Math.Max(0, gameTimeLeft - Time.deltaTime);
+                gameTimer.SetTime(gameTimeLeft);
+                if (gameTimeLeft < 0.001)
+                {
+                    var text = "Winner is " + scoreboard.GetLeaderName() + " with a score of " +
+                               scoreboard.GetLeaderScore();
+                    GameObject.FindWithTag("EndText").GetComponent<EndText>().SetText(text);
+                }
+            }
         }
 
         private GameObject CreatePlayer(string playerName, int order)
