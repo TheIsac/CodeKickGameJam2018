@@ -22,19 +22,26 @@ namespace _20180713._Scripts
             connectedJoint = other;
             other.connectedJoint = this;
         }
-        
+
         public void Disconnect()
         {
             if (connectedJoint)
             {
-                connectedJoint.connectedJoint = null;   
+                connectedJoint.connectedJoint = null;
             }
-            connectedJoint = null;  
+
+            connectedJoint = null;
         }
 
         public Vector3 GetEndPosition()
         {
             return transform.position;
+        }
+
+        public Vector3 GetConnectedCenterPosition()
+        {
+            var direction = (GetEndPosition() - GetCenterPosition()).normalized;
+            return transform.position + direction;
         }
 
         public Vector3 GetCenterPosition()

@@ -655,6 +655,26 @@ Prefab:
       propertyPath: m_RootOrder
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114665737615808348, guid: be3ff90e01e315343b39cbf7d1bb9c56,
+        type: 2}
+      propertyPath: BotCount
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114665737615808348, guid: be3ff90e01e315343b39cbf7d1bb9c56,
+        type: 2}
+      propertyPath: PlayerCount
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114351239573702236, guid: be3ff90e01e315343b39cbf7d1bb9c56,
+        type: 2}
+      propertyPath: SecondsBetweenSpawn
+      value: 1.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 114351239573702236, guid: be3ff90e01e315343b39cbf7d1bb9c56,
+        type: 2}
+      propertyPath: Distance
+      value: 50
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: be3ff90e01e315343b39cbf7d1bb9c56, type: 2}
   m_IsPrefabAsset: 0

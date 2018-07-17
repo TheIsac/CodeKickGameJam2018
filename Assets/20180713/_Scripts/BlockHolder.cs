@@ -22,7 +22,7 @@ namespace _20180713._Scripts
         {
             audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
             shipManager = GameObject.FindWithTag("ShipManager").GetComponent<ShipManager>();
-            Base = GetComponent<ShipOwner>().OwnBase;
+            Base = GetComponent<ShipOwner>().OwnShip;
             playerMovement = GetComponent<PlayerMovement>();
         }
 
@@ -66,6 +66,12 @@ namespace _20180713._Scripts
 
         public void SetHoldingBlock(Block block)
         {
+            if (IsHoldingBlock())
+            {
+                Debug.Log("Trying to pick up block while already holding a block.");
+                return;
+            }
+
             holdingBlock = block;
             block.transform.position = HoldingPoint.position;
             var blockRotation = block.transform.rotation;
@@ -76,13 +82,7 @@ namespace _20180713._Scripts
             isPickingUpBlockThisFrame = true;
         }
 
-        private void ReleaseHoldingBlock()
-        {
-            holdingBlock.Release();
-            holdingBlock = null;
-        }
-
-        private void AttachHoldingBlockToBase(Base ship)
+        public void AttachHoldingBlockToBase(Base ship)
         {
             holdingBlock.Release();
             ship.AttachBlock(holdingBlock);
@@ -99,15 +99,26 @@ namespace _20180713._Scripts
             return Input.GetButton(playerMovement.InteractInput);
         }
 
+        public bool IsHoldingBlock()
+        {
+            return holdingBlock;
+        }
+
+        public void ReleaseHoldingBlock()
+        {
+            holdingBlock.Release();
+            holdingBlock = null;
+        }
+
+        public Block GetHoldingBlock()
+        {
+            return holdingBlock;
+        }
+        
         private bool IsTryingToRelease()
         {
             return holdingBlock && !isPickingUpBlockThisFrame && IsHoldingBlock() &&
                    Input.GetButtonDown(playerMovement.InteractInput);
-        }
-
-        public bool IsHoldingBlock()
-        {
-            return holdingBlock;
         }
     }
 }

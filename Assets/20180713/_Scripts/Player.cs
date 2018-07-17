@@ -23,7 +23,7 @@ namespace _20180713._Scripts
 
         public float GetScore()
         {
-            return GetComponent<ShipOwner>().OwnBase.GetBlocks().Sum(b => b.Weight);
+            return GetComponent<ShipOwner>().OwnShip.GetBlocks().Sum(b => b.Weight);
         }
 
         private void SetupMovementComponent()

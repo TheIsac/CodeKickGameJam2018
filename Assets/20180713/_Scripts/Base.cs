@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices;
 using UnityEngine;
-using UnityEngine.AI;
 
 namespace _20180713._Scripts
 {
@@ -14,6 +12,8 @@ namespace _20180713._Scripts
         private ShipModifier shipModifier;
         private AudioManager audioManager;
         private float unscrewProgressPerSecond = .1f;
+        private int bombsAttachedCount = 0;
+        private bool allJointsBlocked = false;
 
         void Awake()
         {
@@ -86,6 +86,11 @@ namespace _20180713._Scripts
             var blockJointsArray = blockJoints as BlockJoint[] ?? blockJoints.ToArray();
             foreach (var baseJoint in baseJoints)
             {
+                var isOccupiedJoint = baseJoints.Any(otherJoint =>
+                    otherJoint != baseJoint &&
+                    baseJoint.GetConnectedCenterPosition() == otherJoint.GetCenterPosition());
+                if (isOccupiedJoint) continue;
+
                 foreach (var blockJoint in blockJointsArray)
                 {
                     var distance = Vector3.Distance(blockJoint.GetEndPosition(),
@@ -111,23 +116,51 @@ namespace _20180713._Scripts
             return baseBlocks;
         }
 
+        public bool HasBombAttached()
+        {
+            return bombsAttachedCount > 0;
+        }
+
         public bool HasFreeJoints()
         {
+            return FreeJointsCount() > 0 && !allJointsBlocked;
+        }
+
+        public void ForceRemoveBlock(Block block)
+        {
+            Debug.Log("Force remove block attached to ship at position: " + transform.position);
+            RemoveBlock(block);
+        }
+
+        private int FreeJointsCount()
+        {
             var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints()).ToList();
-            return baseJoints.Count > 0;
+            return baseJoints.Count;
         }
 
         private void ConnectClosestBaseJointToClosestBlockJoint(Block block)
         {
-            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints());
-            var blockJoints = block.GetFreeJoints();
+            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints()).ToList();
+            var blockJoints = block.GetFreeJoints().ToList();
+
             var joints = GetClosestTwoJoints(blockJoints, baseJoints);
+
+            if (joints.BaseJoint == null)
+            {
+                allJointsBlocked = true;
+                return;
+            }
+
+            allJointsBlocked = false;
 
             Align(block, joints);
 
             if (baseBlocks.Any(b => b.transform.position == block.transform.position))
             {
-                throw new Exception("Block inside another block!");
+                var collidingBaseBlock = baseBlocks.Find(b => b.transform.position == block.transform.position);
+                Debug.Log("Block inside another block. Base block position: " + collidingBaseBlock.transform.position +
+                          ", Free block position: " + block.transform.position);
+                allJointsBlocked = true;
             }
 
             AddBlock(block);
@@ -169,6 +202,11 @@ namespace _20180713._Scripts
 
         private void AddBlock(Block block)
         {
+            if (block.GetComponent<Explodable>() != null)
+            {
+                bombsAttachedCount++;
+            }
+
             baseBlocks.Add(block);
             shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
             screwnessByBlock[block] = 1f;
@@ -177,6 +215,20 @@ namespace _20180713._Scripts
 
         private void RemoveBlock(Block block)
         {
+            //TODO This is treating the symptom of some other unkown bug
+            if (block == null)
+            {
+                Debug.Log("REMOVING DESTROYED BLOCK Base.RemoveBlock");
+                baseBlocks.Remove(block);
+                screwnessByBlock.Remove(block);
+                return;
+            }
+
+            if (block.GetComponent<Explodable>() != null)
+            {
+                bombsAttachedCount--;
+            }
+
             baseBlocks.Remove(block);
             shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
             screwnessByBlock.Remove(block);

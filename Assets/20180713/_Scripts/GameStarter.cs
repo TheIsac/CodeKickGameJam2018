@@ -9,6 +9,7 @@ namespace _20180713._Scripts
     public class GameStarter : MonoBehaviour
     {
         public int PlayerCount = 4;
+        public int BotCount = 1;
 
         public int ArenaWidth = 20;
         public int ArenaHeight = 20;
@@ -44,7 +45,11 @@ namespace _20180713._Scripts
                 var playerName = PlayerNames[playerNameIndex];
                 PlayerNames.RemoveAt(playerNameIndex);
                 var playerOrder = i + 1;
-                var player = CreatePlayer(playerName, playerOrder);
+
+                var player = i < PlayerCount - BotCount
+                    ? CreatePlayer(playerName, playerOrder)
+                    : CreateBot(playerOrder);
+
                 var playerShip = CreateShipAndPlacePlayerAboveShip(player);
                 var playerComponent = player.GetComponent<Player>();
                 scoreboard.Players.Add(playerComponent);
@@ -87,26 +92,66 @@ namespace _20180713._Scripts
                     GameObject.FindWithTag("EndText").GetComponent<EndText>().SetText(text);
                 }
             }
+
+            foreach (var player in players)
+            {
+                var position = player.transform.position;
+                if (position.x > ArenaWidth || position.x < -ArenaWidth)
+                {
+                    player.transform.position = new Vector3(
+                        0,
+                        position.y,
+                        position.z
+                    );
+                }
+
+                if (position.y > 1 || position.y < -1)
+                {
+                    player.transform.position = new Vector3(
+                        position.x,
+                        0,
+                        position.z
+                    );
+                }
+
+                if (position.z > ArenaHeight || position.z < -ArenaHeight)
+                {
+                    player.transform.position = new Vector3(
+                        position.x,
+                        position.y,
+                        0
+                    );
+                }
+            }
         }
 
         private GameObject CreatePlayer(string playerName, int order)
         {
             var player = Instantiate(PlayerTemplate);
+            player.name = playerName;
             var playerComponent = player.GetComponent<Player>();
             playerComponent.Name = playerName;
             playerComponent.Order = order;
             return player;
         }
 
+        private GameObject CreateBot(int order)
+        {
+            var player = CreatePlayer("Anna (" + order + ")", order);
+            player.gameObject.AddComponent<Bot>();
+            return player;
+        }
+
         private GameObject CreateShipAndPlacePlayerAboveShip(GameObject player)
         {
             var playerShip = Instantiate(BaseTemplate);
+            playerShip.name = "Ship " + player.name;
             var playerComponent = player.GetComponent<Player>();
             playerShip.transform.position = GetShipPositionByPlayerOrder(playerComponent.Order);
             player.transform.position = GetShipPositionByPlayerOrder(playerComponent.Order) + Vector3.up;
             var shipComponent = playerShip.GetComponent<Base>();
             var playerShipOwnerComponent = player.GetComponent<ShipOwner>();
-            playerShipOwnerComponent.OwnBase = shipComponent;
+            playerShipOwnerComponent.OwnShip = shipComponent;
 
             var pilotBlockController = playerShip.GetComponentInChildren<PilotBlockController>();
             pilotBlockController.Owner = playerComponent;

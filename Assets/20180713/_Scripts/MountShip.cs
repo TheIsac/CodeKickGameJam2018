@@ -25,7 +25,7 @@ namespace _20180713._Scripts
             playerMesh = GetComponentInChildren<MeshRenderer>();
             playerCollider = GetComponent<Collider>();
             blockHolder = GetComponent<BlockHolder>();
-            baseBlock = GetComponent<ShipOwner>().OwnBase;
+            baseBlock = GetComponent<ShipOwner>().OwnShip;
             playerShip = baseBlock.gameObject.GetComponentInChildren<ShipMovement>();
 
             SetShipInputs();

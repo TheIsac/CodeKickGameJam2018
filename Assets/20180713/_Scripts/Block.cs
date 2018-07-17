@@ -40,8 +40,8 @@ public class Block : MonoBehaviour
     {
         transform.SetParent(holder.transform);
         isFree = false;
-        var holderBaseComponent = holder.GetComponent<Base>();
-        IsOnShip = holderBaseComponent != null;
+        var shipComponent = holder.GetComponent<Base>();
+        IsOnShip = shipComponent != null;
 
         var rigidbody = GetComponent<Rigidbody>();
         if (rigidbody)
@@ -62,6 +62,7 @@ public class Block : MonoBehaviour
     {
         transform.SetParent(null);
         isFree = true;
+        IsOnShip = false;
 
         var rigidbody = GetComponent<Rigidbody>();
         if (rigidbody)
