@@ -1,5 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using FMOD.Studio;
 using UnityEngine;
 
@@ -7,33 +6,38 @@ namespace _20180713._Scripts
 {
     public class AudioManager : MonoBehaviour
     {
-        [FMODUnity.EventRef] public string pickupBlock;
-        [FMODUnity.EventRef] public string dropBlock;
-        [FMODUnity.EventRef] public string explosion;
-        [FMODUnity.EventRef] public string blockCollision;
-        [FMODUnity.EventRef] public string blockBuild;
-        [FMODUnity.EventRef] public string bombBeep;
-        [FMODUnity.EventRef] public string thruster;
+        [FMODUnity.EventRef] public string PickupBlock;
+        [FMODUnity.EventRef] public string DropBlock;
+        [FMODUnity.EventRef] public string Explosion;
+        [FMODUnity.EventRef] public string BlockCollision;
+        [FMODUnity.EventRef] public string BlockBuild;
+        [FMODUnity.EventRef] public string BombBeep; 
+        [FMODUnity.EventRef] public string Thruster;
+        [FMODUnity.EventRef] public string PlayerCollision;
+        [FMODUnity.EventRef] public string ShipCollision;
         FMOD.Studio.EventInstance soundevent;
 
-        void Start()
+        private const float MinSecondsBetweenSameSound = .5f;
+        private readonly Dictionary<string, float> lastPlayedSoundByName = new Dictionary<string, float>();
+
+        public void PlaySound(string sound, Vector3 position)
         {
-            //soundevent = FMODUnity.RuntimeManager.CreateInstance(bombBeep);
+            if (!lastPlayedSoundByName.ContainsKey(sound) ||
+                Time.fixedTime - lastPlayedSoundByName[sound] > MinSecondsBetweenSameSound)
+            {
+                lastPlayedSoundByName[sound] = Time.fixedTime;
+                FMODUnity.RuntimeManager.PlayOneShot(sound, position);
+            }
         }
 
-        void Update()
-        {
-            //FMODUnity.RuntimeManager.AttachInstanceToGameObject(bombBeep, )
-        }
-
-        public void PlaySound(string sound, UnityEngine.Vector3 position)
+        public void ForcePlaySound(string sound, Vector3 position)
         {
             FMODUnity.RuntimeManager.PlayOneShot(sound, position);
         }
 
         public EventInstance CreateThrusterSoundInstance()
         {
-            return FMODUnity.RuntimeManager.CreateInstance(thruster);
+            return FMODUnity.RuntimeManager.CreateInstance(Thruster);
         }
     }
 }

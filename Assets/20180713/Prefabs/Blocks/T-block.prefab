@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 4246321290394286}
   - component: {fileID: 33194776550125954}
   - component: {fileID: 23381685075167458}
+  - component: {fileID: 114459933128370082}
   m_Layer: 0
   m_Name: mesh_hexagon_tShape
   m_TagString: Untagged
@@ -246,6 +247,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weight: 20
   Speed: 0
+  OnShip: {fileID: 0}
 --- !u!114 &114297569846402416
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -272,6 +274,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Block: {fileID: 0}
   connectedJoint: {fileID: 0}
+--- !u!114 &114459933128370082
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1938741172681994}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0217d943104d4adb8f743201c5aeac66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114928109521453604
 MonoBehaviour:
   m_ObjectHideFlags: 1

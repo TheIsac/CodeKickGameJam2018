@@ -33,6 +33,7 @@ namespace _20180713._Scripts
             playerMovement.VerticalInput = Order + "_LSV";
             playerMovement.InteractInput = Order + "_Primary";
             playerMovement.SecondaryInput = Order + "_Secondary";
+            playerMovement.TertiaryInput = Order + "_Tertiary";
         }
     }
 }

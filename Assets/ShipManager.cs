@@ -30,13 +30,13 @@ public class ShipManager : MonoBehaviour
         return Ships.Any(ship => ship.IsCloseEnough(position, minDistance));
     }
 
-    public Base GetClosestShipExcept(Vector3 position, Base excludeShip)
+    public Base GetClosestShipExcept(Vector3 position, params Base[] excludeShips)
     {
         Base closest = null;
         var closestDistance = -1f;
         foreach (var ship in Ships)
         {
-            if (ship == excludeShip) continue;
+            if (excludeShips.Contains(ship)) continue;
 
             var distance = ship.GetDistanceToClosestBlock(position);
             if (distance < closestDistance || closestDistance < 0)

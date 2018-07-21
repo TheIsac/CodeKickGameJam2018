@@ -20,7 +20,7 @@ public class ShootAtPlayers : MonoBehaviour
 
     void Update()
     {
-        if (!block.IsOnShip) return;
+        if (!block.IsOnShip()) return;
         if (!player) return;
 
         secondsSinceLastShot += Time.deltaTime;

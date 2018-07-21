@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 4811825429835530}
   - component: {fileID: 33878187117708884}
   - component: {fileID: 23869724049074234}
+  - component: {fileID: 114452909468996234}
   m_Layer: 0
   m_Name: mesh_rocket
   m_TagString: Untagged
@@ -173,6 +174,17 @@ BoxCollider:
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
+--- !u!114 &114452909468996234
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1837929262518022}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0217d943104d4adb8f743201c5aeac66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114709375577410110
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -186,6 +198,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weight: 10
   Speed: 0
+  OnShip: {fileID: 0}
 --- !u!114 &114793625158664942
 MonoBehaviour:
   m_ObjectHideFlags: 1

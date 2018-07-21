@@ -1,30 +1,34 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
-public class ShipModifier : MonoBehaviour {
+namespace _20180713._Scripts
+{
+    [RequireComponent(typeof(Base))]
+    [RequireComponent(typeof(Rigidbody))]
+    public class ShipModifier : MonoBehaviour
+    {
+        private Rigidbody rb;
+        private ShipMovement shipMovement;
 
-	private Rigidbody rb;
-	private ShipMovement shipMovement;
+        private const float InitialMass = 0;
+        private float shipMass;
 
-	private float baseMass;
-	private float baseSpeed;
+        private void Awake()
+        {
+            rb = GetComponent<Rigidbody>();
+            shipMovement = GetComponent<ShipMovement>();
+        }
 
-	public float extraMass;
-	public float extraSpeed;
+        public void UpdateMassAndSpeed(float mass, float speed)
+        {
+            shipMass += mass / 10;
+            rb.mass = shipMass + InitialMass;
 
-	private void Awake()
-	{
-		rb = GetComponentInParent<Rigidbody>();
-		shipMovement = GetComponent<ShipMovement>();
-		baseMass = rb.mass;
-		baseSpeed = shipMovement.movementSpeed;
-	}
+            shipMovement.MovementSpeed += speed * 10;
+        }
 
-	public void UpdateMassAndSpeed(float mass, float speed)
-	{
-		rb.mass += mass/10;
-		shipMovement.movementSpeed += speed*10;
-	}
+        public float GetMass()
+        {
+            return shipMass;
+        }
+    }
 }

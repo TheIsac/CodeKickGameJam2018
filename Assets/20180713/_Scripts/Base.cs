@@ -5,23 +5,37 @@ using UnityEngine;
 
 namespace _20180713._Scripts
 {
+    [RequireComponent(typeof(ShipModifier))]
     public class Base : MonoBehaviour
     {
         private readonly List<Block> baseBlocks = new List<Block>();
         private readonly Dictionary<Block, float> screwnessByBlock = new Dictionary<Block, float>();
         private ShipModifier shipModifier;
         private AudioManager audioManager;
+        private Block pilotBlock;
         private float unscrewProgressPerSecond = .1f;
         private int bombsAttachedCount = 0;
-        private bool allJointsBlocked = false;
+
+        private bool
+            allJointsBlocked =
+                false; //TODO The idea should work. But the implementation is wrong. Sufficiently stable for now.
+
+        private int freeJointCount = 0;
 
         void Awake()
         {
             var pilotBlockController = GetComponentInChildren<PilotBlockController>();
-            var pilotBlock = pilotBlockController.GetComponent<Block>();
+            pilotBlock = pilotBlockController.GetComponent<Block>();
             baseBlocks.Add(pilotBlock);
-            shipModifier = GetComponentInChildren<ShipModifier>();
+
+            shipModifier = GetComponent<ShipModifier>();
+        }
+
+        void Start()
+        {
             audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
+            freeJointCount = CountFreeJoints();
+            Debug.Log("freeJointsCount " + freeJointCount);
         }
 
         public void AttachBlock(Block block)
@@ -34,17 +48,23 @@ namespace _20180713._Scripts
 
             ConnectClosestBaseJointToClosestBlockJoint(block);
             block.SetHolder(gameObject);
+            freeJointCount = CountFreeJoints();
 
-            audioManager.PlaySound(audioManager.blockBuild, transform.position);
+            audioManager.PlaySound(audioManager.BlockBuild, transform.position);
         }
 
         public void WorkOnUnscrewingBlock(Block block)
         {
-            if (!screwnessByBlock.ContainsKey(block)) return;
+            WorkOnUnscrewingBlock(block, Time.deltaTime * unscrewProgressPerSecond);
+        }
 
-            var screwness = screwnessByBlock[block];
-            var newScrewness = screwness - Time.deltaTime * unscrewProgressPerSecond;
+        public void WorkOnUnscrewingBlock(Block block, float damageDelt)
+        {
+            if (!screwnessByBlock.ContainsKey(block)) return;
+            var currentScrewness = screwnessByBlock[block];
+            var newScrewness = currentScrewness - damageDelt;
             screwnessByBlock[block] = newScrewness;
+            block.SetDamageAppearcance(1 - newScrewness);
         }
 
         public bool BlockIsUnscrewed(Block block)
@@ -77,38 +97,40 @@ namespace _20180713._Scripts
             return baseBlocks.Min(baseBlock => Vector3.Distance(position, baseBlock.transform.position));
         }
 
-        public ClosestJointsPair GetClosestTwoJoints(IEnumerable<BlockJoint> blockJoints,
-            IEnumerable<BlockJoint> baseJoints)
+        public Block GetClosestBlockThatIsNotPilotBlock(Vector3 position)
         {
-            BlockJoint closestBlockJoint = null;
-            BlockJoint closestBaseJoint = null;
-            float closestBaseJointDistance = -1;
-            var blockJointsArray = blockJoints as BlockJoint[] ?? blockJoints.ToArray();
-            foreach (var baseJoint in baseJoints)
+            Block closestBlock = null;
+            var closestBlockDistance = -1f;
+            foreach (var baseBlock in baseBlocks)
             {
-                var isOccupiedJoint = baseJoints.Any(otherJoint =>
-                    otherJoint != baseJoint &&
-                    baseJoint.GetConnectedCenterPosition() == otherJoint.GetCenterPosition());
-                if (isOccupiedJoint) continue;
-
-                foreach (var blockJoint in blockJointsArray)
+                if (baseBlock == pilotBlock) continue;
+                var distance = Vector3.Distance(baseBlock.transform.position, position);
+                if (distance < closestBlockDistance || closestBlockDistance < 0)
                 {
-                    var distance = Vector3.Distance(blockJoint.GetEndPosition(),
-                        baseJoint.GetEndPosition());
-                    if (distance < closestBaseJointDistance || closestBaseJointDistance < 0)
-                    {
-                        closestBaseJoint = baseJoint;
-                        closestBlockJoint = blockJoint;
-                        closestBaseJointDistance = distance;
-                    }
+                    closestBlock = baseBlock;
+                    closestBlockDistance = distance;
                 }
             }
 
-            return new ClosestJointsPair
+            return closestBlock;
+        }
+
+        public Vector3 GetPositionOfClosestFreeJoint(Vector3 position)
+        {
+            var joints = baseBlocks.SelectMany(b => b.GetFreeJoints()).ToList();
+            BlockJoint closestJoint = null;
+            var closestBlockDistance = -1f;
+            foreach (var joint in joints)
             {
-                BlockJoint = closestBlockJoint,
-                BaseJoint = closestBaseJoint
-            };
+                var distance = Vector3.Distance(joint.GetCenterPosition(), position);
+                if (distance < closestBlockDistance || closestBlockDistance < 0)
+                {
+                    closestJoint = joint;
+                    closestBlockDistance = distance;
+                }
+            }
+
+            return closestJoint.GetCenterPosition();
         }
 
         public List<Block> GetBlocks()
@@ -123,7 +145,7 @@ namespace _20180713._Scripts
 
         public bool HasFreeJoints()
         {
-            return FreeJointsCount() > 0 && !allJointsBlocked;
+            return freeJointCount > 0; //&& !allJointsBlocked;
         }
 
         public void ForceRemoveBlock(Block block)
@@ -132,9 +154,18 @@ namespace _20180713._Scripts
             RemoveBlock(block);
         }
 
-        private int FreeJointsCount()
+        private int CountFreeJoints()
         {
-            var baseJoints = baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints()).ToList();
+            var baseJoints =
+                baseBlocks
+                    .SelectMany(baseBlock => baseBlock.GetFreeJoints())
+                    .Where(baseJoint =>
+                    {
+                        var connectedCenterPosition = baseJoint.GetConnectedCenterPosition();
+                        return !baseBlocks.Any(block => block != baseJoint.Block &&
+                                                        block.transform.position == connectedCenterPosition);
+                    })
+                    .ToList();
             return baseJoints.Count;
         }
 
@@ -160,7 +191,8 @@ namespace _20180713._Scripts
                 var collidingBaseBlock = baseBlocks.Find(b => b.transform.position == block.transform.position);
                 Debug.Log("Block inside another block. Base block position: " + collidingBaseBlock.transform.position +
                           ", Free block position: " + block.transform.position);
-                allJointsBlocked = true;
+                allJointsBlocked =
+                    true; //TODO When using this variable some joints visible NOT blocked is never used. But the idea is sound..
             }
 
             AddBlock(block);
@@ -185,7 +217,7 @@ namespace _20180713._Scripts
 
         private void DisconnectAllConnectedBlocks(Block startBlock, List<BlockJoint> visitedJoints)
         {
-            if (startBlock.GetComponent<PilotBlockController>()) return;
+            if (startBlock == pilotBlock) return;
 
             foreach (var joint in startBlock.GetConnectedJoints())
             {
@@ -200,6 +232,35 @@ namespace _20180713._Scripts
             startBlock.Release();
         }
 
+        public ClosestJointsPair GetClosestTwoJoints(IEnumerable<BlockJoint> blockJoints,
+            IEnumerable<BlockJoint> baseJoints)
+        {
+            BlockJoint closestBlockJoint = null;
+            BlockJoint closestBaseJoint = null;
+            float closestBaseJointDistance = -1;
+            var blockJointsArray = blockJoints as BlockJoint[] ?? blockJoints.ToArray();
+            foreach (var baseJoint in baseJoints)
+            {
+                foreach (var blockJoint in blockJointsArray)
+                {
+                    var distance = Vector3.Distance(blockJoint.GetEndPosition(),
+                        baseJoint.GetEndPosition());
+                    if (distance < closestBaseJointDistance || closestBaseJointDistance < 0)
+                    {
+                        closestBaseJoint = baseJoint;
+                        closestBlockJoint = blockJoint;
+                        closestBaseJointDistance = distance;
+                    }
+                }
+            }
+
+            return new ClosestJointsPair
+            {
+                BlockJoint = closestBlockJoint,
+                BaseJoint = closestBaseJoint
+            };
+        }
+
         private void AddBlock(Block block)
         {
             if (block.GetComponent<Explodable>() != null)
@@ -210,7 +271,8 @@ namespace _20180713._Scripts
             baseBlocks.Add(block);
             shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
             screwnessByBlock[block] = 1f;
-            Destroy(block.GetComponent<Rigidbody>());
+            block.SetDamageAppearcance(0);
+            block.RemoveRigidbody();
         }
 
         private void RemoveBlock(Block block)
@@ -232,7 +294,9 @@ namespace _20180713._Scripts
             baseBlocks.Remove(block);
             shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
             screwnessByBlock.Remove(block);
-            block.gameObject.AddComponent<Rigidbody>();
+            block.AddRigidbody();
+            block.SetDamageAppearcance(0);
+            freeJointCount = CountFreeJoints();
         }
 
         private bool IsConnectedToPilotBlock(Block startBlock, List<BlockJoint> visitedJoints)
@@ -242,7 +306,7 @@ namespace _20180713._Scripts
             {
                 if (visitedJoints.Contains(joint)) continue;
 
-                if (joint.Block.GetComponent<PilotBlockController>())
+                if (joint.Block == pilotBlock)
                 {
                     return true;
                 }

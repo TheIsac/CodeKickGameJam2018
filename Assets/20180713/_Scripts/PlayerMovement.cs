@@ -9,7 +9,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float movementSpeed;
     [SerializeField] private float maxSpeed = 11;
 
-    [SerializeField] public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput;
+    [SerializeField] public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput, TertiaryInput;
 
     private Rigidbody rb;
 

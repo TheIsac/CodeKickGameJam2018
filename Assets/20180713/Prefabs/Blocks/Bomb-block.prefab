@@ -53,6 +53,7 @@ GameObject:
   - component: {fileID: 4694900017070614}
   - component: {fileID: 33793456871912562}
   - component: {fileID: 23422735305732600}
+  - component: {fileID: 114454041413902684}
   m_Layer: 0
   m_Name: mesh_bomb
   m_TagString: Untagged
@@ -303,9 +304,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ExplodeInSeconds: 10
   Radius: 2
-  Force: 20
   ExplosionParticle: {fileID: 1625799553838522, guid: 6fd7ef652d5b6c948982a97175f92361,
     type: 2}
+--- !u!114 &114454041413902684
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1230330589717800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0217d943104d4adb8f743201c5aeac66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114512190265875340
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -319,6 +330,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weight: 100
   Speed: 0
+  OnShip: {fileID: 0}
 --- !u!114 &114588577326416544
 MonoBehaviour:
   m_ObjectHideFlags: 1

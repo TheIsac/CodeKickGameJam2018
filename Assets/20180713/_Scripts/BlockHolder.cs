@@ -14,7 +14,7 @@ namespace _20180713._Scripts
         private PlayerMovement playerMovement;
         private AudioManager audioManager;
         private ShipManager shipManager;
-        [SerializeField] private const float SnappingDistance = 2f;
+        [SerializeField] private const float SnappingDistance = 2.3f;
 
         private bool isPickingUpBlockThisFrame;
 
@@ -41,7 +41,7 @@ namespace _20180713._Scripts
                 else
                 {
                     ReleaseHoldingBlock();
-                    audioManager.PlaySound(audioManager.pickupBlock, transform.position);
+                    audioManager.PlaySound(audioManager.PickupBlock, transform.position);
                 }
             }
 
@@ -59,7 +59,7 @@ namespace _20180713._Scripts
 
             if (isPickingUpBlockThisFrame)
             {
-                audioManager.PlaySound(audioManager.pickupBlock, transform.position);
+                audioManager.PlaySound(audioManager.PickupBlock, transform.position);
                 isPickingUpBlockThisFrame = false;
             }
         }

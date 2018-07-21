@@ -85,7 +85,7 @@ namespace _20180713._Scripts
 
         private void GainShipControl()
         {
-            playerShip.isMounted = true;
+            playerShip.IsMounted = true;
         }
 
         #endregion
@@ -100,7 +100,7 @@ namespace _20180713._Scripts
 
         private void LoseShipControl()
         {
-            playerShip.isMounted = false;
+            playerShip.IsMounted = false;
         }
 
         private void TeleportToShipPosition()

@@ -1,7 +1,4 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEditor.Experimental.UIElements;
-using UnityEngine;
+﻿using UnityEngine;
 using _20180713._Scripts;
 
 public class Explodable : MonoBehaviour
@@ -49,7 +46,7 @@ public class Explodable : MonoBehaviour
                 }
             }
 
-            audioManager.PlaySound(audioManager.explosion, transform.position);
+            audioManager.ForcePlaySound(audioManager.Explosion, transform.position);
 
             var explosion = Instantiate(ExplosionParticle);
             explosion.transform.position = gameObject.transform.position;
@@ -60,12 +57,12 @@ public class Explodable : MonoBehaviour
         }
         else if (tickEvenFaster && tickTime > tickInSeconds * .1)
         {
-            audioManager.PlaySound(audioManager.bombBeep, transform.position);
+            audioManager.ForcePlaySound(audioManager.BombBeep, transform.position);
             tickTime = 0;
         }
         else if (tickFaster && tickTime > tickInSeconds * .25)
         {
-            audioManager.PlaySound(audioManager.bombBeep, transform.position);
+            audioManager.ForcePlaySound(audioManager.BombBeep, transform.position);
             tickTime = 0;
             if (explodeTime > ExplodeInSeconds * .8 && !tickEvenFaster)
             {
@@ -74,7 +71,7 @@ public class Explodable : MonoBehaviour
         }
         else if (tickTime > tickInSeconds)
         {
-            audioManager.PlaySound(audioManager.bombBeep, transform.position);
+            audioManager.ForcePlaySound(audioManager.BombBeep, transform.position);
             tickTime = 0;
             if (explodeTime > ExplodeInSeconds * .5 && !tickFaster)
             {

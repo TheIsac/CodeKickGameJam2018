@@ -37,6 +37,7 @@ GameObject:
   - component: {fileID: 4077861641758274}
   - component: {fileID: 33871991879643702}
   - component: {fileID: 23413363857287078}
+  - component: {fileID: 114977873691886826}
   m_Layer: 0
   m_Name: mesh_thruster_base
   m_TagString: Untagged
@@ -285,6 +286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weight: 10
   Speed: 90
+  OnShip: {fileID: 0}
 --- !u!114 &114795982962827124
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -294,6 +296,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: ac0324f66642b4ea28d5ec52e6a9b9a1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &114977873691886826
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1691120149752466}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0217d943104d4adb8f743201c5aeac66, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!135 &135664725936296594

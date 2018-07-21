@@ -9,6 +9,7 @@ TagManager:
   - ShipManager
   - GameTimer
   - EndText
+  - CameraManager
   layers:
   - Default
   - TransparentFX

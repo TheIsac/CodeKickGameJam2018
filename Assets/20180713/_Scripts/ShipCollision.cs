@@ -1,71 +1,142 @@
-﻿using _20180713._Scripts;
-using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System;
+using System.Linq;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
-public class ShipCollision : MonoBehaviour {
+namespace _20180713._Scripts
+{
+    [RequireComponent(typeof(ShipModifier))]
+    [RequireComponent(typeof(Rigidbody))]
+    [RequireComponent(typeof(Base))]
+    public class ShipCollision : MonoBehaviour
+    {
+        private AudioManager audioManager;
+        private ShipModifier shipModifier;
+        private Rigidbody shipRigidbody;
+        private Base ownShip;
+        private const float BreakingVelocity = 1.4f;
+        private const float CollisionDamageRadius = .5f;
+        private const int MaxBlockBreaksPerCollision = 1;
+        private const float MinSecondsBetweenBlockBreak = 5;
 
-	private Rigidbody shipRigidbody;
+        private float lastBlockBreak;
 
-	private void Awake()
-	{
-		shipRigidbody = transform.GetComponent<Rigidbody>();
-	}
+        private void Awake()
+        {
+            audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
+            shipModifier = GetComponent<ShipModifier>();
+            shipRigidbody = GetComponent<Rigidbody>();
+            ownShip = GetComponent<Base>();
+        }
 
-	private void OnCollisionEnter(Collision collision)
-	{
-		var otherShip = collision.transform;
-		var otherRigidBody = otherShip.GetComponent<Rigidbody>();
+        private void OnCollisionEnter(Collision collision)
+        {
+            var otherShip = collision.gameObject.GetComponent<Base>();
+            var otherRigidBody = collision.gameObject.GetComponent<Rigidbody>();
+            if (otherShip == null || otherRigidBody == null) return;
 
-		if (otherShip.transform.GetComponent<Base>() == null 
-			|| otherRigidBody == null)
-		{
-			return;
-		}
+            var timeSinceLastBlockBreak = Time.fixedTime - lastBlockBreak;
+            if (timeSinceLastBlockBreak < MinSecondsBetweenBlockBreak) return;
+            if (!AchievesBreakingVelocity()) return;
 
-		Rigidbody fastestRigidbody = CheckWhoIsFaster(otherRigidBody);
-		if(fastestRigidbody == shipRigidbody)
-		{
-			BreakOtherShip(otherShip);
-		}
-	}
+            if (OwnShipIsFasterThan(otherRigidBody))
+            {
+                var contantPoint = collision.contacts.First();
+                BreakOtherShip(otherShip, contantPoint);
+            }
+        }
 
-	private Rigidbody CheckWhoIsFaster(Rigidbody otherRigidBody)
-	{
-		Rigidbody fastestRigidbody = shipRigidbody;
+        private bool AchievesBreakingVelocity()
+        {
+            return shipRigidbody.velocity.magnitude >= BreakingVelocity;
+        }
 
-		if (otherRigidBody.velocity.magnitude > shipRigidbody.velocity.magnitude)
-			fastestRigidbody = otherRigidBody;
+        private bool OwnShipIsFasterThan(Rigidbody otherRigidBody)
+        {
+            var fastestRigidbody = shipRigidbody;
 
-		return fastestRigidbody;
-	}
+            if (otherRigidBody.velocity.magnitude > shipRigidbody.velocity.magnitude)
+                fastestRigidbody = otherRigidBody;
 
-	private void BreakOtherShip(Transform otherShip)
-	{
-		var amountOfChildren = otherShip.childCount;
-		if (amountOfChildren <= 1)
-			return;
+            return fastestRigidbody == shipRigidbody;
+        }
 
-		GetRandomChild(amountOfChildren, otherShip);
-	}
+        private void BreakOtherShip(Base otherShip, ContactPoint contactPoint)
+        {
+            var amountOfChildren = otherShip.transform.childCount;
+            if (amountOfChildren <= 1)
+                return;
 
-	private void GetRandomChild(int amountOfChildren, Transform otherShip)
-	{
-		var randomBlockNumber = UnityEngine.Random.Range(0, amountOfChildren);
+            var brokenBlocks = 0;
+            var colliders = Physics.OverlapSphere(contactPoint.point, CollisionDamageRadius);
+            foreach (var colliderObject in colliders)
+            {
+                if (brokenBlocks >= MaxBlockBreaksPerCollision) continue;
 
-		while (otherShip.GetChild(randomBlockNumber).GetComponent<ShipMovement>())
-		{
-			randomBlockNumber = UnityEngine.Random.Range(0, amountOfChildren);
-		}
+                var blockToBreak = colliderObject.GetComponent<Block>();
+                if (blockToBreak == null) continue;
 
-		var otherBase = otherShip.GetComponent<Base>();
-		var blockToBreak = otherShip.GetChild(randomBlockNumber);
-		var blockToBreakScript = blockToBreak.GetComponent<Block>();
+                if (BlockBelongToOwnShip(blockToBreak))
+                {
+                    if (ShouldBreakOwnShip())
+                    {
+                        brokenBlocks++;
+                        DamageBlockOnShip(blockToBreak, ownShip);
+                    }
+                }
+                else if (ShouldBreakOtherShip())
+                {
+                    brokenBlocks++;
+                    DamageBlockOnShip(blockToBreak, otherShip);
+                }
+            }
 
-		if (blockToBreakScript != null)
-		{
-			otherBase.DetachBlock(blockToBreakScript);
-		}
-	}
+            if (brokenBlocks > 0)
+            {
+                lastBlockBreak = Time.fixedTime;
+                audioManager.PlaySound(audioManager.ShipCollision, contactPoint.point);
+            }
+        }
+
+        private void DamageBlockOnShip(Block block, Base ship)
+        {
+            ship.WorkOnUnscrewingBlock(block, DamageDelt());
+            if (ship.BlockIsUnscrewed(block))
+            {
+                ship.DetachBlock(block);
+            }
+        }
+
+        private bool ShouldBreakOtherShip()
+        {
+            return Random.value < .4f;
+        }
+
+        private bool BlockBelongToOwnShip(Block block)
+        {
+            return block.transform.parent == transform;
+        }
+
+        private bool ShouldBreakOwnShip()
+        {
+            return Random.value < .1f;
+        }
+
+        private float DamageDelt()
+        {
+            const float start = 2;
+            const float end = 10;
+            var mass = shipModifier.GetMass();
+            if (mass < start) return 0;
+
+            return Math.Min(1, EaseInExpo(start, end, (shipModifier.GetMass() + start) / (end - start)));
+        }
+
+        private float EaseInExpo(float start, float end, float value)
+        {
+            end -= start;
+            var inverseEaseInExpo = end * Mathf.Pow(3, 10 * (value - 1)) + start;
+            return inverseEaseInExpo;
+        }
+    }
 }

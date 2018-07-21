@@ -1,8 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Resources;
+﻿using System.Collections.Generic;
+using System.Linq;
+using UnityEditor.Experimental.UIElements;
 using UnityEngine;
-using Random = System.Random;
 
 namespace _20180713._Scripts
 {
@@ -17,8 +16,12 @@ namespace _20180713._Scripts
             GettingBlock,
             AttachingBlock,
             PlacingBomb,
-            RemovingBomb
+            RemovingBomb,
+            Pillaging,
+            Thinking
         }
+
+        private const float MovementSpeed = 700;
 
         private State state = State.SearchingForBlock;
         private Rigidbody rb;
@@ -27,11 +30,15 @@ namespace _20180713._Scripts
         private ShipManager shipManager;
         private Block targetBlock;
         private Base targetShip;
-        private float movementSpeed = 800;
+        private Vector3 targetPosition;
 
         private Vector3 previousPosition = Vector3.zero;
-        private float timeNearPreviousPosition = 0;
-        private float maxSecondsStuck = 10;
+        private float timeNearPreviousPosition;
+        private const float MaxSecondsStuck = 15;
+
+        private GameObject pipeDream;
+        private float secondsSpentChasingPipeDream;
+        private const float ChasePipeDreamSeconds = 8;
 
         void Start()
         {
@@ -60,11 +67,12 @@ namespace _20180713._Scripts
                     blockHolder.ReleaseHoldingBlock();
                 }
 
-                //TODO This is treating the symptops of another bug (without a clear cause)
+                //TODO This is treating the symptops of another unknown bug
                 var destroyedBlocks = new List<Block>();
                 foreach (var block in ship.GetBlocks())
                 {
-                    if (block == null) destroyedBlocks.Add(block);
+                    if (block == null)
+                        destroyedBlocks.Add(block); //GameObject overloads "==", it is not null only "Destroyed". 
                     else if (block.GetComponent<Explodable>())
                     {
                         targetBlock = block;
@@ -78,50 +86,117 @@ namespace _20180713._Scripts
                 }
             }
 
-            if (state == State.SearchingForBlock) SearchingForBlock();
+
+            if (state == State.Thinking) Thinking();
+            else if (state == State.SearchingForBlock) SearchingForBlock();
             else if (state == State.GettingBlock || state == State.RemovingBomb) GettingBlock();
             else if (state == State.AttachingBlock) AttachingBlock();
             else if (state == State.PlacingBomb) PlacingBomb();
+            else if (state == State.Pillaging) Pillaging();
 
             TeleportAwayIfStuck();
+            ThinkAboutAbandoningPipeDream();
         }
 
-        private void PlacingBomb()
+        private void Thinking()
         {
-            MoveTowards(targetShip.transform);
+            targetBlock = null;
+            targetShip = null;
 
-            var targetVector = targetShip.transform.position - transform.position;
-            var distanceToTarget = targetVector.magnitude;
-            if (distanceToTarget < 3)
+            MoveTowards(ship.transform);
+
+            if (!ship.HasFreeJoints())
             {
-                if (ship.HasFreeJoints())
+                if (blockHolder.IsHoldingBlock()) blockHolder.ReleaseHoldingBlock();
+
+                var bomb = BlockManager.GetClosestBombOrNull(transform.position);
+                if (bomb != null)
                 {
-                    blockHolder.AttachHoldingBlockToBase(targetShip);
-                    state = State.SearchingForBlock;
+                    StartGettingBlock(bomb);
                 }
                 else
                 {
-                    blockHolder.ReleaseHoldingBlock();
-                    state = State.SearchingForBlock;
+                    var hasTargetBlock = targetBlock != null;
+                    var blockHasBeenLetGo = hasTargetBlock && targetBlock.transform.position.y < -5;
+                    if (!hasTargetBlock || blockHasBeenLetGo)
+                    {
+                        targetShip = shipManager.GetClosestShipExcept(transform.position, ship);
+                        targetBlock = targetShip.GetClosestBlockThatIsNotPilotBlock(transform.position);
+                        if (targetBlock != null) state = State.Pillaging;
+                    }
                 }
+            }
+            else if (blockHolder.IsHoldingBlock())
+            {
+                var isHoldingBomb = blockHolder.GetHoldingBlock().GetComponent<Explodable>() != null;
+                if (isHoldingBomb)
+                {
+                    var closestShip = shipManager.GetClosestShipExcept(transform.position, ship);
+                    targetShip = closestShip;
+                    state = State.PlacingBomb;
+                }
+                else
+                {
+                    targetPosition = ship.GetPositionOfClosestFreeJoint(transform.position);
+                    state = State.AttachingBlock;
+                }
+            }
+            else if (BlockManager.ActiveBlocks.Count > 0)
+            {
+                state = State.SearchingForBlock;
+            }
+        }
 
-                targetShip = null;
-                targetBlock = null;
+        private void SearchingForBlock()
+        {
+            if (BlockManager.ActiveBlocks.Count > 0)
+            {
+                var closestBlock = BlockManager.GetFreeBlockClosestTo(transform.position);
+                if (closestBlock == null) state = State.Thinking;
+                else StartGettingBlock(closestBlock);
+            }
+        }
+
+        private void GettingBlock()
+        {
+            if (targetBlock == null
+                || !targetBlock.IsFree() && !targetBlock.IsOnShip())
+            {
+                state = State.Thinking;
+            }
+            else
+            {
+                MoveTowards(targetBlock.transform);
+
+                var targetVector = targetBlock.transform.position - transform.position;
+                var distanceToBlock = targetVector.magnitude;
+                if (distanceToBlock < 1.5)
+                {
+                    var targetBlockIsOnOwnShip = targetBlock.IsOnShip() && ship.GetBlocks().Contains(targetBlock);
+                    if (targetBlockIsOnOwnShip)
+                    {
+                        ship.DetachBlock(targetBlock);
+                    }
+
+                    blockHolder.SetHoldingBlock(targetBlock);
+                    targetBlock = null;
+                    state = State.Thinking;
+                }
             }
         }
 
         private void AttachingBlock()
         {
-            MoveTowards(ship.transform);
+            MoveTowards(targetPosition);
 
-            var targetVector = ship.transform.position - transform.position;
-            var distanceToShip = targetVector.magnitude;
-            if (distanceToShip < 2)
+            var targetVector = targetPosition - transform.position;
+            var distanceToTarget = targetVector.magnitude;
+            if (distanceToTarget < 2.2f)
             {
                 if (ship.HasFreeJoints())
                 {
                     blockHolder.AttachHoldingBlockToBase(ship);
-                    state = State.SearchingForBlock;
+                    state = State.Thinking;
                 }
                 else
                 {
@@ -134,57 +209,51 @@ namespace _20180713._Scripts
             }
         }
 
-        private void GettingBlock()
+        private void PlacingBomb()
         {
-            if (targetBlock == null)
-            {
-                state = State.SearchingForBlock;
-            }
-            else if (!targetBlock.IsFree() && !targetBlock.IsOnShip)
-            {
-                targetBlock = null;
-                state = State.SearchingForBlock;
-            }
-            else
-            {
-                MoveTowards(targetBlock.transform);
+            MoveTowards(targetShip.transform);
 
-                var targetVector = targetBlock.transform.position - transform.position;
-                var distanceToBlock = targetVector.magnitude;
-                if (distanceToBlock < 2)
+            var targetVector = targetShip.transform.position - transform.position;
+            var distanceToTarget = targetVector.magnitude;
+            if (distanceToTarget < 3)
+            {
+                if (targetShip.HasFreeJoints())
                 {
-                    var targetBlockIsOnOwnShip = targetBlock.IsOnShip && ship.GetBlocks().Contains(targetBlock);
-                    if (targetBlockIsOnOwnShip)
-                    {
-                        ship.DetachBlock(targetBlock);
-                    }
-
-                    blockHolder.SetHoldingBlock(targetBlock);
-                    var isHoldingBomb = targetBlock.GetComponent<Explodable>() != null;
-                    if (isHoldingBomb)
-                    {
-                        var closestShip = shipManager.GetClosestShipExcept(transform.position, ship);
-                        targetShip = closestShip;
-                        state = State.PlacingBomb;
-                    }
-                    else
-                    {
-                        state = State.AttachingBlock;
-                    }
-
-                    targetBlock = null;
+                    blockHolder.AttachHoldingBlockToBase(targetShip);
+                    state = State.Thinking;
+                }
+                else
+                {
+                    var otherShip = shipManager.GetClosestShipExcept(transform.position, targetShip, ship);
+                    targetShip = otherShip;
                 }
             }
         }
 
-        private void SearchingForBlock()
+        private void Pillaging()
         {
-            if (BlockManager.ActiveBlocks.Count > 0)
+            var blockHasBeenLetGo = targetBlock.transform.position.y < -5;
+            if (blockHasBeenLetGo)
             {
-                var closestBlock = BlockManager.GetBlockFreeClosestTo(transform.position);
-                StartGettingBlock(closestBlock);
+                state = State.Thinking;
+                return;
+            }
+
+            MoveTowards(targetBlock.transform);
+
+            var targetVector = targetShip.transform.position - transform.position;
+            var distanceToTarget = targetVector.magnitude;
+            if (distanceToTarget < 2)
+            {
+                targetShip.WorkOnUnscrewingBlock(targetBlock);
+                if (targetShip.BlockIsUnscrewed(targetBlock))
+                {
+                    targetShip.DetachBlock(targetBlock);
+                    state = State.Thinking;
+                }
             }
         }
+
 
         private void StartGettingBlock(Block block)
         {
@@ -194,28 +263,62 @@ namespace _20180713._Scripts
 
         private void MoveTowards(Transform target)
         {
-            var targetVector = target.position - transform.position;
+            MoveTowards(target.position);
+        }
+
+        private void MoveTowards(Vector3 target)
+        {
+            var targetVector = target - transform.position;
             var direction = targetVector.normalized;
-            rb.AddForce(direction * Time.deltaTime * movementSpeed, ForceMode.Acceleration);
+            rb.AddForce(direction * Time.deltaTime * MovementSpeed, ForceMode.Acceleration);
         }
 
         private void TeleportAwayIfStuck()
         {
+            if (state == State.Thinking) return;
+
             timeNearPreviousPosition += Time.deltaTime;
 
-            if (Vector3.Distance(previousPosition, transform.position) > 1)
+            if (Vector3.Distance(previousPosition, transform.position) > 3)
             {
+                previousPosition = transform.position;
                 timeNearPreviousPosition = 0;
             }
-            else if (timeNearPreviousPosition > maxSecondsStuck)
+            else if (timeNearPreviousPosition > MaxSecondsStuck)
             {
                 var newPosition = new Vector3(
-                    UnityEngine.Random.Range(-5, 5),
+                    Random.Range(-5, 5),
                     0,
-                    UnityEngine.Random.Range(-5, 5)
+                    Random.Range(-5, 5)
                 );
                 rb.position = newPosition;
                 timeNearPreviousPosition = 0;
+            }
+        }
+
+        private void ThinkAboutAbandoningPipeDream()
+        {
+            if (targetBlock == null)
+            {
+                secondsSpentChasingPipeDream = 0;
+                return;
+            }
+
+            if (targetBlock == pipeDream)
+            {
+                secondsSpentChasingPipeDream += Time.deltaTime;
+            }
+            else
+            {
+                secondsSpentChasingPipeDream = 0;
+                pipeDream = targetBlock.gameObject;
+            }
+
+            if (secondsSpentChasingPipeDream > ChasePipeDreamSeconds)
+            {
+                pipeDream = null;
+                secondsSpentChasingPipeDream = 0;
+                state = State.Thinking;
             }
         }
     }

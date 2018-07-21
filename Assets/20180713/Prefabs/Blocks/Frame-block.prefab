@@ -88,6 +88,7 @@ GameObject:
   - component: {fileID: 4361610513729838}
   - component: {fileID: 33905648653035216}
   - component: {fileID: 23232814494139778}
+  - component: {fileID: 114607824266036750}
   m_Layer: 0
   m_Name: mesh_frame
   m_TagString: Untagged
@@ -328,6 +329,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weight: 2
   Speed: 0
+  OnShip: {fileID: 0}
+--- !u!114 &114607824266036750
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1758473281692892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0217d943104d4adb8f743201c5aeac66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &135858031552448374
 SphereCollider:
   m_ObjectHideFlags: 1

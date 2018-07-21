@@ -88,8 +88,6 @@ GameObject:
   - component: {fileID: 65359680084617296}
   - component: {fileID: 114875605361578140}
   - component: {fileID: 114009254073967924}
-  - component: {fileID: 114723868338034226}
-  - component: {fileID: 114374377134732748}
   m_Layer: 0
   m_Name: PilotBlock
   m_TagString: Untagged
@@ -109,6 +107,8 @@ GameObject:
   - component: {fileID: 54780976887471582}
   - component: {fileID: 135594990049845118}
   - component: {fileID: 114375037212499280}
+  - component: {fileID: 114631180311638918}
+  - component: {fileID: 114855650730895780}
   m_Layer: 0
   m_Name: Base
   m_TagString: Untagged
@@ -323,19 +323,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Block: {fileID: 0}
   connectedJoint: {fileID: 0}
---- !u!114 &114374377134732748
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1738037740584808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ac66652d5f998cf4a8a98407da1614b3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  extraMass: 0
-  extraSpeed: 0
 --- !u!114 &114375037212499280
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -371,6 +358,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 154c1da6b4704e05808bb94166844bf2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &114631180311638918
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1772540786078032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ac66652d5f998cf4a8a98407da1614b3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!114 &114687129834161300
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -382,23 +380,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bdd4abd8e96624953ab462df8ac10182, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &114723868338034226
-MonoBehaviour:
-  m_ObjectHideFlags: 1
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1738037740584808}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01d0d9155e384684ca46c9fae31753b7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  HorizontalInput: 
-  VerticalInput: 
-  InteractInput: 
-  SecondaryInput: 
-  isMounted: 0
-  movementSpeed: 100
 --- !u!114 &114759339086788694
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -425,6 +406,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Block: {fileID: 0}
   connectedJoint: {fileID: 0}
+--- !u!114 &114855650730895780
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1772540786078032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01d0d9155e384684ca46c9fae31753b7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  HorizontalInput: 
+  VerticalInput: 
+  InteractInput: 
+  SecondaryInput: 
+  IsMounted: 0
+  MovementSpeed: 100
 --- !u!114 &114875605361578140
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -438,7 +436,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weight: 10
   Speed: 0
-  isStatic: 0
+  OnShip: {fileID: 0}
 --- !u!135 &135594990049845118
 SphereCollider:
   m_ObjectHideFlags: 1

@@ -10,10 +10,6 @@ namespace _20180713._Scripts
     {
         public int PlayerCount = 4;
         public int BotCount = 1;
-
-        public int ArenaWidth = 20;
-        public int ArenaHeight = 20;
-        public int BaseCornerOffset = 5;
         public int GameLengthSeconds = 5 * 60;
 
         public List<string> PlayerNames = new List<string>
@@ -29,15 +25,31 @@ namespace _20180713._Scripts
         public GameObject BaseTemplate;
         public GameObject PlayerTemplate;
 
+        private enum ArenaSize
+        {
+            Small,
+            Large
+        }
+
+        [SerializeField] private ArenaSize arenaSize = ArenaSize.Large;
+        private int arenaWidth = 20;
+        private int arenaHeight = 20;
+        private int shipCornerOffset = 5;
+
         private readonly List<GameObject> players = new List<GameObject>();
         private readonly List<GameObject> ships = new List<GameObject>();
         private GameTimer gameTimer;
         private bool foundTimer;
         private Scoreboard scoreboard;
         private float gameTimeLeft = 5 * 60;
+        private CameraManager cameraManager;
 
         public void Start()
         {
+            cameraManager = GameObject.FindWithTag("CameraManager").GetComponent<CameraManager>();
+            if (arenaSize == ArenaSize.Large) SetToLargeArena();
+            else if (arenaSize == ArenaSize.Small) SetToSmallArena();
+
             scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
             for (var i = 0; i < PlayerCount; i++)
             {
@@ -96,7 +108,7 @@ namespace _20180713._Scripts
             foreach (var player in players)
             {
                 var position = player.transform.position;
-                if (position.x > ArenaWidth || position.x < -ArenaWidth)
+                if (position.x > arenaWidth || position.x < -arenaWidth)
                 {
                     player.transform.position = new Vector3(
                         0,
@@ -114,7 +126,7 @@ namespace _20180713._Scripts
                     );
                 }
 
-                if (position.z > ArenaHeight || position.z < -ArenaHeight)
+                if (position.z > arenaHeight || position.z < -arenaHeight)
                 {
                     player.transform.position = new Vector3(
                         position.x,
@@ -164,40 +176,56 @@ namespace _20180713._Scripts
             if (order == 1) //Top left corner
             {
                 return new Vector3(
-                    -ArenaWidth * .5f + BaseCornerOffset,
+                    -arenaWidth * .5f + shipCornerOffset,
                     -1,
-                    ArenaHeight * .5f - BaseCornerOffset
+                    arenaHeight * .5f - shipCornerOffset
                 );
             }
 
             if (order == 4) //Top right corner
             {
                 return new Vector3(
-                    ArenaWidth * .5f - BaseCornerOffset,
+                    arenaWidth * .5f - shipCornerOffset,
                     -1,
-                    ArenaHeight * .5f - BaseCornerOffset
+                    arenaHeight * .5f - shipCornerOffset
                 );
             }
 
             if (order == 2) //Bottom right corner
             {
                 return new Vector3(
-                    ArenaWidth * .5f - BaseCornerOffset,
+                    arenaWidth * .5f - shipCornerOffset,
                     -1,
-                    -ArenaHeight * .5f + BaseCornerOffset
+                    -arenaHeight * .5f + shipCornerOffset
                 );
             }
 
             if (order == 3) //Bottom left corner
             {
                 return new Vector3(
-                    -ArenaWidth * .5f + BaseCornerOffset,
+                    -arenaWidth * .5f + shipCornerOffset,
                     -1,
-                    -ArenaHeight * .5f + BaseCornerOffset
+                    -arenaHeight * .5f + shipCornerOffset
                 );
             }
 
             return Vector3.zero;
+        }
+
+        private void SetToSmallArena()
+        {
+            arenaWidth = 30;
+            arenaHeight = 15;
+            shipCornerOffset = 4;
+            cameraManager.SetToSmallArena();
+        }
+
+        private void SetToLargeArena()
+        {
+            arenaWidth = 40;
+            arenaHeight = 20;
+            shipCornerOffset = 5;
+            cameraManager.SetToLargeArena();
         }
     }
 }

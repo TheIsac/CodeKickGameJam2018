@@ -11,6 +11,9 @@ public class Block : MonoBehaviour
 {
     public float Weight = 10;
     public float Speed = 0;
+    public Base OnShip;
+
+    private const float PushBackForceOnShipCollision = 5;
 
     private bool isFree = true;
     private bool isExplosive;
@@ -20,13 +23,13 @@ public class Block : MonoBehaviour
 
     void Awake()
     {
-        audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
+        isExplosive = GetComponent<Explodable>();
         joints = new List<BlockJoint>(GetComponentsInChildren<BlockJoint>());
     }
 
     void Start()
     {
-        isExplosive = GetComponent<Explodable>();
+        audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
     }
 
     public bool IsFree()
@@ -34,14 +37,17 @@ public class Block : MonoBehaviour
         return isFree;
     }
 
-    public bool IsOnShip { get; private set; }
+    public bool IsOnShip()
+    {
+        return OnShip != null;
+    }
 
     public void SetHolder(GameObject holder)
     {
         transform.SetParent(holder.transform);
         isFree = false;
         var shipComponent = holder.GetComponent<Base>();
-        IsOnShip = shipComponent != null;
+        OnShip = shipComponent;
 
         var rigidbody = GetComponent<Rigidbody>();
         if (rigidbody)
@@ -62,7 +68,7 @@ public class Block : MonoBehaviour
     {
         transform.SetParent(null);
         isFree = true;
-        IsOnShip = false;
+        OnShip = null;
 
         var rigidbody = GetComponent<Rigidbody>();
         if (rigidbody)
@@ -81,9 +87,25 @@ public class Block : MonoBehaviour
         return joints.Where(joint => joint.connectedJoint != null).Select(joint => joint.connectedJoint);
     }
 
+    public void RemoveRigidbody()
+    {
+        Destroy(GetComponent<Rigidbody>());
+    }
+
+    public void AddRigidbody()
+    {
+        var newRigidbody = gameObject.AddComponent<Rigidbody>();
+        newRigidbody.useGravity = false;
+    }
+
+    public void SetDamageAppearcance(float damageFactor)
+    {
+        GetComponentInChildren<BlockDamageEffectController>().SetDamage(damageFactor);
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        audioManager.PlaySound(audioManager.blockCollision, transform.position);
+        audioManager.PlaySound(audioManager.BlockCollision, transform.position);
     }
 
     private void OnTriggerStay(Collider collider)
@@ -116,6 +138,15 @@ public class Block : MonoBehaviour
         {
             ship.DetachBlock(this);
             blockHolder.SetHoldingBlock(this);
+        }
+    }
+
+    private void OnCollisionEnter(Collision other)
+    {
+        if (!isFree && !IsOnShip() && GetHolder().GetComponent<Bot>() == null)
+        {
+            var rb = GetHolder().GetComponent<Rigidbody>();
+            rb.velocity = (-rb.velocity).normalized * PushBackForceOnShipCollision;
         }
     }
 }

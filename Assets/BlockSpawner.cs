@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using _20180713._Scripts;
 using Random = UnityEngine.Random;
@@ -21,10 +18,12 @@ public class BlockSpawner : MonoBehaviour
     public float RareMinSpeed = 5;
     public float RareMaxSpeed = 10;
 
-    public float BombSpawnChance = .05f;
     public float ThrusterSpawnChance = .1f;
 
-    private float secondsSinceLastSpawn = 0;
+    public float BombSpawnSeconds = 60;
+    private float bombSecondsSinceSpawn;
+
+    private float secondsSinceLastSpawn;
     private List<Block> generalBlocks;
     private Block bombBlock;
     private Block thrusterBlock;
@@ -38,16 +37,28 @@ public class BlockSpawner : MonoBehaviour
 
     void Update()
     {
+        bombSecondsSinceSpawn += Time.deltaTime;
         secondsSinceLastSpawn += Time.deltaTime;
         if (secondsSinceLastSpawn >= SecondsBetweenSpawn)
         {
             secondsSinceLastSpawn = 0;
 
-            Spawn();
+            Block prefab;
+            if (bombSecondsSinceSpawn > BombSpawnSeconds)
+            {
+                bombSecondsSinceSpawn = 0;
+                prefab = bombBlock;
+            }
+            else
+            {
+                prefab = GetRandomBlock();
+            }
+
+            Spawn(prefab);
         }
     }
 
-    private void Spawn()
+    private void Spawn(Block prefab)
     {
         var cam = Camera.main;
 
@@ -55,8 +66,6 @@ public class BlockSpawner : MonoBehaviour
         var topRightRay = cam.ScreenPointToRay(new Vector3(cam.pixelWidth, cam.pixelHeight));
         var bottomLeft = bottomLeftRay.GetPoint(cam.transform.position.y + 2);
         var topRight = topRightRay.GetPoint(cam.transform.position.y + 2);
-
-        var prefab = GetRandomBlock();
 
         var minSpawnX = bottomLeft.x;
         var maxSpawnX = topRight.x;
@@ -89,14 +98,7 @@ public class BlockSpawner : MonoBehaviour
     private Block GetRandomBlock()
     {
         var chance = Random.value;
-
-        var threshold = 1 - BombSpawnChance;
-        if (chance > threshold)
-        {
-            return bombBlock;
-        }
-
-        threshold -= ThrusterSpawnChance;
+        var threshold = 1 - ThrusterSpawnChance;
         if (chance > threshold)
         {
             return thrusterBlock;

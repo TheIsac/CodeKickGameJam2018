@@ -56,6 +56,7 @@ GameObject:
   - component: {fileID: 4689539466154490}
   - component: {fileID: 33185145001530398}
   - component: {fileID: 23713900172989802}
+  - component: {fileID: 114605988588422982}
   m_Layer: 0
   m_Name: mesh_hexagon_broken
   m_TagString: Untagged
@@ -186,6 +187,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weight: 10
   Speed: 0
+  OnShip: {fileID: 0}
 --- !u!114 &114277108818270772
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -199,6 +201,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Block: {fileID: 0}
   connectedJoint: {fileID: 0}
+--- !u!114 &114605988588422982
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1166314223143800}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0217d943104d4adb8f743201c5aeac66, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!135 &135538397344547180
 SphereCollider:
   m_ObjectHideFlags: 1
