@@ -6,7 +6,7 @@ namespace _20180713._Scripts
     public class BlockJoint : MonoBehaviour
     {
         public Block Block;
-        public BlockJoint connectedJoint;
+        public BlockJoint ConnectedJoint;
 
         public void Start()
         {
@@ -19,18 +19,18 @@ namespace _20180713._Scripts
 
         public void Join(BlockJoint other)
         {
-            connectedJoint = other;
-            other.connectedJoint = this;
+            ConnectedJoint = other;
+            other.ConnectedJoint = this;
         }
 
         public void Disconnect()
         {
-            if (connectedJoint)
+            if (ConnectedJoint)
             {
-                connectedJoint.connectedJoint = null;
+                ConnectedJoint.ConnectedJoint = null;
             }
 
-            connectedJoint = null;
+            ConnectedJoint = null;
         }
 
         public Vector3 GetEndPosition()

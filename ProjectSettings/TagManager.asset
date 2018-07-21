@@ -10,6 +10,9 @@ TagManager:
   - GameTimer
   - EndText
   - CameraManager
+  - Pompeii
+  - GameStarter
+  - ParticleManager
   layers:
   - Default
   - TransparentFX

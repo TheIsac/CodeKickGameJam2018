@@ -5,9 +5,10 @@ public class Explodable : MonoBehaviour
 {
     public float ExplodeInSeconds = 10;
     public float Radius;
-    public GameObject ExplosionParticle;
 
+    private ParticleManager particleManager;
     private AudioManager audioManager;
+    private GameObject explosionParticle;
     private bool running = false;
     private float explodeTime = 0;
     private float tickInSeconds = 2;
@@ -17,6 +18,9 @@ public class Explodable : MonoBehaviour
 
     void Start()
     {
+        particleManager = GameObject.FindWithTag("ParticleManager").GetComponent<ParticleManager>();
+        explosionParticle = particleManager.Explosion;
+        
         audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
     }
 
@@ -48,7 +52,7 @@ public class Explodable : MonoBehaviour
 
             audioManager.ForcePlaySound(audioManager.Explosion, transform.position);
 
-            var explosion = Instantiate(ExplosionParticle);
+            var explosion = Instantiate(explosionParticle);
             explosion.transform.position = gameObject.transform.position;
             explosion.transform.rotation = gameObject.transform.rotation;
             Destroy(explosion, explosion.GetComponent<ParticleSystem>().main.duration * .9f);

@@ -6,7 +6,7 @@ public class CameraManager : MonoBehaviour
     private MainCameraController mainCamera;
 
     // Use this for initialization
-    void Start()
+    void Awake()
     {
         arenaBoundaries = GetComponentInChildren<ArenaBoundariesController>();
         mainCamera = GetComponentInChildren<MainCameraController>();
@@ -22,5 +22,11 @@ public class CameraManager : MonoBehaviour
     {
         arenaBoundaries.SetToLargeArena();
         mainCamera.SetToLargeArena();
+    }
+
+    public void SetToGiganticArena()
+    {
+        arenaBoundaries.SetToGiganticArena();
+        mainCamera.SetToGiganticArena();
     }
 }

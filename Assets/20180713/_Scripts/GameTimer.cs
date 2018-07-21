@@ -8,11 +8,13 @@ namespace _20180713._Scripts
 {
     public class GameTimer : MonoBehaviour
     {
+        public Color Color = new Color(.2f, .2f, .2f);
         private Text timerText;
 
         void Awake()
         {
             timerText = GetComponent<Text>();
+            timerText.color = Color;
         }
 
         public void SetTime(float time)

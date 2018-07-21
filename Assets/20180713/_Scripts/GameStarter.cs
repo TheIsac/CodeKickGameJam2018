@@ -11,7 +11,7 @@ namespace _20180713._Scripts
         public int PlayerCount = 4;
         public int BotCount = 1;
         public int GameLengthSeconds = 5 * 60;
-
+        
         public List<string> PlayerNames = new List<string>
         {
             "Isac",
@@ -28,7 +28,8 @@ namespace _20180713._Scripts
         private enum ArenaSize
         {
             Small,
-            Large
+            Large,
+            Gigantic
         }
 
         [SerializeField] private ArenaSize arenaSize = ArenaSize.Large;
@@ -38,17 +39,23 @@ namespace _20180713._Scripts
 
         private readonly List<GameObject> players = new List<GameObject>();
         private readonly List<GameObject> ships = new List<GameObject>();
+
+        private CameraManager cameraManager;
+
         private GameTimer gameTimer;
         private bool foundTimer;
         private Scoreboard scoreboard;
         private float gameTimeLeft = 5 * 60;
-        private CameraManager cameraManager;
+        private bool gameHasEnded = false;
 
-        public void Start()
+        public bool HasLoaded = false;
+
+        private void Start()
         {
             cameraManager = GameObject.FindWithTag("CameraManager").GetComponent<CameraManager>();
             if (arenaSize == ArenaSize.Large) SetToLargeArena();
             else if (arenaSize == ArenaSize.Small) SetToSmallArena();
+            else if (arenaSize == ArenaSize.Gigantic) SetToGiganticArena();
 
             scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
             for (var i = 0; i < PlayerCount; i++)
@@ -89,6 +96,8 @@ namespace _20180713._Scripts
             var mainCamera = GameObject.FindWithTag("MainCamera");
             mainCamera.SetActive(false);
             mainCamera.SetActive(true);
+
+            HasLoaded = true;
         }
 
         void Update()
@@ -97,11 +106,25 @@ namespace _20180713._Scripts
             {
                 gameTimeLeft = Math.Max(0, gameTimeLeft - Time.deltaTime);
                 gameTimer.SetTime(gameTimeLeft);
-                if (gameTimeLeft < 0.001)
+            }
+
+            if (gameTimeLeft < 0.001 && !gameHasEnded)
+            {
+                gameHasEnded = true;
+
+                var text = "Winner is " + scoreboard.GetLeaderName() + " with a score of " +
+                           scoreboard.GetLeaderScore();
+                GameObject.FindWithTag("EndText").GetComponent<EndText>().SetText(text);
+
+                foreach (var block in BlockManager.ActiveBlocks)
                 {
-                    var text = "Winner is " + scoreboard.GetLeaderName() + " with a score of " +
-                               scoreboard.GetLeaderScore();
-                    GameObject.FindWithTag("EndText").GetComponent<EndText>().SetText(text);
+                    if (block.IsFree()) block.BlowUp();
+                }
+
+                foreach (var ship in ships)
+                {
+                    var shipComponent = ship.GetComponent<Base>();
+                    shipComponent.BlowUpAllBlocksExceptPilot();
                 }
             }
 
@@ -135,6 +158,11 @@ namespace _20180713._Scripts
                     );
                 }
             }
+        }
+
+        public Vector2 GetArenaDimensions()
+        {
+            return new Vector2(arenaWidth, arenaHeight);
         }
 
         private GameObject CreatePlayer(string playerName, int order)
@@ -226,6 +254,14 @@ namespace _20180713._Scripts
             arenaHeight = 20;
             shipCornerOffset = 5;
             cameraManager.SetToLargeArena();
+        }
+        
+        private void SetToGiganticArena()
+        {
+            arenaWidth = 80;
+            arenaHeight = 40;
+            shipCornerOffset = 10;
+            cameraManager.SetToGiganticArena();
         }
     }
 }

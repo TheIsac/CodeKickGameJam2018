@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -152,6 +151,23 @@ namespace _20180713._Scripts
         {
             Debug.Log("Force remove block attached to ship at position: " + transform.position);
             RemoveBlock(block);
+        }
+
+        public void BlowUpAllBlocksExceptPilot()
+        {
+            var index = 0;
+            while (baseBlocks.Count > index)
+            {
+                var block = baseBlocks[index];
+                if (block == pilotBlock)
+                {
+                    index++;
+                    continue;
+                }
+
+                DetachBlock(block);
+                block.BlowUp();
+            }
         }
 
         private int CountFreeJoints()

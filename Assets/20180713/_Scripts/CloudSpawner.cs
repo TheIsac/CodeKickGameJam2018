@@ -19,13 +19,18 @@ public class CloudSpawner : MonoBehaviour
     public float SecondsBetweenSpawn = 1;
     public Distribution Distribution;
     public GameObject Prefab;
-    public bool randomizeYRotation = false;
-    public bool addRandomTorque = false;
+    public bool RandomizeYRotation;
+    public bool AddRandomTorque;
 
     private float secondsSinceLastSpawn;
 
+    private GameObject pompeii;
+    private const float NoSpawnAfterPompeiiReachesHeight = -320;
+
     void Start()
     {
+        pompeii = GameObject.FindWithTag("Pompeii");
+
         secondsSinceLastSpawn = SecondsBetweenSpawn;
         Spawn();
         Spawn();
@@ -33,6 +38,8 @@ public class CloudSpawner : MonoBehaviour
 
     void Update()
     {
+        if (pompeii.transform.position.y > NoSpawnAfterPompeiiReachesHeight) return;
+
         secondsSinceLastSpawn += Time.deltaTime;
         if (secondsSinceLastSpawn >= SecondsBetweenSpawn)
         {
@@ -70,12 +77,12 @@ public class CloudSpawner : MonoBehaviour
     private void spawnAndRotate(Vector3 position)
     {
         var instance = Instantiate(Prefab, position, Quaternion.identity);
-        if (randomizeYRotation)
+        if (RandomizeYRotation)
         {
             instance.transform.Rotate(Vector3.up, Random.Range(0, 360));
         }
 
-        if (addRandomTorque)
+        if (AddRandomTorque)
         {
             instance.GetComponent<Rigidbody>().AddTorque(Random.insideUnitSphere);
         }

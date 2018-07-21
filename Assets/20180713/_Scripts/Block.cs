@@ -20,16 +20,16 @@ public class Block : MonoBehaviour
 
     private List<BlockJoint> joints = new List<BlockJoint>();
     private AudioManager audioManager;
+    private ParticleManager particleManager;
+    private BlockEffectController blockEffectController;
 
     void Awake()
     {
         isExplosive = GetComponent<Explodable>();
         joints = new List<BlockJoint>(GetComponentsInChildren<BlockJoint>());
-    }
-
-    void Start()
-    {
         audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
+        particleManager = GameObject.FindWithTag("ParticleManager").GetComponent<ParticleManager>();
+        blockEffectController = GetComponentInChildren<BlockEffectController>();
     }
 
     public bool IsFree()
@@ -49,13 +49,15 @@ public class Block : MonoBehaviour
         var shipComponent = holder.GetComponent<Base>();
         OnShip = shipComponent;
 
-        var rigidbody = GetComponent<Rigidbody>();
-        if (rigidbody)
+        var body = GetComponent<Rigidbody>();
+        if (body)
         {
-            rigidbody.isKinematic = true;
-            rigidbody.velocity = Vector3.zero;
-            rigidbody.angularVelocity = Vector3.zero;
+            body.isKinematic = true;
+            body.velocity = Vector3.zero;
+            body.angularVelocity = Vector3.zero;
         }
+
+        UpdateSelected(holder);
     }
 
     public GameObject GetHolder()
@@ -75,16 +77,23 @@ public class Block : MonoBehaviour
         {
             rigidbody.isKinematic = false;
         }
+        
+        blockEffectController.SetSelected(false);
     }
 
     public IEnumerable<BlockJoint> GetFreeJoints()
     {
-        return joints.Where(joint => joint.connectedJoint == null);
+        return joints.Where(joint => joint.ConnectedJoint == null);
     }
 
     public IEnumerable<BlockJoint> GetConnectedJoints()
     {
-        return joints.Where(joint => joint.connectedJoint != null).Select(joint => joint.connectedJoint);
+        return joints.Where(joint => joint.ConnectedJoint != null).Select(joint => joint.ConnectedJoint);
+    }
+
+    public int GetFreeJointsCount()
+    {
+        return joints.Count(joint => joint.ConnectedJoint == null);
     }
 
     public void RemoveRigidbody()
@@ -94,13 +103,31 @@ public class Block : MonoBehaviour
 
     public void AddRigidbody()
     {
+        if (gameObject == null) //Checking for null on gameObject is an overloaded operation
+        {
+            Debug.Log("Trying to add rigidbody to block that is already destroyed");
+            return;
+        }
+
         var newRigidbody = gameObject.AddComponent<Rigidbody>();
         newRigidbody.useGravity = false;
     }
 
     public void SetDamageAppearcance(float damageFactor)
     {
-        GetComponentInChildren<BlockDamageEffectController>().SetDamage(damageFactor);
+        blockEffectController.SetDamage(damageFactor);
+    }
+
+    public void BlowUp()
+    {
+        audioManager.ForcePlaySound(audioManager.Explosion, transform.position);
+
+        var explosion = Instantiate(particleManager.Explosion);
+        explosion.transform.position = gameObject.transform.position;
+        explosion.transform.rotation = gameObject.transform.rotation;
+        Destroy(explosion, explosion.GetComponent<ParticleSystem>().main.duration * .9f);
+
+        Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider other)
@@ -108,11 +135,12 @@ public class Block : MonoBehaviour
         audioManager.PlaySound(audioManager.BlockCollision, transform.position);
     }
 
-    private void OnTriggerStay(Collider collider)
+    private void OnTriggerStay(Collider other)
     {
-        var blockHolder = collider.GetComponent<BlockHolder>();
+        var blockHolder = other.GetComponent<BlockHolder>();
         if (blockHolder == null) return;
 
+        UpdateSelected(other.gameObject);
         if (isFree && blockHolder.IsTryingToPickUp())
         {
             blockHolder.SetHoldingBlock(this);
@@ -124,12 +152,40 @@ public class Block : MonoBehaviour
         }
     }
 
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.GetComponent<BlockHolder>() != null) blockEffectController.SetSelected(false);
+    }
+
+    private void UpdateSelected(GameObject blockHolder)
+    {
+        if (blockHolder == null)
+        {
+            blockEffectController.SetSelected(false);
+            return;
+        }
+
+        var blockHolderComponent = blockHolder.GetComponent<BlockHolder>();
+        if (blockHolderComponent == null)
+        {
+            blockEffectController.SetSelected(false);
+            return;
+        }
+
+        var distanceFromHolder = Vector3.Distance(
+            transform.position,
+            blockHolderComponent.HoldingPoint.transform.position
+        );
+        var selected = distanceFromHolder <= 1.5f && !blockHolderComponent.IsMountedOnShip();
+        blockEffectController.SetSelected(selected);
+    }
+
     private void HandleShipBlockCollision(BlockHolder blockHolder)
     {
         var ship = GetHolder().GetComponent<Base>();
         if (!ship) return;
 
-        if (blockHolder.IsHoldingDownPickUpButton())
+        if (blockHolder.IsHoldingDownPickUpButton() && blockEffectController.IsSelected())
         {
             ship.WorkOnUnscrewingBlock(this);
         }

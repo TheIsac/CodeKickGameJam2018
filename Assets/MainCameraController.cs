@@ -11,4 +11,9 @@ public class MainCameraController : MonoBehaviour
     {
         transform.position = new Vector3(0, 20, 0);
     }
+
+    public void SetToGiganticArena()
+    {
+        transform.position = new Vector3(0, 40, 0);
+    }
 }

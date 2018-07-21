@@ -15,11 +15,12 @@ namespace _20180713._Scripts
         private Rigidbody shipRigidbody;
         private Base ownShip;
         private const float BreakingVelocity = 1.4f;
-        private const float CollisionDamageRadius = .5f;
-        private const int MaxBlockBreaksPerCollision = 1;
-        private const float MinSecondsBetweenBlockBreak = 5;
+        private const float CollisionDamageRadius = 1f;
+        private const float MinSecondsBetweenBlockBreak = 3;
 
         private float lastBlockBreak;
+
+        private const float IndestructableBlockMassThreshold = 100;
 
         private void Awake()
         {
@@ -71,20 +72,18 @@ namespace _20180713._Scripts
             var colliders = Physics.OverlapSphere(contactPoint.point, CollisionDamageRadius);
             foreach (var colliderObject in colliders)
             {
-                if (brokenBlocks >= MaxBlockBreaksPerCollision) continue;
-
                 var blockToBreak = colliderObject.GetComponent<Block>();
                 if (blockToBreak == null) continue;
 
                 if (BlockBelongToOwnShip(blockToBreak))
                 {
-                    if (ShouldBreakOwnShip())
+                    if (ShouldBreakOwnShip(blockToBreak.Weight))
                     {
                         brokenBlocks++;
                         DamageBlockOnShip(blockToBreak, ownShip);
                     }
                 }
-                else if (ShouldBreakOtherShip())
+                else if (ShouldBreakOtherShip(blockToBreak.Weight))
                 {
                     brokenBlocks++;
                     DamageBlockOnShip(blockToBreak, otherShip);
@@ -100,16 +99,21 @@ namespace _20180713._Scripts
 
         private void DamageBlockOnShip(Block block, Base ship)
         {
-            ship.WorkOnUnscrewingBlock(block, DamageDelt());
+            ship.WorkOnUnscrewingBlock(block, DamageDeltBasedOnTargetMass(block.Weight));
             if (ship.BlockIsUnscrewed(block))
             {
                 ship.DetachBlock(block);
             }
         }
 
-        private bool ShouldBreakOtherShip()
+        private bool ShouldBreakOtherShip(float targetBlockMass)
         {
-            return Random.value < .4f;
+            return Random.value < .4f + targetBlockMass / IndestructableBlockMassThreshold;
+        }
+
+        private bool ShouldBreakOwnShip(float targetedBlockMass)
+        {
+            return Random.value < .3f + targetedBlockMass / IndestructableBlockMassThreshold;
         }
 
         private bool BlockBelongToOwnShip(Block block)
@@ -117,15 +121,23 @@ namespace _20180713._Scripts
             return block.transform.parent == transform;
         }
 
-        private bool ShouldBreakOwnShip()
-        {
-            return Random.value < .1f;
-        }
-
-        private float DamageDelt()
+        private float DamageDeltBasedOnTargetMass(float targetBlockMass)
         {
             const float start = 2;
-            const float end = 10;
+            const float end = 16;
+            var mass = shipModifier.GetMass();
+            if (mass < start) return 0;
+
+            var massEffect = targetBlockMass / IndestructableBlockMassThreshold;
+            return Math.Min(1,
+                EaseInExpo(start, end, (shipModifier.GetMass() + start) / (end - start)) - massEffect);
+        }
+
+        private float
+            DamageDelt() // TODO Remove when DamageDeltBasedOnTargetMass feels like a complete worthy replacement 
+        {
+            const float start = 2;
+            const float end = 16;
             var mass = shipModifier.GetMass();
             if (mass < start) return 0;
 

@@ -28,15 +28,21 @@ public class BlockSpawner : MonoBehaviour
     private Block bombBlock;
     private Block thrusterBlock;
 
+    private GameObject pompeii;
+    private const float NoSpawnAfterPompeiiReachesHeight = -320;
+
     void Start()
     {
         bombBlock = Prefabs.Find(p => p.GetComponent<Explodable>() != null);
         thrusterBlock = Prefabs.Find(p => p.GetComponent<ThrusterBlock>() != null);
         generalBlocks = Prefabs.Where(p => p != bombBlock && p != thrusterBlock).ToList();
+        pompeii = GameObject.FindWithTag("Pompeii");
     }
 
     void Update()
     {
+        if (pompeii.transform.position.y > NoSpawnAfterPompeiiReachesHeight) return;
+
         bombSecondsSinceSpawn += Time.deltaTime;
         secondsSinceLastSpawn += Time.deltaTime;
         if (secondsSinceLastSpawn >= SecondsBetweenSpawn)

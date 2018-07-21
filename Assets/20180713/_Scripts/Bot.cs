@@ -151,7 +151,11 @@ namespace _20180713._Scripts
         {
             if (BlockManager.ActiveBlocks.Count > 0)
             {
-                var closestBlock = BlockManager.GetFreeBlockClosestTo(transform.position);
+                var closestBlock = BlockManager.GetFreeBlockClosestTo(
+                    transform.position,
+                    block => block.GetFreeJointsCount() > 2
+                );
+                if (closestBlock == null) closestBlock = BlockManager.GetFreeBlockClosestTo(transform.position);
                 if (closestBlock == null) state = State.Thinking;
                 else StartGettingBlock(closestBlock);
             }
@@ -232,7 +236,7 @@ namespace _20180713._Scripts
 
         private void Pillaging()
         {
-            var blockHasBeenLetGo = targetBlock.transform.position.y < -5;
+            var blockHasBeenLetGo = targetBlock == null || targetBlock.transform.position.y < -5;
             if (blockHasBeenLetGo)
             {
                 state = State.Thinking;

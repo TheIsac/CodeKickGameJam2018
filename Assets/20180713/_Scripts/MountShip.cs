@@ -31,6 +31,11 @@ namespace _20180713._Scripts
             SetShipInputs();
         }
 
+        public bool IsMounted()
+        {
+            return mounting;
+        }
+
         private void SetShipInputs()
         {
             playerShip.HorizontalInput = playerMovement.HorizontalInput;

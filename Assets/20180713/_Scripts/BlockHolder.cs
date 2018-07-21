@@ -91,6 +91,8 @@ namespace _20180713._Scripts
 
         public bool IsTryingToPickUp()
         {
+            if (playerMovement == null) return false;
+
             return !IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
         }
 
@@ -114,7 +116,12 @@ namespace _20180713._Scripts
         {
             return holdingBlock;
         }
-        
+
+        public bool IsMountedOnShip()
+        {
+            return GetComponent<MountShip>().IsMounted();
+        }
+
         private bool IsTryingToRelease()
         {
             return holdingBlock && !isPickingUpBlockThisFrame && IsHoldingBlock() &&

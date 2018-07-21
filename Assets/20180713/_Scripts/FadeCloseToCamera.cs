@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class FadeCloseToCamera : MonoBehaviour
 {
-    Renderer objectRenderer;
-    Color color;
-
+    private Renderer objectRenderer;
+    private Color color;
+    private float fadeStartDistace = 40;
+    
     void Start()
     {
         objectRenderer = GetComponent<Renderer>();
@@ -16,9 +17,9 @@ public class FadeCloseToCamera : MonoBehaviour
     void Update()
     {
         var distance = Vector3.Distance(Camera.main.transform.position, transform.position);
-        if (distance < 100)
+        if (distance < fadeStartDistace)
         {
-            var alpha = Mathf.Pow(distance / 100, 2);
+            var alpha = Mathf.Pow(distance / fadeStartDistace, 2);
             objectRenderer.material.color = new Color(color.r, color.g, color.b, alpha);
         }
     }
