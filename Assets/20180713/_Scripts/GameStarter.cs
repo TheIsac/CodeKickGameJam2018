@@ -37,7 +37,7 @@ namespace _20180713._Scripts
         private int arenaHeight = 20;
         private int shipCornerOffset = 5;
 
-        private readonly List<GameObject> players = new List<GameObject>();
+        public readonly List<GameObject> players = new List<GameObject>();
         private readonly List<GameObject> ships = new List<GameObject>();
 
         private CameraManager cameraManager;
