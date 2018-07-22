@@ -137,7 +137,10 @@ public class Block : MonoBehaviour
 
     public void SetSelected(bool selected)
     {
-        blockEffectController.SetSelected(selected);
+        if (blockEffectController != null)
+        {
+            blockEffectController.SetSelected(selected);
+        }
     }
 
     private void OnTriggerEnter(Collider other)

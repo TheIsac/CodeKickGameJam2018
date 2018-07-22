@@ -257,6 +257,11 @@ Prefab:
       propertyPath: m_LocalPosition.y
       value: -900
       objectReference: {fileID: 0}
+    - target: {fileID: 114748153418814778, guid: 9d4c6c39bfa73f940b0049d97feb5566,
+        type: 2}
+      propertyPath: BotCount
+      value: 2
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d4c6c39bfa73f940b0049d97feb5566, type: 2}
   m_IsPrefabAsset: 0
