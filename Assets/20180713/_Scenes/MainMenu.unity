@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657898, g: 0.4964133, b: 0.5748178, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -386,6 +386,48 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &745588486
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 4952633917444718, guid: 004c98a9736e9a148af0b2681fadd58b, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -9.179243
+      objectReference: {fileID: 0}
+    - target: {fileID: 4952633917444718, guid: 004c98a9736e9a148af0b2681fadd58b, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -20.773739
+      objectReference: {fileID: 0}
+    - target: {fileID: 4952633917444718, guid: 004c98a9736e9a148af0b2681fadd58b, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 1.5721173
+      objectReference: {fileID: 0}
+    - target: {fileID: 4952633917444718, guid: 004c98a9736e9a148af0b2681fadd58b, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4952633917444718, guid: 004c98a9736e9a148af0b2681fadd58b, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4952633917444718, guid: 004c98a9736e9a148af0b2681fadd58b, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4952633917444718, guid: 004c98a9736e9a148af0b2681fadd58b, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4952633917444718, guid: 004c98a9736e9a148af0b2681fadd58b, type: 2}
+      propertyPath: m_RootOrder
+      value: 5
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 004c98a9736e9a148af0b2681fadd58b, type: 2}
+  m_IsPrefabAsset: 0
 --- !u!1 &765732687
 GameObject:
   m_ObjectHideFlags: 0
@@ -547,6 +589,28 @@ MonoBehaviour:
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1324408320}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
+        m_CallState: 2
+      - m_Target: {fileID: 1399411439}
+        m_MethodName: set_enabled
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 1
         m_CallState: 2
     m_TypeName: UnityEngine.UI.Button+ButtonClickedEvent, UnityEngine.UI, Version=1.0.0.0,
       Culture=neutral, PublicKeyToken=null
@@ -717,6 +781,18 @@ CanvasRenderer:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 929481336}
   m_CullTransparentMesh: 0
+--- !u!114 &1324408320 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114867518158511762, guid: 004c98a9736e9a148af0b2681fadd58b,
+    type: 2}
+  m_PrefabInternal: {fileID: 745588486}
+  m_Script: {fileID: 11500000, guid: 61450863bded0db4cb77812a82431243, type: 3}
+--- !u!114 &1399411439 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 114849661512788510, guid: 004c98a9736e9a148af0b2681fadd58b,
+    type: 2}
+  m_PrefabInternal: {fileID: 745588486}
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
 --- !u!1 &1770206940
 GameObject:
   m_ObjectHideFlags: 0

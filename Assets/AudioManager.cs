@@ -15,6 +15,7 @@ namespace _20180713._Scripts
         [FMODUnity.EventRef] public string Thruster;
         [FMODUnity.EventRef] public string PlayerCollision;
         [FMODUnity.EventRef] public string ShipCollision;
+        [FMODUnity.EventRef] public string PlayerSwoosh;
         FMOD.Studio.EventInstance soundevent;
 
         private const float MinSecondsBetweenSameSound = .5f;

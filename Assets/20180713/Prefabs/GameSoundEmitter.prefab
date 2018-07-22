@@ -9,51 +9,52 @@ Prefab:
     m_Modifications: []
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 0}
-  m_RootGameObject: {fileID: 1996336965348618}
+  m_RootGameObject: {fileID: 1316038830002088}
   m_IsPrefabAsset: 1
---- !u!1 &1996336965348618
+--- !u!1 &1316038830002088
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4930218916028942}
-  - component: {fileID: 114569039473509328}
-  - component: {fileID: 114373279258750110}
+  - component: {fileID: 4952633917444718}
+  - component: {fileID: 114849661512788510}
+  - component: {fileID: 114428595319520188}
+  - component: {fileID: 114867518158511762}
   m_Layer: 0
   m_Name: GameSoundEmitter
-  m_TagString: Untagged
+  m_TagString: GameSoundEmitter
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4930218916028942
+--- !u!4 &4952633917444718
 Transform:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1996336965348618}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -9.179243, y: -0.77373934, z: 1.5721173}
+  m_GameObject: {fileID: 1316038830002088}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -9.179243, y: -20.773739, z: 1.5721173}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &114373279258750110
+--- !u!114 &114428595319520188
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1996336965348618}
-  m_Enabled: 1
+  m_GameObject: {fileID: 1316038830002088}
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Event: event:/SFX/Windloop
-  PlayEvent: 1
+  PlayEvent: 11
   StopEvent: 0
   CollisionTag: 
   AllowFadeout: 1
@@ -63,25 +64,40 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
---- !u!114 &114569039473509328
+--- !u!114 &114849661512788510
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 100100000}
-  m_GameObject: {fileID: 1996336965348618}
+  m_GameObject: {fileID: 1316038830002088}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: event:/Game Event
+  Event: event:/Game Event2
   PlayEvent: 1
   StopEvent: 0
   CollisionTag: 
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
-  Params: []
+  Params:
+  - Name: StartGame
+    Value: 0
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
+--- !u!114 &114867518158511762
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1316038830002088}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61450863bded0db4cb77812a82431243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicEvent: {fileID: 114849661512788510}
+  WindLoop: {fileID: 114428595319520188}

@@ -13,6 +13,7 @@ TagManager:
   - Pompeii
   - GameStarter
   - ParticleManager
+  - GameSoundEmitter
   layers:
   - Default
   - TransparentFX

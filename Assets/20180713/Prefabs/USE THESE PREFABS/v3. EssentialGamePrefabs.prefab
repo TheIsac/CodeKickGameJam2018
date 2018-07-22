@@ -36,6 +36,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4975059721879782}
   - component: {fileID: 114428636063197156}
+  - component: {fileID: 114200026781983772}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: AudioManager
@@ -402,7 +403,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1878003908576674}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -500, z: 0}
+  m_LocalPosition: {x: 0, y: -900, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4256841137952998}
@@ -940,6 +941,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &114200026781983772
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1010307976361230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61450863bded0db4cb77812a82431243, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  musicEvent: {fileID: 114313172849311824}
 --- !u!114 &114249090543119184
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -962,14 +975,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Event: event:/Game Event
+  Event: event:/Game Event2
   PlayEvent: 1
   StopEvent: 0
   CollisionTag: 
   AllowFadeout: 1
   TriggerOnce: 0
   Preload: 0
-  Params: []
+  Params:
+  - Name: StartGame
+    Value: 0
   OverrideAttenuation: 0
   OverrideMinDistance: 0
   OverrideMaxDistance: 0
@@ -1092,7 +1107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerCount: 4
-  BotCount: 1
+  BotCount: 2
   GameLengthSeconds: 211
   PlayerNames:
   - Isac

@@ -46,7 +46,7 @@ namespace _20180713._Scripts
                 if (colliderRigidbody)
                 {
                     colliderRigidbody.AddForce(pushDirection * PushForce, ForceMode.Impulse);
-                    audioManager.ForcePlaySound(audioManager.PlayerCollision, colliderObject.transform.position);
+                    audioManager.ForcePlaySound(audioManager.PlayerSwoosh, colliderObject.transform.position);
                 }
             }
         }
