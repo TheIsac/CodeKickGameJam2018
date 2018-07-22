@@ -14,13 +14,13 @@ namespace _20180713._Scripts
         private ShipModifier shipModifier;
         private Rigidbody shipRigidbody;
         private Base ownShip;
-        private const float BreakingVelocity = 1.4f;
+        private const float BreakingVelocity = 1.2f;
         private const float CollisionDamageRadius = 1f;
         private const float MinSecondsBetweenBlockBreak = 3;
 
         private float lastBlockBreak;
 
-        private const float IndestructableBlockMassThreshold = 100;
+        private const float IndestructableBlockMassThreshold = 80;
 
         private void Awake()
         {
@@ -113,7 +113,7 @@ namespace _20180713._Scripts
 
         private bool ShouldBreakOwnShip(float targetedBlockMass)
         {
-            return Random.value < .3f + targetedBlockMass / IndestructableBlockMassThreshold;
+            return Random.value < .25f + targetedBlockMass / IndestructableBlockMassThreshold;
         }
 
         private bool BlockBelongToOwnShip(Block block)
@@ -123,14 +123,10 @@ namespace _20180713._Scripts
 
         private float DamageDeltBasedOnTargetMass(float targetBlockMass)
         {
-            const float start = 2;
-            const float end = 16;
             var mass = shipModifier.GetMass();
-            if (mass < start) return 0;
-
             var massEffect = targetBlockMass / IndestructableBlockMassThreshold;
-            return Math.Min(1,
-                EaseInExpo(start, end, (shipModifier.GetMass() + start) / (end - start)) - massEffect);
+            var factor = mass / 30;
+            return Math.Max(0, Math.Min(1, factor - massEffect));
         }
 
         private float
@@ -147,8 +143,7 @@ namespace _20180713._Scripts
         private float EaseInExpo(float start, float end, float value)
         {
             end -= start;
-            var inverseEaseInExpo = end * Mathf.Pow(3, 10 * (value - 1)) + start;
-            return inverseEaseInExpo;
+            return end * Mathf.Pow(2, 10 * (value - 1)) + start;
         }
     }
 }

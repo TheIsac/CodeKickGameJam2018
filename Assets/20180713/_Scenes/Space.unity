@@ -341,6 +341,21 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
+    - target: {fileID: 114690485341462198, guid: 5496d716d1cf3a54c9eb2a6e5a97bf10,
+        type: 2}
+      propertyPath: arenaSize
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 114690485341462198, guid: 5496d716d1cf3a54c9eb2a6e5a97bf10,
+        type: 2}
+      propertyPath: PlayerCount
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 114690485341462198, guid: 5496d716d1cf3a54c9eb2a6e5a97bf10,
+        type: 2}
+      propertyPath: BotCount
+      value: 4
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5496d716d1cf3a54c9eb2a6e5a97bf10, type: 2}
   m_IsPrefabAsset: 0

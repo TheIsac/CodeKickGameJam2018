@@ -11,7 +11,7 @@ namespace _20180713._Scripts
         public int PlayerCount = 4;
         public int BotCount = 1;
         public int GameLengthSeconds = 5 * 60;
-        
+
         public List<string> PlayerNames = new List<string>
         {
             "Isac",
@@ -255,7 +255,7 @@ namespace _20180713._Scripts
             shipCornerOffset = 5;
             cameraManager.SetToLargeArena();
         }
-        
+
         private void SetToGiganticArena()
         {
             arenaWidth = 80;

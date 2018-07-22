@@ -3,7 +3,7 @@ using _20180713._Scripts;
 
 public class Explodable : MonoBehaviour
 {
-    public float ExplodeInSeconds = 10;
+    public float ExplodeInSeconds = 5;
     public float Radius;
 
     private ParticleManager particleManager;
@@ -20,7 +20,7 @@ public class Explodable : MonoBehaviour
     {
         particleManager = GameObject.FindWithTag("ParticleManager").GetComponent<ParticleManager>();
         explosionParticle = particleManager.Explosion;
-        
+
         audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
     }
 
@@ -46,6 +46,7 @@ public class Explodable : MonoBehaviour
                     if (@base != null)
                     {
                         @base.DetachBlock(block);
+                        block.DestroySelf();
                     }
                 }
             }
@@ -88,7 +89,6 @@ public class Explodable : MonoBehaviour
     {
         if (explodeTime < 1)
         {
-            ExplodeInSeconds = Random.Range(10, 20);
             explodeTime = 0;
         }
 

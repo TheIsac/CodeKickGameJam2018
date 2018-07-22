@@ -8,7 +8,7 @@ namespace _20180713._Scripts
         public Block Block;
         public BlockJoint ConnectedJoint;
 
-        public void Start()
+        public void Awake()
         {
             Block = transform.parent.GetComponent<Block>();
             if (Block == null)
@@ -33,20 +33,19 @@ namespace _20180713._Scripts
             ConnectedJoint = null;
         }
 
-        public Vector3 GetEndPosition()
+        public Vector3 GetJointPosition()
         {
             return transform.position;
         }
-
-        public Vector3 GetConnectedCenterPosition()
-        {
-            var direction = (GetEndPosition() - GetCenterPosition()).normalized;
-            return transform.position + direction;
-        }
-
+        
         public Vector3 GetCenterPosition()
         {
-            return transform.parent.position;
+            return Block.transform.position;
+        }
+
+        public Vector3 GetDirection()
+        {
+            return (GetJointPosition() - GetCenterPosition()).normalized;
         }
     }
 }

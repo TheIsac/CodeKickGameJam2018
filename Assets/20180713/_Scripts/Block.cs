@@ -77,7 +77,7 @@ public class Block : MonoBehaviour
         {
             rigidbody.isKinematic = false;
         }
-        
+
         blockEffectController.SetSelected(false);
     }
 
@@ -127,7 +127,17 @@ public class Block : MonoBehaviour
         explosion.transform.rotation = gameObject.transform.rotation;
         Destroy(explosion, explosion.GetComponent<ParticleSystem>().main.duration * .9f);
 
+        DestroySelf();
+    }
+
+    public void DestroySelf()
+    {
         Destroy(gameObject);
+    }
+
+    public void SetSelected(bool selected)
+    {
+        blockEffectController.SetSelected(selected);
     }
 
     private void OnTriggerEnter(Collider other)

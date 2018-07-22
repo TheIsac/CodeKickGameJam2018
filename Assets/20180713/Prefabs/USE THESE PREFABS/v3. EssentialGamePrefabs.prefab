@@ -798,7 +798,7 @@ MeshRenderer:
   m_ReflectionProbeUsage: 1
   m_RenderingLayerMask: 4294967295
   m_Materials:
-  - {fileID: 2100000, guid: b3bcf4927ebeefc4e885809573d2fb09, type: 2}
+  - {fileID: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1048,11 +1048,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MinSpawnX: -30
   MaxSpawnX: 30
-  MinSpawnY: -50
-  MaxSpawnY: -40
+  MinSpawnY: -60
+  MaxSpawnY: -50
   MinSpawnZ: -30
   MaxSpawnZ: 30
-  SecondsBetweenSpawn: 25
+  SecondsBetweenSpawn: 18
   Distribution: 0
   Prefab: {fileID: 1817361374692174, guid: 669018a57585f4d5f82fecaa40f83349, type: 2}
   RandomizeYRotation: 0
@@ -1092,7 +1092,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PlayerCount: 4
-  BotCount: 3
+  BotCount: 1
   GameLengthSeconds: 211
   PlayerNames:
   - Isac
@@ -1105,7 +1105,8 @@ MonoBehaviour:
     type: 2}
   PlayerTemplate: {fileID: 1783644354395944, guid: 51d8579294c2fef44b0eff7bf41ae3b4,
     type: 2}
-  arenaSize: 0
+  arenaSize: 1
+  HasLoaded: 0
 --- !u!114 &114776194158469214
 MonoBehaviour:
   m_ObjectHideFlags: 1

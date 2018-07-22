@@ -9,7 +9,7 @@ namespace _20180713._Scripts
         private Rigidbody rb;
         private ShipMovement shipMovement;
 
-        private const float InitialMass = 0;
+        private const float InitialMass = .2f;
         private float shipMass;
 
         private void Awake()

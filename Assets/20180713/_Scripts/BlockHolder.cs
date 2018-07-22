@@ -47,14 +47,14 @@ namespace _20180713._Scripts
 
             if (IsHoldingBlock())
             {
-                var baseJoints = Base.GetBlocks().SelectMany(baseBlock => baseBlock.GetFreeJoints());
-                var blockJoints = holdingBlock.GetFreeJoints();
-                var closestJoints = Base.GetClosestTwoJoints(blockJoints, baseJoints);
-                if (closestJoints != null && closestJoints.BaseJoint && closestJoints.BlockJoint)
-                {
-                    Debug.DrawLine(closestJoints.BlockJoint.GetEndPosition(),
-                        closestJoints.BaseJoint.GetEndPosition(), Color.red);
-                }
+//                var baseJoints = Base.GetBlocks().SelectMany(baseBlock => baseBlock.GetFreeJoints());
+//                var blockJoints = holdingBlock.GetFreeJoints();
+//                var closestJoints = Base.GetClosestTwoJoints(blockJoints, baseJoints);
+//                if (closestJoints != null && closestJoints.BaseJoint && closestJoints.BlockJoint)
+//                {
+//                    Debug.DrawLine(closestJoints.BlockJoint.GetJointPosition(),
+//                        closestJoints.BaseJoint.GetJointPosition(), Color.red);
+//                }
             }
 
             if (isPickingUpBlockThisFrame)

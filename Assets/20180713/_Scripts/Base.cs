@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
@@ -9,15 +10,17 @@ namespace _20180713._Scripts
     {
         private readonly List<Block> baseBlocks = new List<Block>();
         private readonly Dictionary<Block, float> screwnessByBlock = new Dictionary<Block, float>();
+
         private ShipModifier shipModifier;
         private AudioManager audioManager;
         private Block pilotBlock;
-        private float unscrewProgressPerSecond = .1f;
+        private float unscrewProgressPerSecond = .18f;
         private int bombsAttachedCount = 0;
+        private Vector3 startPosition;
 
-        private bool
-            allJointsBlocked =
-                false; //TODO The idea should work. But the implementation is wrong. Sufficiently stable for now.
+        private float OutOfBoundsThreshold = 100;
+
+        private bool allJointsBlocked;
 
         private int freeJointCount = 0;
 
@@ -34,7 +37,19 @@ namespace _20180713._Scripts
         {
             audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
             freeJointCount = CountFreeJoints();
-            Debug.Log("freeJointsCount " + freeJointCount);
+
+            startPosition = transform.position;
+        }
+
+        private void Update()
+        {
+            var position = transform.position;
+            if (Math.Abs(position.x) > OutOfBoundsThreshold
+                || Math.Abs(position.z) > OutOfBoundsThreshold
+                || Math.Abs(position.y) > 3)
+            {
+                transform.position = startPosition;
+            }
         }
 
         public void AttachBlock(Block block)
@@ -46,10 +61,17 @@ namespace _20180713._Scripts
             }
 
             ConnectClosestBaseJointToClosestBlockJoint(block);
-            block.SetHolder(gameObject);
-            freeJointCount = CountFreeJoints();
+            if (allJointsBlocked)
+            {
+                Debug.Log("All joints blocked");
+            }
+            else
+            {
+                block.SetHolder(gameObject);
+                freeJointCount = CountFreeJoints();
 
-            audioManager.PlaySound(audioManager.BlockBuild, transform.position);
+                audioManager.PlaySound(audioManager.BlockBuild, transform.position);
+            }
         }
 
         public void WorkOnUnscrewingBlock(Block block)
@@ -74,6 +96,7 @@ namespace _20180713._Scripts
 
         public void DetachBlock(Block block)
         {
+            if (block == pilotBlock) return;
             if (!screwnessByBlock.ContainsKey(block)) return;
 
             var explosionComponent = block.GetComponent<Explodable>();
@@ -144,7 +167,7 @@ namespace _20180713._Scripts
 
         public bool HasFreeJoints()
         {
-            return freeJointCount > 0; //&& !allJointsBlocked;
+            return freeJointCount > 0 && !allJointsBlocked;
         }
 
         public void ForceRemoveBlock(Block block)
@@ -177,11 +200,19 @@ namespace _20180713._Scripts
                     .SelectMany(baseBlock => baseBlock.GetFreeJoints())
                     .Where(baseJoint =>
                     {
-                        var connectedCenterPosition = baseJoint.GetConnectedCenterPosition();
-                        return !baseBlocks.Any(block => block != baseJoint.Block &&
-                                                        block.transform.position == connectedCenterPosition);
+                        var direction = baseJoint.GetDirection();
+                        RaycastHit objectHit;
+                        Debug.DrawRay(baseJoint.transform.position, direction, Color.green, 1000);
+                        if (Physics.Raycast(baseJoint.transform.position, direction, out objectHit, .5f))
+                        {
+                            var hitBlock = objectHit.collider.GetComponent<Block>();
+                            if (hitBlock != null) return false;
+                        }
+
+                        return true;
                     })
                     .ToList();
+            if (baseJoints.Count > 0) allJointsBlocked = false; //TODO A desperate move. Will refactor later.
             return baseJoints.Count;
         }
 
@@ -207,15 +238,14 @@ namespace _20180713._Scripts
                 var collidingBaseBlock = baseBlocks.Find(b => b.transform.position == block.transform.position);
                 Debug.Log("Block inside another block. Base block position: " + collidingBaseBlock.transform.position +
                           ", Free block position: " + block.transform.position);
-                allJointsBlocked =
-                    true; //TODO When using this variable some joints visible NOT blocked is never used. But the idea is sound..
+                allJointsBlocked = true;
             }
 
             AddBlock(block);
             joints.BaseJoint.Join(joints.BlockJoint);
 
             var jointsAtBlockPosition = GetFreeJointsAtPosition(block.transform.position);
-            ConnectLooseJoints(block, jointsAtBlockPosition);
+            ConnectLooseJoints(block, jointsAtBlockPosition.ToList());
         }
 
         private void DisconnectBlockJoints(Block block)
@@ -254,13 +284,22 @@ namespace _20180713._Scripts
             BlockJoint closestBlockJoint = null;
             BlockJoint closestBaseJoint = null;
             float closestBaseJointDistance = -1;
-            var blockJointsArray = blockJoints as BlockJoint[] ?? blockJoints.ToArray();
+            var blockJointsList = blockJoints.ToList();
             foreach (var baseJoint in baseJoints)
             {
-                foreach (var blockJoint in blockJointsArray)
+                var direction = baseJoint.GetDirection();
+                RaycastHit objectHit;
+                Debug.DrawRay(baseJoint.transform.position, direction, Color.green, 1000);
+                if (Physics.Raycast(baseJoint.transform.position, direction, out objectHit, .5f))
                 {
-                    var distance = Vector3.Distance(blockJoint.GetEndPosition(),
-                        baseJoint.GetEndPosition());
+                    var hitBlock = objectHit.collider.GetComponent<Block>();
+                    if (hitBlock != null) continue;
+                }
+
+                foreach (var blockJoint in blockJointsList)
+                {
+                    var distance = Vector3.Distance(blockJoint.GetJointPosition(),
+                        baseJoint.GetJointPosition());
                     if (distance < closestBaseJointDistance || closestBaseJointDistance < 0)
                     {
                         closestBaseJoint = baseJoint;
@@ -284,9 +323,11 @@ namespace _20180713._Scripts
                 bombsAttachedCount++;
             }
 
-            baseBlocks.Add(block);
             shipModifier.UpdateMassAndSpeed(block.Weight, block.Speed);
+
+            baseBlocks.Add(block);
             screwnessByBlock[block] = 1f;
+
             block.SetDamageAppearcance(0);
             block.RemoveRigidbody();
         }
@@ -302,14 +343,18 @@ namespace _20180713._Scripts
                 return;
             }
 
+            if (block == pilotBlock) return;
+
             if (block.GetComponent<Explodable>() != null)
             {
                 bombsAttachedCount--;
             }
 
-            baseBlocks.Remove(block);
             shipModifier.UpdateMassAndSpeed(-block.Weight, -block.Speed);
+
+            baseBlocks.Remove(block);
             screwnessByBlock.Remove(block);
+
             block.AddRigidbody();
             block.SetDamageAppearcance(0);
             freeJointCount = CountFreeJoints();
@@ -338,29 +383,28 @@ namespace _20180713._Scripts
         private static void Align(Block block, ClosestJointsPair joints)
         {
             var blockTransform = block.transform;
-            var currentDir = blockTransform.position - joints.BlockJoint.GetEndPosition();
-            var targetDir = joints.BaseJoint.GetEndPosition() - joints.BaseJoint.GetCenterPosition();
+            var currentDir = blockTransform.position - joints.BlockJoint.GetJointPosition();
+            var targetDir = joints.BaseJoint.GetJointPosition() - joints.BaseJoint.GetCenterPosition();
             var resultRotation = Quaternion.FromToRotation(currentDir, targetDir) * blockTransform.rotation;
             resultRotation.z = 0;
             resultRotation.x = 0;
             blockTransform.rotation = resultRotation;
-            block.transform.position += joints.BaseJoint.GetEndPosition() - joints.BlockJoint.GetEndPosition();
+            block.transform.position += joints.BaseJoint.GetJointPosition() - joints.BlockJoint.GetJointPosition();
         }
 
         private IEnumerable<BlockJoint> GetFreeJointsAtPosition(Vector3 position)
         {
             return baseBlocks.SelectMany(baseBlock => baseBlock.GetFreeJoints())
-                .Where(joint => joint.GetEndPosition() == position);
+                .Where(joint => joint.GetJointPosition() == position);
         }
 
-        private void ConnectLooseJoints(Block block, IEnumerable<BlockJoint> otherJoints)
+        private void ConnectLooseJoints(Block block, List<BlockJoint> otherJoints)
         {
-            var freeBlockJoints = block.GetFreeJoints();
-            var blockJoints = freeBlockJoints as BlockJoint[] ?? freeBlockJoints.ToArray();
+            var blockJoints = block.GetFreeJoints().ToList();
             foreach (var looseJoint in otherJoints)
             {
                 var closestBlockJoint = blockJoints.First(blockJoint =>
-                    blockJoint.GetEndPosition() == looseJoint.GetCenterPosition());
+                    blockJoint.GetJointPosition() == looseJoint.GetCenterPosition());
                 closestBlockJoint.Join(looseJoint);
             }
         }

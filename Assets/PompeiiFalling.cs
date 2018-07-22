@@ -12,7 +12,7 @@ public class PompeiiFalling : MonoBehaviour
     private float secondsFalling;
 
     private void Awake()
-    {
+    {    
         gameStarter = GameObject.FindWithTag("GameStarter").GetComponent<GameStarter>();
         secondsToFall = gameStarter.GameLengthSeconds;
 
@@ -24,15 +24,27 @@ public class PompeiiFalling : MonoBehaviour
         secondsFalling += Time.deltaTime;
 
         var progress = secondsFalling / secondsToFall;
-        var curvedProgress = Math.Max(0, EaseInCubic(0, 1, progress));
+        var curvedProgress = Math.Max(0, EaseInCirc(0, 1, progress));
         var position = transform.position;
         position.y = start.y + curvedProgress * (end.y - start.y);
         transform.position = position.y < end.y ? position : end;
     }
 
-    private float EaseInCubic(float startValue, float endValue, float value)
+    private float EaseInCirc(float start, float end, float value)
     {
-        endValue -= startValue;
-        return endValue * value * value * value + startValue;
+        end -= start;
+        return -end * (Mathf.Sqrt(1 - value * value) - 1) + start;
+    }
+
+    private float EaseInExpo(float start, float end, float value)
+    {
+        end -= start;
+        return end * Mathf.Pow(2, 10 * (value - 1)) + start;
+    }
+
+    float EaseInQuint(float start, float end, float value)
+    {
+        end -= start;
+        return end * value * value * value * value * value + start;
     }
 }

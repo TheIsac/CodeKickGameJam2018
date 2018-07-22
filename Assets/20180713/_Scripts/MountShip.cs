@@ -15,9 +15,9 @@ namespace _20180713._Scripts
         private MeshRenderer playerMesh;
         private Collider playerCollider;
         private BlockHolder blockHolder;
-        private Base baseBlock;
+        private Base ship;
 
-        private ShipMovement playerShip;
+        private ShipMovement shipMovement;
 
         private void Start()
         {
@@ -25,8 +25,8 @@ namespace _20180713._Scripts
             playerMesh = GetComponentInChildren<MeshRenderer>();
             playerCollider = GetComponent<Collider>();
             blockHolder = GetComponent<BlockHolder>();
-            baseBlock = GetComponent<ShipOwner>().OwnShip;
-            playerShip = baseBlock.gameObject.GetComponentInChildren<ShipMovement>();
+            ship = GetComponent<ShipOwner>().OwnShip;
+            shipMovement = ship.gameObject.GetComponentInChildren<ShipMovement>();
 
             SetShipInputs();
         }
@@ -38,10 +38,10 @@ namespace _20180713._Scripts
 
         private void SetShipInputs()
         {
-            playerShip.HorizontalInput = playerMovement.HorizontalInput;
-            playerShip.VerticalInput = playerMovement.VerticalInput;
-            playerShip.InteractInput = playerMovement.InteractInput;
-            playerShip.SecondaryInput = playerMovement.SecondaryInput;
+            shipMovement.HorizontalInput = playerMovement.HorizontalInput;
+            shipMovement.VerticalInput = playerMovement.VerticalInput;
+            shipMovement.InteractInput = playerMovement.InteractInput;
+            shipMovement.SecondaryInput = playerMovement.SecondaryInput;
         }
 
         private void Update()
@@ -53,7 +53,7 @@ namespace _20180713._Scripts
 
             else if (mounting)
             {
-                tryDismounting();
+                TryDismounting();
             }
         }
 
@@ -62,13 +62,18 @@ namespace _20180713._Scripts
         {
             if (canMount && !blockHolder.IsHoldingBlock() && Input.GetButtonDown(playerMovement.SecondaryInput))
             {
+                foreach (var block in ship.GetBlocks())
+                {
+                    block.SetSelected(false);
+                }
+
                 HidePlayer();
                 GainShipControl();
                 mounting = true;
             }
         }
 
-        private void tryDismounting()
+        private void TryDismounting()
         {
             if (Input.GetButtonDown(playerMovement.SecondaryInput))
             {
@@ -90,7 +95,7 @@ namespace _20180713._Scripts
 
         private void GainShipControl()
         {
-            playerShip.IsMounted = true;
+            shipMovement.IsMounted = true;
         }
 
         #endregion
@@ -105,13 +110,13 @@ namespace _20180713._Scripts
 
         private void LoseShipControl()
         {
-            playerShip.IsMounted = false;
+            shipMovement.IsMounted = false;
         }
 
         private void TeleportToShipPosition()
         {
             transform.position =
-                new Vector3(baseBlock.transform.position.x, transform.position.y, baseBlock.transform.position.z);
+                new Vector3(ship.transform.position.x, transform.position.y, ship.transform.position.z);
 
             playerMovement.StopPlayerMovement();
         }
@@ -122,15 +127,15 @@ namespace _20180713._Scripts
 
         private void OnTriggerStay(Collider other)
         {
-            if (!baseBlock) return;
+            if (!ship) return;
 
-            if (other.transform.gameObject == baseBlock.gameObject)
+            if (other.transform.gameObject == ship.gameObject)
                 canMount = true;
         }
 
         private void OnTriggerExit(Collider other)
         {
-            if (other.transform.gameObject == baseBlock.gameObject)
+            if (other.transform.gameObject == ship.gameObject)
                 canMount = false;
         }
 

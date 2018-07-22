@@ -248,10 +248,14 @@ Prefab:
       propertyPath: m_RootOrder
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 114748153418814778, guid: 9d4c6c39bfa73f940b0049d97feb5566,
+    - target: {fileID: 23561722969675310, guid: 9d4c6c39bfa73f940b0049d97feb5566,
         type: 2}
-      propertyPath: arenaSize
-      value: 0
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: b3bcf4927ebeefc4e885809573d2fb09, type: 2}
+    - target: {fileID: 4161104624848418, guid: 9d4c6c39bfa73f940b0049d97feb5566, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: -900
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 9d4c6c39bfa73f940b0049d97feb5566, type: 2}

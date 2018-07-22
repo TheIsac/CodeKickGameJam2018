@@ -35,17 +35,24 @@ namespace _20180713._Scripts
         private void UpdateEmissionColor()
         {
             var currentColor = material.GetColor("_EmissionColor");
-            currentColor.r = EaseOutCubic(0, 1, damage);
+            currentColor.r = EaseOutQuart(0, 1, damage);
             currentColor.g = 0;
             currentColor.b = selected ? .5f : 0;
             material.SetColor("_EmissionColor", currentColor);
         }
-        
+
         private static float EaseOutCubic(float start, float end, float value)
         {
             value--;
             end -= start;
             return end * (value * value * value + 1) + start;
+        }
+
+        private float EaseOutQuart(float start, float end, float value)
+        {
+            value--;
+            end -= start;
+            return -end * (value * value * value * value - 1) + start;
         }
     }
 }
