@@ -11,6 +11,10 @@ namespace _20180713._Scripts
         public int PlayerCount = 4;
         public int BotCount = 1;
         public int GameLengthSeconds = 5 * 60;
+        public ArenaSize SizeOfArena = ArenaSize.Large;
+
+        public bool UseScoreboard = true;
+        public bool StartImmediately = true;
 
         public List<string> PlayerNames = new List<string>
         {
@@ -25,26 +29,26 @@ namespace _20180713._Scripts
         public GameObject BaseTemplate;
         public GameObject PlayerTemplate;
 
-        private enum ArenaSize
+        public enum ArenaSize
         {
             Small,
             Large,
             Gigantic
         }
 
-        [SerializeField] private ArenaSize arenaSize = ArenaSize.Large;
         private int arenaWidth = 20;
         private int arenaHeight = 20;
         private int shipCornerOffset = 5;
 
-        public readonly List<GameObject> players = new List<GameObject>();
-        private readonly List<GameObject> ships = new List<GameObject>();
+        public List<GameObject> Players = new List<GameObject>();
+        public List<GameObject> Ships = new List<GameObject>();
 
         private CameraManager cameraManager;
-
+        private ShipManager shipManager;
         private GameTimer gameTimer;
-        private bool foundTimer;
         private Scoreboard scoreboard;
+
+        private bool foundTimer;
         private float gameTimeLeft = 5 * 60;
         private bool gameHasEnded = false;
 
@@ -52,33 +56,73 @@ namespace _20180713._Scripts
 
         private void Start()
         {
-            cameraManager = GameObject.FindWithTag("CameraManager").GetComponent<CameraManager>();
-            if (arenaSize == ArenaSize.Large) SetToLargeArena();
-            else if (arenaSize == ArenaSize.Small) SetToSmallArena();
-            else if (arenaSize == ArenaSize.Gigantic) SetToGiganticArena();
-
-            scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
-            for (var i = 0; i < PlayerCount; i++)
+            if (StartImmediately)
             {
-                var playerNameIndex = Random.Range(0, PlayerNames.Count - 1);
-                var playerName = PlayerNames[playerNameIndex];
-                PlayerNames.RemoveAt(playerNameIndex);
+                SetupGameWithCurrentSettings();
+                StartGame(Players);
+            }
+        }
+
+        void Update()
+        {
+            if (foundTimer) UpdateGameTimer();
+
+            var shouldEndGame = gameTimeLeft < 0.001 && !gameHasEnded;
+            if (shouldEndGame) EndGame();
+
+            MakeSurePlayersAreInsideArena();
+        }
+
+        public void SetupGameWithCurrentSettings()
+        {
+            SetupGame(SizeOfArena, PlayerCount, BotCount, PlayerNames);
+        }
+
+        private void SetupGame(ArenaSize arenaSize, int playerCount, int botCount, List<string> playerNames)
+        {
+            cameraManager = GameObject.FindWithTag("CameraManager").GetComponent<CameraManager>();
+            shipManager = GameObject.FindWithTag("ShipManager").GetComponent<ShipManager>();
+
+            ResetArenaSize(arenaSize);
+
+            var availablePlayerNames = playerNames.ToList();
+            var players = new List<GameObject>();
+            var playerShips = new List<GameObject>();
+            for (var i = 0; i < playerCount; i++)
+            {
+                var playerNameIndex = Random.Range(0, availablePlayerNames.Count - 1);
+                var playerName = availablePlayerNames[playerNameIndex];
+                availablePlayerNames.RemoveAt(playerNameIndex);
                 var playerOrder = i + 1;
 
-                var player = i < PlayerCount - BotCount
+                var player = i < playerCount - botCount
                     ? CreatePlayer(playerName, playerOrder)
                     : CreateBot(playerOrder);
 
                 var playerShip = CreateShipAndPlacePlayerAboveShip(player);
-                var playerComponent = player.GetComponent<Player>();
-                scoreboard.Players.Add(playerComponent);
                 players.Add(player);
-                ships.Add(playerShip);
+                playerShips.Add(playerShip);
             }
 
-            var shipManager = GameObject.FindWithTag("ShipManager").GetComponent<ShipManager>();
-            var shipComponents = ships.Select(shipGameObject => shipGameObject.GetComponent<Base>());
-            shipManager.Ships.AddRange(shipComponents);
+            ResetShips(playerShips);
+            ResetPlayers(players);
+            HasLoaded = true;
+        }
+
+        private void StartGame(List<GameObject> players)
+        {
+            if (UseScoreboard)
+            {
+                scoreboard = GameObject.FindWithTag("Scoreboard").GetComponent<Scoreboard>();
+
+                foreach (var player in players)
+                {
+                    var playerComponent = player.GetComponent<Player>();
+                    scoreboard.Players.Add(playerComponent);
+                }
+
+                scoreboard.ResetScoreboard();
+            }
 
             var gameTimerObject = GameObject.FindWithTag("GameTimer");
             if (gameTimerObject)
@@ -90,74 +134,49 @@ namespace _20180713._Scripts
                 GameObject.FindWithTag("EndText").GetComponent<EndText>().SetText("");
             }
 
-            scoreboard.ResetScoreboard();
-
             //TODO Some bug requires us to deactivate-activate the main camera for it to display stuff properly
             var mainCamera = GameObject.FindWithTag("MainCamera");
             mainCamera.SetActive(false);
             mainCamera.SetActive(true);
-
-            HasLoaded = true;
         }
 
-        void Update()
+        private void ResetShips(List<GameObject> ships)
         {
-            if (foundTimer)
+            if (Ships != null)
             {
-                gameTimeLeft = Math.Max(0, gameTimeLeft - Time.deltaTime);
-                gameTimer.SetTime(gameTimeLeft);
+                Ships.ForEach(Destroy);
+                Ships.Clear();
+                Ships.AddRange(ships);
+            }
+            else
+            {
+                Ships = ships;
             }
 
-            if (gameTimeLeft < 0.001 && !gameHasEnded)
+            shipManager.Ships.Clear();
+            var shipComponents = ships.Select(s => s.GetComponent<Base>());
+            shipManager.Ships.AddRange(shipComponents);
+        }
+
+        private void ResetPlayers(List<GameObject> players)
+        {
+            if (Players != null)
             {
-                gameHasEnded = true;
-
-                var text = "Winner is " + scoreboard.GetLeaderName() + " with a score of " +
-                           scoreboard.GetLeaderScore();
-                GameObject.FindWithTag("EndText").GetComponent<EndText>().SetText(text);
-
-                foreach (var block in BlockManager.ActiveBlocks)
-                {
-                    if (block.IsFree()) block.BlowUp();
-                }
-
-                foreach (var ship in ships)
-                {
-                    var shipComponent = ship.GetComponent<Base>();
-                    shipComponent.BlowUpAllBlocksExceptPilot();
-                }
+                Players.ForEach(Destroy);
+                Players.Clear();
+                Players.AddRange(players);
             }
-
-            foreach (var player in players)
+            else
             {
-                var position = player.transform.position;
-                if (position.x > arenaWidth || position.x < -arenaWidth)
-                {
-                    player.transform.position = new Vector3(
-                        0,
-                        position.y,
-                        position.z
-                    );
-                }
-
-                if (position.y > 1 || position.y < -1)
-                {
-                    player.transform.position = new Vector3(
-                        position.x,
-                        0,
-                        position.z
-                    );
-                }
-
-                if (position.z > arenaHeight || position.z < -arenaHeight)
-                {
-                    player.transform.position = new Vector3(
-                        position.x,
-                        position.y,
-                        0
-                    );
-                }
+                Players = players;
             }
+        }
+
+        private void ResetArenaSize(ArenaSize size)
+        {
+            if (size == ArenaSize.Large) SetToLargeArena();
+            else if (size == ArenaSize.Small) SetToSmallArena();
+            else if (size == ArenaSize.Gigantic) SetToGiganticArena();
         }
 
         public Vector2 GetArenaDimensions()
@@ -190,6 +209,7 @@ namespace _20180713._Scripts
             playerShip.transform.position = GetShipPositionByPlayerOrder(playerComponent.Order);
             player.transform.position = GetShipPositionByPlayerOrder(playerComponent.Order) + Vector3.up;
             var shipComponent = playerShip.GetComponent<Base>();
+            shipComponent.SetOwner(player);
             var playerShipOwnerComponent = player.GetComponent<ShipOwner>();
             playerShipOwnerComponent.OwnShip = shipComponent;
 
@@ -262,6 +282,66 @@ namespace _20180713._Scripts
             arenaHeight = 40;
             shipCornerOffset = 10;
             cameraManager.SetToGiganticArena();
+        }
+
+        private void UpdateGameTimer()
+        {
+            gameTimeLeft = Math.Max(0, gameTimeLeft - Time.deltaTime);
+            gameTimer.SetTime(gameTimeLeft);
+        }
+
+        private void EndGame()
+        {
+            gameHasEnded = true;
+
+            var text = "Winner is " + scoreboard.GetLeaderName() + " with a score of " +
+                       scoreboard.GetLeaderScore();
+            GameObject.FindWithTag("EndText").GetComponent<EndText>().SetText(text);
+
+            foreach (var block in BlockManager.ActiveBlocks)
+            {
+                if (block.IsFree()) block.BlowUp();
+            }
+
+            foreach (var ship in Ships)
+            {
+                var shipComponent = ship.GetComponent<Base>();
+                shipComponent.BlowUpAllBlocksExceptPilot();
+            }
+        }
+
+        private void MakeSurePlayersAreInsideArena()
+        {
+            foreach (var player in Players)
+            {
+                var position = player.transform.position;
+                if (position.x > arenaWidth || position.x < -arenaWidth)
+                {
+                    player.transform.position = new Vector3(
+                        0,
+                        position.y,
+                        position.z
+                    );
+                }
+
+                if (position.y > 1 || position.y < -1)
+                {
+                    player.transform.position = new Vector3(
+                        position.x,
+                        0,
+                        position.z
+                    );
+                }
+
+                if (position.z > arenaHeight || position.z < -arenaHeight)
+                {
+                    player.transform.position = new Vector3(
+                        position.x,
+                        position.y,
+                        0
+                    );
+                }
+            }
         }
     }
 }

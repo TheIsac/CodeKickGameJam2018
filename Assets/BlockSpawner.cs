@@ -41,7 +41,8 @@ public class BlockSpawner : MonoBehaviour
 
     void Update()
     {
-        if (pompeii.transform.position.y > NoSpawnAfterPompeiiReachesHeight) return;
+        var hasPompeii = pompeii != null;
+        if (hasPompeii && pompeii.transform.position.y > NoSpawnAfterPompeiiReachesHeight) return;
 
         bombSecondsSinceSpawn += Time.deltaTime;
         secondsSinceLastSpawn += Time.deltaTime;

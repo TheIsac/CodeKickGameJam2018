@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 0}
-  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -509,6 +509,9 @@ MonoBehaviour:
   PlayerCount: 4
   BotCount: 3
   GameLengthSeconds: 211
+  SizeOfArena: 1
+  UseScoreboard: 1
+  StartImmediately: 1
   PlayerNames:
   - Isac
   - Gabriel
@@ -520,7 +523,8 @@ MonoBehaviour:
     type: 2}
   PlayerTemplate: {fileID: 1783644354395944, guid: 51d8579294c2fef44b0eff7bf41ae3b4,
     type: 2}
-  arenaSize: 0
+  Players: []
+  Ships: []
   HasLoaded: 0
 --- !u!1 &579347679
 GameObject:
@@ -892,6 +896,7 @@ MonoBehaviour:
   PlayerCollision: event:/SFX/UGH 3D
   ShipCollision: event:/SFX/Collision
   PlayerSwoosh: event:/SFX/Push Swoosh
+  Mute: 0
 --- !u!1 &1004165496
 GameObject:
   m_ObjectHideFlags: 0

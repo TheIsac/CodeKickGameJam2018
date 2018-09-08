@@ -23,7 +23,7 @@ public class Block : MonoBehaviour
     private ParticleManager particleManager;
     private BlockEffectController blockEffectController;
 
-    void Awake()
+    private void Awake()
     {
         isExplosive = GetComponent<Explodable>();
         joints = new List<BlockJoint>(GetComponentsInChildren<BlockJoint>());
@@ -72,10 +72,10 @@ public class Block : MonoBehaviour
         isFree = true;
         OnShip = null;
 
-        var rigidbody = GetComponent<Rigidbody>();
-        if (rigidbody)
+        var body = GetComponent<Rigidbody>();
+        if (body)
         {
-            rigidbody.isKinematic = false;
+            body.isKinematic = false;
         }
 
         blockEffectController.SetSelected(false);
@@ -103,14 +103,14 @@ public class Block : MonoBehaviour
 
     public void AddRigidbody()
     {
-        if (gameObject == null) //Checking for null on gameObject is an overloaded operation
+        if (this == null) //Checking for null on gameObject is an overloaded operation
         {
             Debug.Log("Trying to add rigidbody to block that is already destroyed");
             return;
         }
 
         var newRigidbody = gameObject.AddComponent<Rigidbody>();
-        newRigidbody.useGravity = false;
+        if (newRigidbody) newRigidbody.useGravity = false;
     }
 
     public void SetDamageAppearcance(float damageFactor)
@@ -120,6 +120,12 @@ public class Block : MonoBehaviour
 
     public void BlowUp()
     {
+        if (this == null)
+        {
+            Debug.LogError("Tried to blow up block that was already Destroyed");
+            return;
+        }
+
         audioManager.ForcePlaySound(audioManager.Explosion, transform.position);
 
         var explosion = Instantiate(particleManager.Explosion);

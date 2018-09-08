@@ -11,18 +11,21 @@ namespace _20180713._Scripts
         [FMODUnity.EventRef] public string Explosion;
         [FMODUnity.EventRef] public string BlockCollision;
         [FMODUnity.EventRef] public string BlockBuild;
-        [FMODUnity.EventRef] public string BombBeep; 
+        [FMODUnity.EventRef] public string BombBeep;
         [FMODUnity.EventRef] public string Thruster;
         [FMODUnity.EventRef] public string PlayerCollision;
         [FMODUnity.EventRef] public string ShipCollision;
         [FMODUnity.EventRef] public string PlayerSwoosh;
         FMOD.Studio.EventInstance soundevent;
 
+        public bool Mute = false;
         private const float MinSecondsBetweenSameSound = .5f;
         private readonly Dictionary<string, float> lastPlayedSoundByName = new Dictionary<string, float>();
 
         public void PlaySound(string sound, Vector3 position)
         {
+            if (Mute) return;
+
             if (!lastPlayedSoundByName.ContainsKey(sound) ||
                 Time.fixedTime - lastPlayedSoundByName[sound] > MinSecondsBetweenSameSound)
             {
@@ -33,6 +36,8 @@ namespace _20180713._Scripts
 
         public void ForcePlaySound(string sound, Vector3 position)
         {
+            if (Mute) return;
+
             FMODUnity.RuntimeManager.PlayOneShot(sound, position);
         }
 

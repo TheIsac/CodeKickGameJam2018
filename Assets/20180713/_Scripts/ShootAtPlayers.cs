@@ -1,4 +1,5 @@
-﻿using _20180713._Scripts;
+﻿using System;
+using _20180713._Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,19 +18,47 @@ public class ShootAtPlayers : MonoBehaviour
 
     void Start()
     {
-        var gamestarter = GameObject.FindWithTag("GameStarter").GetComponent<GameStarter>();
-        players = gamestarter.players;
         block = GetComponentInParent<Block>();
     }
 
     void Update()
     {
-        if (!block.IsOnShip()) return;
+        if (players == null) TryGetGamePlayers();
+
+        var closestPlayer = GetClosestPlayerOrNull();
+        if (!closestPlayer) return;
+
+        PointNozzleAt(closestPlayer.transform);
+        var shouldShoot = secondsSinceLastShot >= SecondsBetweenShots;
+        if (shouldShoot)
+        {
+            ShootAt(closestPlayer.transform.position);
+            secondsSinceLastShot = 0;
+        }
+
+        secondsSinceLastShot += Time.deltaTime;
+    }
+
+    private void TryGetGamePlayers()
+    {
+        var gameStarterGameObject = GameObject.FindWithTag("GameStarter");
+        if (gameStarterGameObject)
+        {
+            var gameStarter = gameStarterGameObject.GetComponent<GameStarter>();
+            players = gameStarter.Players;
+        }
+    }
+
+    private GameObject GetClosestPlayerOrNull()
+    {
+        if (!block.IsOnShip()) return null;
 
         GameObject closestPlayer = null;
         var closestBlockDistance = -1f;
         foreach (var player in players)
         {
+            if (player == block.OnShip.GetOwner()) continue;
+
             var distance = Vector3.Distance(player.transform.position, transform.position);
             if (distance > radius) continue;
 
@@ -40,19 +69,31 @@ public class ShootAtPlayers : MonoBehaviour
             }
         }
 
-        if (!closestPlayer) return;
+        return closestPlayer;
+    }
 
-        secondsSinceLastShot += Time.deltaTime;
+    private void ShootAt(Vector3 targetPosition)
+    {
+        var direction = GetDirectionToTarget(targetPosition);
+        var bulletStartPosition = GetNozzlePosition() + direction;
+        var instance = Instantiate(BulletToSpawn, bulletStartPosition, Quaternion.identity);
+        instance.AddForce(direction * Force, ForceMode.Impulse);
+    }
 
+    private Vector3 GetDirectionToTarget(Vector3 targetPosition)
+    {
         var nozzlePosition = transform.position;
-        var dir = (closestPlayer.transform.position - nozzlePosition).normalized;
-        transform.LookAt(closestPlayer.transform);
+        var dir = (targetPosition - nozzlePosition).normalized;
+        return dir;
+    }
 
-        if (secondsSinceLastShot >= SecondsBetweenShots)
-        {
-            secondsSinceLastShot = 0;
-            var instance = Instantiate(BulletToSpawn, nozzlePosition + dir, Quaternion.identity);
-            instance.AddForce(dir * Force, ForceMode.Impulse);
-        }
+    private void PointNozzleAt(Transform target)
+    {
+        transform.LookAt(target);
+    }
+
+    private Vector3 GetNozzlePosition()
+    {
+        return transform.position;
     }
 }

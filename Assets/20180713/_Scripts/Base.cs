@@ -8,6 +8,7 @@ namespace _20180713._Scripts
     [RequireComponent(typeof(ShipModifier))]
     public class Base : MonoBehaviour
     {
+        private GameObject owner;
         private readonly List<Block> baseBlocks = new List<Block>();
         private readonly Dictionary<Block, float> screwnessByBlock = new Dictionary<Block, float>();
 
@@ -24,7 +25,7 @@ namespace _20180713._Scripts
 
         private int freeJointCount = 0;
 
-        void Awake()
+        private void Awake()
         {
             var pilotBlockController = GetComponentInChildren<PilotBlockController>();
             pilotBlock = pilotBlockController.GetComponent<Block>();
@@ -33,7 +34,7 @@ namespace _20180713._Scripts
             shipModifier = GetComponent<ShipModifier>();
         }
 
-        void Start()
+        private void Start()
         {
             audioManager = GameObject.FindWithTag("AudioManager").GetComponent<AudioManager>();
             freeJointCount = CountFreeJoints();
@@ -50,6 +51,16 @@ namespace _20180713._Scripts
             {
                 transform.position = startPosition;
             }
+        }
+
+        public void SetOwner(GameObject player)
+        {
+            owner = player;
+        }
+
+        public GameObject GetOwner()
+        {
+            return owner;
         }
 
         public void AttachBlock(Block block)

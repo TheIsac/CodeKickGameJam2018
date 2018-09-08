@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿using System.Runtime.Serialization.Formatters;
+using System.Security;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -38,7 +39,8 @@ public class CloudSpawner : MonoBehaviour
 
     void Update()
     {
-        if (pompeii.transform.position.y > NoSpawnAfterPompeiiReachesHeight) return;
+        var hasPompeii = pompeii != null;
+        if (hasPompeii && pompeii.transform.position.y > NoSpawnAfterPompeiiReachesHeight) return;
 
         secondsSinceLastSpawn += Time.deltaTime;
         if (secondsSinceLastSpawn >= SecondsBetweenSpawn)
