@@ -2,29 +2,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class MeshController : MonoBehaviour {
+public class MeshController : MonoBehaviour
+{
 	public void SetColor(Color color)
 	{
 		GetComponent<Renderer>().material.color = color;
-	}
-
-	public void SetColorByPlayerOrder(int order)
-	{
-		if (order == 1)
-		{
-			SetColor(Color.yellow);
-		}
-		else if (order == 2)
-		{
-			SetColor(Color.magenta);
-		}
-		else if (order == 3)
-		{
-			SetColor(Color.black);
-		}
-		else if (order == 4)
-		{
-			SetColor(Color.red);
-		}
 	}
 }

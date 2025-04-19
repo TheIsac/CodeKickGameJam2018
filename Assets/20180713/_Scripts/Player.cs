@@ -12,10 +12,29 @@ namespace _20180713._Scripts
 
         private float ShipWeight;
 
+        // Static method to get player color based on order
+        public static Color GetPlayerColor(int order)
+        {
+            switch (order)
+            {
+                case 1: return Color.yellow;
+                case 2: return Color.magenta;
+                case 3: return Color.black;
+                case 4: return Color.red;
+                default: return Color.white; // Default color
+            }
+        }
+
+        public Color GetPlayerColor()
+        {
+            return GetPlayerColor(Order);
+        }
+
         void Start()
         {
             var meshController = GetComponentInChildren<MeshController>();
-            meshController.SetColorByPlayerOrder(Order);
+            // Use the static method now
+            meshController.SetColor(GetPlayerColor(Order));
 
             SetupMovementComponent();
         }

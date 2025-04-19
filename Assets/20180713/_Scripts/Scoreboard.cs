@@ -53,10 +53,14 @@ namespace _20180713._Scripts
 
             for (var i = 0; i < playerCount; i++)
             {
+                var player = Players[i]; // Get the current player
                 var text = Instantiate(ScoreTemplate);
                 var textRect = text.GetComponent<RectTransform>(); // Get RectTransform of the instance
 
                 textRect.SetParent(transform, false); // Set parent, worldPositionStays = false
+
+                // Set the text color based on player order
+                text.color = Player.GetPlayerColor(player.Order);
 
                 float posX;
                 if (playerCount == 1)
