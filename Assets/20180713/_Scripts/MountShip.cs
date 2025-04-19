@@ -38,10 +38,12 @@ namespace _20180713._Scripts
 
         private void SetShipInputs()
         {
+            // Pass the input names and the keyboard flag to the ship
             shipMovement.HorizontalInput = playerMovement.HorizontalInput;
             shipMovement.VerticalInput = playerMovement.VerticalInput;
             shipMovement.InteractInput = playerMovement.InteractInput;
             shipMovement.SecondaryInput = playerMovement.SecondaryInput;
+            shipMovement.useKeyboardInput = playerMovement.useKeyboardInput; // Pass the flag
         }
 
         private void Update()
@@ -50,7 +52,6 @@ namespace _20180713._Scripts
             {
                 TryMounting();
             }
-
             else if (mounting)
             {
                 TryDismounting();
@@ -60,7 +61,8 @@ namespace _20180713._Scripts
 
         private void TryMounting()
         {
-            if (canMount && !blockHolder.IsHoldingBlock() && Input.GetButtonDown(playerMovement.SecondaryInput))
+            // Use the abstracted input method
+            if (canMount && !blockHolder.IsHoldingBlock() && playerMovement.GetSecondaryButtonDown())
             {
                 foreach (var block in ship.GetBlocks())
                 {
@@ -75,7 +77,8 @@ namespace _20180713._Scripts
 
         private void TryDismounting()
         {
-            if (Input.GetButtonDown(playerMovement.SecondaryInput))
+            // Use the abstracted input method
+            if (playerMovement.GetSecondaryButtonDown())
             {
                 ShowPlayer();
                 LoseShipControl();

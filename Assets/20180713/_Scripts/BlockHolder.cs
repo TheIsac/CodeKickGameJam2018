@@ -47,14 +47,14 @@ namespace _20180713._Scripts
 
             if (IsHoldingBlock())
             {
-//                var baseJoints = Base.GetBlocks().SelectMany(baseBlock => baseBlock.GetFreeJoints());
-//                var blockJoints = holdingBlock.GetFreeJoints();
-//                var closestJoints = Base.GetClosestTwoJoints(blockJoints, baseJoints);
-//                if (closestJoints != null && closestJoints.BaseJoint && closestJoints.BlockJoint)
-//                {
-//                    Debug.DrawLine(closestJoints.BlockJoint.GetJointPosition(),
-//                        closestJoints.BaseJoint.GetJointPosition(), Color.red);
-//                }
+                //                var baseJoints = Base.GetBlocks().SelectMany(baseBlock => baseBlock.GetFreeJoints());
+                //                var blockJoints = holdingBlock.GetFreeJoints();
+                //                var closestJoints = Base.GetClosestTwoJoints(blockJoints, baseJoints);
+                //                if (closestJoints != null && closestJoints.BaseJoint && closestJoints.BlockJoint)
+                //                {
+                //                    Debug.DrawLine(closestJoints.BlockJoint.GetJointPosition(),
+                //                        closestJoints.BaseJoint.GetJointPosition(), Color.red);
+                //                }
             }
 
             if (isPickingUpBlockThisFrame)
@@ -93,17 +93,25 @@ namespace _20180713._Scripts
         {
             if (playerMovement == null) return false;
 
-            return !IsHoldingBlock() && Input.GetButtonDown(playerMovement.InteractInput);
+            // Use the abstracted input method
+            return !IsHoldingBlock() && playerMovement.GetInteractButtonDown();
         }
 
         public bool IsHoldingDownPickUpButton()
         {
-            return Input.GetButton(playerMovement.InteractInput);
+            // Use the abstracted input method
+            return playerMovement.GetInteractButton();
+        }
+
+        public bool IsTryingToRelease()
+        {
+            // Use the abstracted input method AND check if we just picked up
+            return IsHoldingBlock() && playerMovement.GetInteractButtonDown() && !isPickingUpBlockThisFrame;
         }
 
         public bool IsHoldingBlock()
         {
-            return holdingBlock;
+            return holdingBlock != null;
         }
 
         public void ReleaseHoldingBlock()
@@ -120,12 +128,6 @@ namespace _20180713._Scripts
         public bool IsMountedOnShip()
         {
             return GetComponent<MountShip>().IsMounted();
-        }
-
-        private bool IsTryingToRelease()
-        {
-            return holdingBlock && !isPickingUpBlockThisFrame && IsHoldingBlock() &&
-                   Input.GetButtonDown(playerMovement.InteractInput);
         }
     }
 }
