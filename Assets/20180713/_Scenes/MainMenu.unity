@@ -758,6 +758,7 @@ GameObject:
   - component: {fileID: 652930803}
   - component: {fileID: 652930802}
   - component: {fileID: 652930805}
+  - component: {fileID: 652930806}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -783,7 +784,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.14173195, g: 0.21502067, b: 0.3301887, a: 0}
+  m_BackGroundColor: {r: 0, g: 0, b: 0, a: 0}
   m_projectionMatrixMode: 1
   m_SensorSize: {x: 36, y: 24}
   m_LensShift: {x: 0, y: 0}
@@ -842,6 +843,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd16f23ae06c198499d5cfe01a145ec7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &652930806
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 652930801}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8a1cf007b598942c2bb8c59869a2f4a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  numberOfStars: 500
+  sphereRadius: 100
+  minStarSize: 0.05
+  maxStarSize: 0.1
+  starColor: {r: 1, g: 1, b: 1, a: 1}
+  rotationSpeed: 0.1
 --- !u!1 &702439306
 GameObject:
   m_ObjectHideFlags: 0

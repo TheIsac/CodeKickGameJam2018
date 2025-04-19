@@ -21,7 +21,7 @@ namespace _20180713._Scripts
 
             if (musicEvent != null)
             {
-                musicEvent.SetParameter("StartGame", 1.0f);                
+                musicEvent.SetParameter("StartGame", 1.0f);
             }
         }
     }
