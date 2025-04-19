@@ -33,6 +33,12 @@ namespace _20180713._Scripts
             playerMovement.InteractInput = Order + "_Primary";
             playerMovement.SecondaryInput = Order + "_Secondary";
             playerMovement.TertiaryInput = Order + "_Tertiary";
+
+            // Set the flag for keyboard input if this is Player 1
+            if (Order == 1)
+            {
+                playerMovement.useKeyboardInput = true;
+            }
         }
     }
 }

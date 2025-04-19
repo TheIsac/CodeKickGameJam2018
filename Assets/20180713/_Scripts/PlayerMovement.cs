@@ -2,7 +2,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using _20180713._Scripts;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,6 +11,7 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] public string HorizontalInput, VerticalInput, InteractInput, SecondaryInput, TertiaryInput;
 
     private Rigidbody rb;
+    public bool useKeyboardInput = false; // Flag to enable keyboard input
 
     private void Awake()
     {
@@ -37,8 +37,28 @@ public class PlayerMovement : MonoBehaviour
 
     private void DirectionalInput()
     {
-        var verticalInput = Input.GetAxis(VerticalInput);
-        var horizontalInput = Input.GetAxis(HorizontalInput);
+        // Get controller input
+        var controllerVerticalInput = Input.GetAxis(VerticalInput);
+        var controllerHorizontalInput = Input.GetAxis(HorizontalInput);
+
+        // Initialize keyboard input
+        float keyboardVerticalInput = 0f;
+        float keyboardHorizontalInput = 0f;
+
+        // Check for keyboard input using the flag
+        if (useKeyboardInput)
+        {
+            if (Input.GetKey(KeyCode.W)) keyboardVerticalInput = 1f;
+            if (Input.GetKey(KeyCode.S)) keyboardVerticalInput = -1f;
+            if (Input.GetKey(KeyCode.A)) keyboardHorizontalInput = -1f;
+            if (Input.GetKey(KeyCode.D)) keyboardHorizontalInput = 1f;
+        }
+
+        // Combine inputs (prioritize keyboard if both are used, or simply add and clamp)
+        // Let's add and clamp for now, allowing combined input strength up to 1
+        var finalVerticalInput = Mathf.Clamp(controllerVerticalInput + keyboardVerticalInput, -1f, 1f);
+        var finalHorizontalInput = Mathf.Clamp(controllerHorizontalInput + keyboardHorizontalInput, -1f, 1f);
+
 
         if (rb.velocity.magnitude > maxSpeed)
         {
@@ -47,14 +67,16 @@ public class PlayerMovement : MonoBehaviour
         }
         else
         {
-            rb.AddForce(new Vector3(horizontalInput * movementSpeed * Time.deltaTime, 0,
-                verticalInput * movementSpeed * Time.deltaTime), ForceMode.Acceleration);
+            // Use final combined inputs
+            rb.AddForce(new Vector3(finalHorizontalInput * movementSpeed * Time.deltaTime, 0,
+                finalVerticalInput * movementSpeed * Time.deltaTime), ForceMode.Acceleration);
         }
 
-        if (Mathf.Abs(verticalInput) > 0.5 || Mathf.Abs(horizontalInput) > 0.5)
+        // Use final combined inputs for rotation as well
+        if (Mathf.Abs(finalVerticalInput) > 0.1 || Mathf.Abs(finalHorizontalInput) > 0.1)
         {
             var currentAngle = transform.rotation.eulerAngles.y;
-            var targetAngle = Mathf.Atan2(horizontalInput, verticalInput) * Mathf.Rad2Deg - 180;
+            var targetAngle = Mathf.Atan2(finalHorizontalInput, finalVerticalInput) * Mathf.Rad2Deg;
             var inputAngle = Mathf.DeltaAngle(currentAngle, targetAngle);
             rb.AddTorque(transform.up * inputAngle * 0.01f);
         }
