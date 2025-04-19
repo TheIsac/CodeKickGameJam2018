@@ -19,5 +19,10 @@ namespace _20180713._Scripts
         {
             timerText.text = text;
         }
+
+        public void SetTextColor(Color color)
+        {
+            timerText.color = color;
+        }
     }
 }

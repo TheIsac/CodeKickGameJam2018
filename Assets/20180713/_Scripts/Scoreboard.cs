@@ -86,6 +86,16 @@ namespace _20180713._Scripts
 
         public string GetLeaderName()
         {
+            return GetLeader().Name;
+        }
+
+        public Color GetLeaderColor()
+        {
+            return GetLeader().GetPlayerColor();
+        }
+
+        public Player GetLeader()
+        {
             var leaderPlayer = Players[0];
             var leaderScore = -1f;
             foreach (var player in Players)
@@ -98,7 +108,7 @@ namespace _20180713._Scripts
                 }
             }
 
-            return leaderPlayer.Name;
+            return leaderPlayer;
         }
 
         public float GetLeaderScore()

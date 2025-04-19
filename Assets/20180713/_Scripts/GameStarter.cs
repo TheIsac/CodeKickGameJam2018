@@ -296,7 +296,9 @@ namespace _20180713._Scripts
 
             var text = "Winner is " + scoreboard.GetLeaderName() + " with a score of " +
                        scoreboard.GetLeaderScore();
-            GameObject.FindWithTag("EndText").GetComponent<EndText>().SetText(text);
+            var endText = GameObject.FindWithTag("EndText").GetComponent<EndText>();
+            endText.SetText(text);
+            endText.SetTextColor(scoreboard.GetLeaderColor());
 
             foreach (var block in BlockManager.ActiveBlocks)
             {
