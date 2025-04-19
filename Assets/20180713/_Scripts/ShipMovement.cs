@@ -37,6 +37,16 @@ namespace _20180713._Scripts
 
         void Update()
         {
+            // Explicitly stop sound if not mounted and sound is playing
+            if (!IsMounted && isPlayingSound)
+            {
+                isPlayingSound = false;
+                thrusterSound.stop(FMOD.Studio.STOP_MODE.IMMEDIATE);
+                // Optional: Release the instance if you are done with it
+                // thrusterSound.release();
+                return; // Exit early if not mounted
+            }
+
             if (!IsMounted)
                 return;
 
