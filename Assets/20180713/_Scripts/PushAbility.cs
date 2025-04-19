@@ -24,7 +24,8 @@ namespace _20180713._Scripts
 
         void Update()
         {
-            var shouldPush = Input.GetButtonDown(playerMovement.TertiaryInput);
+            // Use the abstracted input method
+            var shouldPush = playerMovement.GetTertiaryButtonDown();
             var cooldownIsOver = Time.fixedTime - lastPushedTime > CooldownSeconds;
             if (shouldPush && cooldownIsOver && !blockHolder.IsHoldingBlock())
             {

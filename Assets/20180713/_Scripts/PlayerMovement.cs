@@ -17,7 +17,7 @@ public class PlayerMovement : MonoBehaviour
     // Define keyboard keys for Player 1
     private const KeyCode KeyboardInteractKey = KeyCode.E;
     private const KeyCode KeyboardSecondaryKey = KeyCode.Q;
-    private const KeyCode KeyboardTertiaryKey = KeyCode.R;
+    private const KeyCode KeyboardTertiaryKey = KeyCode.Space;
     private const KeyCode KeyboardForwardKey = KeyCode.W;
     private const KeyCode KeyboardBackwardKey = KeyCode.S;
     private const KeyCode KeyboardLeftKey = KeyCode.A;
